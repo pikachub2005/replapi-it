@@ -1,4 +1,5 @@
-const Crosis = require("crosis4furrets");
+const {Crosis} = require("crosis4furrets");
+
 
 class Repl {
 	constructor(client, data = {}) {
@@ -18,7 +19,6 @@ class Repl {
 			this[key] = value;
 		}
 		this.crosis = new Crosis(this.client.sid, this.id);
-		this.files = new ReplFileManager(this.client, this);
 	}
 	async delete() {
 		let req = await this.client.graphql(Queries.deleteRepl, {id: this.id});

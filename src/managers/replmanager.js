@@ -1,10 +1,13 @@
 const Collection = require("../utils/collection.js");
+const Queries = require("../utils/queries.js");
+const Repl = require("../structures/repl.js");
 
 class ReplManager {
 	constructor(client, user) {
 		this.client = client;
 		this.cache = new Collection();
 		this.user = user;
+		if (this.user != this.client.user) delete this.create;
 	}
 	async fetch() {
 	 	let args = [...arguments];
