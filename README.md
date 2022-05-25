@@ -3,7 +3,7 @@
 
 ## Install
 ```sh
-	npm install ReplitClient
+npm install ReplitClient
 ```
 ## Usage
 
