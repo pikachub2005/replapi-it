@@ -1,5 +1,5 @@
 const ReplManager = require("../managers/replmanager.js");
-const DashboardManager = require("../managers/dashboardManager.js");
+const DashboardManager = require("../managers/dashboardmanager.js");
 
 class User {
 	constructor(client, data = {}) {
