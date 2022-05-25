@@ -3,7 +3,7 @@
 
 ## Install
 ```sh
-	npm install ReplitClient
+npm install pika-replitcient
 ```
 ## Usage
 
