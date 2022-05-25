@@ -1,11 +1,8 @@
-const ReplitClient = require(__dirname + "/ReplitClient.js");
+const ReplitClient = require(__dirname + "/src/index.js");
+const fs = require("fs");
 
 const client = new ReplitClient(process.env.PikachuB2005);
 
 client.on("ready", async () => {
-	let user = await client.user;
-	let repls = await user.repls.fetch();
-	let repl = repls.first();
-	console.log(repl);
+	
 })
-

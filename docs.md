@@ -8,7 +8,8 @@
   * repls: ReplManager
 	  * client: Client
 	  * cache: Collection {id => Repl}
-		* fetch(id/url): cache
+		* fetch(url): Repl
+		* fetch(id, "id"): Repl
 * User
   * repls: ReplManager
 	  * client: Client
