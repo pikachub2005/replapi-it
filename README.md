@@ -1,5 +1,4 @@
-[![GitHub commits](https://badgen.net/github/commits/PikachuB2005/replitclient)](https://GitHub.com/Naereen/StrapDown.js/commit/)
-
+![GitHub forks](https://sheilds.io/github/forks/pikachub2005/pika-replitclient?style=plastic) ![GitHub Repo stars](sheilds.io/github/stars/pikachub2005/pika-replitclient?style=plastic) ![GitHub watchers](shields.io/github/watchers/pikachub2005/pika-replitclient?style=plastic)
 
 > This project is a **work in progress**. The API may change at any time.
 ---
