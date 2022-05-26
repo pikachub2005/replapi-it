@@ -13,8 +13,8 @@ npm install pika-replitcient
 
 ### Main API
 ```js
-const ReplClient = require("pika-replitclient");
-const client = new ReplClient("token");
+const Client = require("pika-replitclient");
+const client = new Client("token");
 
 client.on("ready", async () => {
 	
@@ -27,7 +27,7 @@ client.on("ready", async () => {
 ### Example
 Gets the title of a user's most recent repl
 ```js
-const ReplClient = require("pika-replitclient");
+const Client = require("pika-replitclient");
 const client = new ReplClient("token");
 
 client.on("ready", async () => {
