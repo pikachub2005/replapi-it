@@ -111,4 +111,7 @@ Requires you to do `<Repl>.connect()`
 * `<FileManger>.readdir(path)`: returns a list of files in a directory
 * `<FileManger>.delete(path)`: deletes a file or directory
 * `<FileManger>.mkdir(path)`: creates a directory
-* `<FileManger>.move(oldPath, newPath)`: move a file or directory   
+* `<FileManger>.move(oldPath, newPath)`: move a file or directory
+
+## How to help
+* Create a pull request and add to [queries.js](src/utils/queries.js)
