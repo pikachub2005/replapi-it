@@ -100,3 +100,15 @@ A Map object with extra methods. Meant to be like [discord.js's Collection](http
 * `<Repl>.timeCreated`: when the repl was created
 * `<Repl>.timeUpdated`: when the repl was last updated
 * `<Repl>.hostedUrl`: the url the replis hosted at
+* `<Repl>.files`: returns a [`<FileManager>`](#FileManager) object
+* `<Repl>.connect(persist = false)`: connects to the repl. Necessary to use `<Repl>.files`. Persist updates the files as they are changed
+
+#### FileManager
+Requires you to do `<Repl>.connect()`
+* `<FileManger>.snapshot()`: if not persisting, updates the files
+* `<FileManger>.read(path, encoding = "utf8)"`: reads a file
+* `<FileManger>.write(path, content)`: writes to a file
+* `<FileManger>.readdir(path)`: returns a list of files in a directory
+* `<FileManger>.delete(path)`: deletes a file or directory
+* `<FileManger>.mkdir(path)`: creates a directory
+* `<FileManger>.move(oldPath, newPath)`: move a file or directory   

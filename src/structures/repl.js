@@ -1,9 +1,9 @@
 const {Crosis} = require("crosis4furrets");
 
-
 class Repl {
 	constructor(client, data = {}) {
 		this.client = client;
+		this.files = new FileManager(this.client, this);
 		for (let [key, value] of Object.entries(data)) {
 			if (key == "user") {
 				if (this.client.users.cache.has(value.username)) {
@@ -23,6 +23,49 @@ class Repl {
 	async delete() {
 		let req = await this.client.graphql(Queries.deleteRepl, {id: this.id});
 		return req.deleteRepl
+	}
+	async connect(persist = false) {
+		await this.crosis.connect();
+		if (persist) await this.crosis.persist();
+		return this;
+	}
+	async disconnect() {
+		await this.crosis.close()
+	}
+}
+
+class FileManager {
+	constructor(client, repl) {
+		this.client = client;
+		this.repl = repl;
+	}
+	async read(path, encoding = "utf8") {
+		return await this.repl.crosis.read(path, encoding).catch(e => {
+			console.log(`Error: ${path} is a directory`);
+			process.exit(1);
+		})
+	}
+	async write(path, content = "") {
+		await this.repl.crosis.write(path, content);
+		return this;
+	}
+	async readdir(path = ".") {
+		return await this.repl.crosis.readdir(path);
+	}
+	async delete(path) {
+		await this.repl.crosis.remove(path);
+		return this;
+	}
+	async mkdir(path) {
+		await this.repl.crosis.mkdir(path);
+		return this;
+	}
+	async move(oldPath, newPath) {
+		await this.repl.crosis.move(oldPath, newPath);
+		return this;
+	}
+	async snapshot() {
+		await this.repl.crosis.snapshot();
 	}
 }
 
