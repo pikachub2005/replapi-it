@@ -1,5 +1,5 @@
 {
-  "name": "pika-replitclient",
+  "name": "replapi-it",
   "version": "1.0.3",
   "description": "This project is a work in progress. The API may change at any time.",
   "main": "src/index.js",
@@ -11,15 +11,14 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pikachub2005/pika-replitclient.git"
+    "url": "git+https://github.com/pikachub2005/replapi-it.git"
   },
   "bugs": {
-    "url": "https://github.com/pikachub2005/pika-replitclient/issues"
+    "url": "https://github.com/pikachub2005/replapi-it/issues"
   },
-  "homepage": "https://github.com/pikachub2005/pika-replitclient#readme",
+  "homepage": "https://github.com/pikachub2005/replapi-it#readme",
   "dependencies": {
     "axios": "^0.27.2",
-    "crosis4furrets": "^0.0.1-beta.7",
-    "pika-replitclient": "^1.0.3"
+    "crosis4furrets": "^0.0.1-beta.7"
   }
 }

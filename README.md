@@ -1,4 +1,4 @@
-![GitHub forks](https://img.shields.io/github/forks/pikachub2005/pika-replitclient?style=plastic) ![GitHub Repo stars](https://img.shields.io/github/stars/pikachub2005/pika-replitclient?style=plastic) ![GitHub watchers](https://img.shields.io/github/watchers/pikachub2005/pika-replitclient?style=plastic) ![Github commits](https://shields.io/github/commit-activity/m/pikachub2005/pika-replitclient?style=plastic) ![Github issues](https://shields.io/github/issues/pikachub2005/pika-replitclient?style=plastic) ![Github repo size](https://shields.io/github/repo-size/pikachub2005/pika-replitclient?style=plastic)
+![GitHub forks](https://img.shields.io/github/forks/pikachub2005/replapi-it?style=plastic) ![GitHub Repo stars](https://img.shields.io/github/stars/pikachub2005/replapi-it?style=plastic) ![GitHub watchers](https://img.shields.io/github/watchers/pikachub2005/replapi-it?style=plastic) ![Github commits](https://shields.io/github/commit-activity/m/pikachub2005/replapi-it?style=plastic) ![Github issues](https://shields.io/github/issues/pikachub2005/replapi-it?style=plastic) ![Github repo size](https://shields.io/github/repo-size/pikachub2005/replapi-it?style=plastic)
 
 ---
 > This project is a **work in progress**. The API may change at any time.
@@ -7,13 +7,13 @@ From https://replit.com/site/terms, section 5 line 13: Launching any automated s
 
 ## Install
 ```sh
-npm install pika-replitcient
+npm install replapi-it
 ```
 ## Usage
 
 ### Main API
 ```js
-const Client = require("pika-replitclient");
+const Client = require("replapi-it");
 const client = new Client("token");
 
 client.on("ready", async () => {
@@ -27,7 +27,7 @@ client.on("ready", async () => {
 ### Example
 Gets the title of a user's most recent repl
 ```js
-const Client = require("pika-replitclient");
+const Client = require("replapi-it");
 const client = new Client("token");
 
 client.on("ready", async () => {
