@@ -28,7 +28,7 @@ client.on("ready", async () => {
 Gets the title of a user's most recent repl
 ```js
 const Client = require("pika-replitclient");
-const client = new ReplClient("token");
+const client = new Client("token");
 
 client.on("ready", async () => {
 	let user = await client.users.fetch("PikachuB2005");
