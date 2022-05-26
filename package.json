@@ -1,6 +1,6 @@
 {
   "name": "pika-replitclient",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This project is a work in progress. The API may change at any time.",
   "main": "src/index.js",
   "scripts": {
