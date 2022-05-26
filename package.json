@@ -17,10 +17,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pikachub2005/ReplitClient.git"
+    "url": "git+https://github.com/pikachub2005/pika-replitclient.git"
   },
   "bugs": {
-    "url": "https://github.com/pikachub2005/ReplitClient/issues"
+    "url": "https://github.com/pikachub2005/pika-replitclient/issues"
   },
-  "homepage": "https://github.com/pikachub2005/ReplitClient#readme"
+  "homepage": "https://github.com/pikachub2005/pika-replitclient#readme"
 }
