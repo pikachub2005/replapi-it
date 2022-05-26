@@ -17,7 +17,6 @@ client.on("ready", async () => {
 	
 })
 ```
-which returns a [`<client>`](#Client)
 
 ### Options
 * token: A `connect.sid` cookie from Replit.
