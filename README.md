@@ -45,7 +45,7 @@ Also includes properties and methods from [`<User>`](#User)
 * `<ClientUser>.state`: an object containing your skill level and interests
 * `<ClientUser>.device`: your device
 * `<ClientUser>.notificationCount`: how many notifications you have
-* `<ClientUser>.dashboard`: returns a [`<DashboardManager>`](#DashboardManager (WIP));
+* `<ClientUser>.dashboard`: returns a [`<DashboardManager>`](#DashboardManager);
 
 #### ReplManager
 * `<ReplManager>.cache`: returns a [`<Collection>`](#Collection) of [`<Repl>`](#Repl) objects
@@ -77,7 +77,8 @@ Also includes properties and methods from [`<User>`](#User)
 * `<User>.languages`: a list of languages the user has used
 * `<User>.image`: the url to the user's profile picture
 
-#### DashboardManager (WIP)
+#### DashboardManager
+(WIP)
 * `<DashboardManager>.create(name)`: creates a new folder
 * `<DashboardManager>.delete(id)`: delete's a folder
 
