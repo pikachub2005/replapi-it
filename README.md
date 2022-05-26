@@ -1,3 +1,6 @@
+[![GitHub commits](https://badgen.net/github/commits/PikachuB2005/replitclient)](https://GitHub.com/Naereen/StrapDown.js/commit/)
+
+
 > This project is a **work in progress**. The API may change at any time.
 ---
 From https://replit.com/site/terms, section 5 line 13: Launching any automated system that accesses the Service in a manner that sends more request messages to the Replit servers in a given period of time than a human can reasonably produce in the same period by using a conventional online web browser is prohibited.
