@@ -1,9 +1,8 @@
-const Client = require(__dirname + "/src/index.js");
-console.log(Client);
-const fs = require("fs");
-
-const client = new Client(process.env.PikachuB2005);
+const ReplClient = require("pika-replitclient");
+const client = new ReplClient(process.env.PikachuB2005);
 
 client.on("ready", async () => {
-	console.log((await client.user.repls.fetch()).first());
+	let user = await client.users.fetch(process.env.REPL_OWNER);
+	let repls = await user.repls.fetch();
+	console.log("Your most recent repl:", repls.first().title);
 })
