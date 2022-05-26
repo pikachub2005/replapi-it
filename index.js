@@ -1,9 +1,9 @@
 const Client = require(__dirname + "/src/index.js");
 console.log(Client);
-// const fs = require("fs");
+const fs = require("fs");
 
-// const client = new Client(process.env.PikachuB2005);
+const client = new Client(process.env.PikachuB2005);
 
-// client.on("ready", async () => {
-// 	console.log((await client.user.repls.fetch()).first());
-// })
+client.on("ready", async () => {
+	console.log((await client.user.repls.fetch()).first());
+})
