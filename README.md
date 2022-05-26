@@ -80,7 +80,7 @@ Also includes properties and methods from [`<User>`](#User)
 #### DashboardManager
 (WIP)
 * `<DashboardManager>.create(name)`: creates a new folder
-* `<DashboardManager>.delete(id)`: delete's a folder
+* `<DashboardManager>.delete(id)`: deletes a folder
 
 #### Collection
 A Map object with extra methods. Meant to be like [discord.js's Collection](https://discord.js.org/#/docs/collection/main/class/Collection)
