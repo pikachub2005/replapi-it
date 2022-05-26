@@ -3,7 +3,7 @@ schema {
   mutation: RootMutationType
 }
 
-"""An onbject for fields restricted to admins"""
+"""An object for fields restricted to admins"""
 type Admin {
   user: User!
   boardTrendingAlgorithmSettings: BoardTrendingAlgorithmSettings!
