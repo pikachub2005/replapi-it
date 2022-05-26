@@ -7,6 +7,6 @@ client.on("ready", async () => {
 	let repl = repls.find(r => r.title == "pika-replitclient");
 	let files = repl.files;
 	await repl.connect();
-	console.log(await files.read("src/structures/repl.js"));
+	console.log(await files.read("src/index.js"));
 	await repl.disconnect();
 })

@@ -9,12 +9,6 @@
   "keywords": [],
   "author": "PikachuB2005",
   "license": "ISC",
-  "dependencies": {
-    "axios": "^0.27.2",
-    "crosis4furrets": "^0.0.1-beta.7",
-    "pika-replitclient": "^1.0.3",
-    "utils": "^0.2.2"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pikachub2005/pika-replitclient.git"
@@ -22,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/pikachub2005/pika-replitclient/issues"
   },
-  "homepage": "https://github.com/pikachub2005/pika-replitclient#readme"
+  "homepage": "https://github.com/pikachub2005/pika-replitclient#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "crosis4furrets": "^0.0.1-beta.7",
+    "pika-replitclient": "^1.0.3"
+  }
 }
