@@ -45,7 +45,7 @@ Also includes properties and methods from [`<User>`](#User)
 * `<ClientUser>.state`: an object containing your skill level and interests
 * `<ClientUser>.device`: your device
 * `<ClientUser>.notificationCount`: how many notifications you have
-* `<ClientUser>.dashboard`: returns a [`<DashboardManager>`](#DashboardManager);
+* `<ClientUser>.dashboard`: returns a [`<DashboardManager>`](#DashboardManager (WIP));
 
 #### ReplManager
 * `<ReplManager>.cache`: returns a [`<Collection>`](#Collection) of [`<Repl>`](#Repl) objects
