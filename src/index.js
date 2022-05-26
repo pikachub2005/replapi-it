@@ -22,4 +22,4 @@ class ReplitClient extends EventEmitter {
 	}
 }
 
-module.exports = {Client: ReplitClient};
+module.exports = ReplitClient
