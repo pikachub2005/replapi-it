@@ -1,4 +1,4 @@
-![GitHub forks](https://img.sheilds.io/github/forks/pikachub2005/pika-replitclient?style=plastic) ![GitHub Repo stars](img.sheilds.io/github/stars/pikachub2005/pika-replitclient?style=plastic) ![GitHub watchers](img.shields.io/github/watchers/pikachub2005/pika-replitclient?style=plastic)
+![GitHub forks](https://img.shields.io/github/forks/pikachub2005/pika-replitclient?style=plastic) ![GitHub Repo stars](https://img.shields.io/github/stars/pikachub2005/pika-replitclient?style=plastic) ![GitHub watchers](https://img.shields.io/github/watchers/pikachub2005/pika-replitclient?style=plastic)
 
 > This project is a **work in progress**. The API may change at any time.
 ---
