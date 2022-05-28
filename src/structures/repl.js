@@ -9,7 +9,7 @@ class Repl {
 				if (this.client.users.cache.has(value.username)) {
 					this.user = this.client.users.cache.get(value.username);
 				} else {
-					this.client.users.getUser(value.username).then(user => this.user = user);
+					this.client.users.fetch(value.username).then(user => this.user = user);
 				};
 				continue;
 			}

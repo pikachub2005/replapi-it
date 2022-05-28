@@ -1,0 +1,104 @@
+{
+  "payload1": [
+    {
+      "operationName": "ReplEnvironmentServicesConnector",
+      "variables": { "id": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query ReplEnvironmentServicesConnector($id: String!) {\n  repl(id: $id) {\n    ... on Repl {\n      id\n      ...CrosisContextRepl\n      __typename\n    }\n    __typename\n  }\n  currentUser {\n    id\n    ...CrosisContextCurrentUser\n    __typename\n  }\n}\n\nfragment CrosisContextRepl on Repl {\n  id\n  language\n  slug\n  user {\n    id\n    username\n    __typename\n  }\n  currentUserPermissions {\n    containerWrite\n    __typename\n  }\n  flagOwnerDotReplitPackager: gateOnOwner(feature: \"flag-dotreplit-packager\")\n  __typename\n}\n\nfragment CrosisContextCurrentUser on CurrentUser {\n  id\n  username\n  isSubscribed\n  flagTrackOtClientDataLoss: gate(feature: \"flag-ot-data-loss-client-tracking\")\n  flagPid1Ping: gate(feature: \"flag-pid1-ping-sample\")\n  __typename\n}\n"
+    },
+    {
+      "operationName": "ReplEnvironmentServicesConnectorPermissions",
+      "variables": { "id": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query ReplEnvironmentServicesConnectorPermissions($id: String!) {\n  repl(id: $id) {\n    ... on Repl {\n      id\n      permissions {\n        id\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+    },
+    {
+      "operationName": "ReplEnvironmentServicesConnectorAdminTracking",
+      "variables": { "id": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query ReplEnvironmentServicesConnectorAdminTracking($id: String!) {\n  repl(id: $id) {\n    ... on Repl {\n      id\n      url\n      language\n      isProjectFork\n      owner {\n        ... on Team {\n          id\n          __typename\n        }\n        ... on User {\n          id\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n  currentUser {\n    id\n    teams {\n      id\n      isAdmin\n      __typename\n    }\n    __typename\n  }\n}\n"
+    },
+    {
+      "operationName": "LiveViewReplConnection",
+      "variables": { "replId": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query LiveViewReplConnection($replId: String!) {\n  currentUser {\n    id\n    hasReplConnectionSub: gate(feature: \"flag-whos-coding-connection\")\n    __typename\n  }\n  repl(id: $replId) {\n    ... on Repl {\n      id\n      owner {\n        __typename\n        ... on Team {\n          id\n          __typename\n        }\n        ... on User {\n          id\n          __typename\n        }\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+    },
+    {
+      "operationName": "ReplEnvironmentHooksUseDebugger",
+      "variables": { "replId": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query ReplEnvironmentHooksUseDebugger($replId: String!) {\n  repl(id: $replId) {\n    ... on Repl {\n      id\n      ...ReplEnvironmentHooksUseDebuggerRepl\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment ReplEnvironmentHooksUseDebuggerRepl on Repl {\n  id\n  lang {\n    id\n    hasDAP\n    hasGit\n    __typename\n  }\n  __typename\n}\n"
+    },
+    {
+      "operationName": "ReplEnvironmentServicesConnectorShowHiddenFiles",
+      "variables": { "replId": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query ReplEnvironmentServicesConnectorShowHiddenFiles($replId: String!) {\n  repl(id: $replId) {\n    ... on Repl {\n      id\n      templateInfo {\n        label\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+    },
+    {
+      "operationName": "ReplEnvironmentServicesConnectorCurriculum",
+      "variables": { "id": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query ReplEnvironmentServicesConnectorCurriculum($id: String!) {\n  currentUser {\n    id\n    isTeacher: hasRole(role: TEACHER)\n    ...CrosisContextCurrentUser\n    __typename\n  }\n  repl(id: $id) {\n    ... on Repl {\n      id\n      isProject\n      isProjectFork\n      isModelSolution\n      isModelSolutionFork\n      owner {\n        ... on Team {\n          id\n          __typename\n        }\n        ... on User {\n          id\n          __typename\n        }\n        __typename\n      }\n      language\n      origin {\n        id\n        ...CrosisContextRepl\n        origin {\n          id\n          ...CrosisContextRepl\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n\nfragment CrosisContextCurrentUser on CurrentUser {\n  id\n  username\n  isSubscribed\n  flagTrackOtClientDataLoss: gate(feature: \"flag-ot-data-loss-client-tracking\")\n  flagPid1Ping: gate(feature: \"flag-pid1-ping-sample\")\n  __typename\n}\n\nfragment CrosisContextRepl on Repl {\n  id\n  language\n  slug\n  user {\n    id\n    username\n    __typename\n  }\n  currentUserPermissions {\n    containerWrite\n    __typename\n  }\n  flagOwnerDotReplitPackager: gateOnOwner(feature: \"flag-dotreplit-packager\")\n  __typename\n}\n"
+    },
+    {
+      "operationName": "GitRepoIsNewFork",
+      "variables": { "replId": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query GitRepoIsNewFork($replId: String!) {\n  repl(id: $replId) {\n    ... on Repl {\n      id\n      origin {\n        id\n        __typename\n      }\n      timeCreated\n      timeUpdated\n      __typename\n    }\n    __typename\n  }\n}\n"
+    },
+    {
+      "operationName": "WorkspacePageTitle",
+      "variables": { "replId": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query WorkspacePageTitle($replId: String!) {\n  repl(id: $replId) {\n    ... on Repl {\n      id\n      title\n      __typename\n    }\n    __typename\n  }\n}\n"
+    },
+    {
+      "operationName": "TerminalPlugin",
+      "variables": { "replId": "004e53e6-7542-4099-a643-af9ccefcd833" },
+      "query": "query TerminalPlugin($replId: String!) {\n  repl(id: $replId) {\n    ... on Repl {\n      id\n      url\n      slug\n      lang {\n        id\n        header\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
+    }
+  ],
+  "response1": [
+    {
+      "data": {
+        "repl": {
+          "id": "004e53e6-7542-4099-a643-af9ccefcd833",
+          "language": "nix",
+          "slug": "replapi-it",
+          "user": { "id": 6120410, "username": "PikachuB2005", "__typename": "User" },
+          "currentUserPermissions": { "containerWrite": true, "__typename": "ReplUpdatePermissions" },
+          "flagOwnerDotReplitPackager": true,
+          "__typename": "Repl"
+        },
+        "currentUser": { "id": 6120410, "username": "PikachuB2005", "isSubscribed": false, "flagTrackOtClientDataLoss": false, "flagPid1Ping": false, "__typename": "CurrentUser" }
+      }
+    },
+    { "data": { "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "permissions": [], "__typename": "Repl" } } },
+    {
+      "data": {
+        "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "url": "/@PikachuB2005/replapi-it", "language": "nix", "isProjectFork": false, "owner": { "id": 6120410, "__typename": "User" }, "__typename": "Repl" },
+        "currentUser": { "id": 6120410, "teams": [{ "id": 14241619, "isAdmin": true, "__typename": "Team" }], "__typename": "CurrentUser" }
+      }
+    },
+    {
+      "data": {
+        "currentUser": { "id": 6120410, "hasReplConnectionSub": true, "__typename": "CurrentUser" },
+        "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "owner": { "__typename": "User", "id": 6120410 }, "__typename": "Repl" }
+      }
+    },
+    { "data": { "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "lang": { "id": "nix", "hasDAP": false, "hasGit": true, "__typename": "Language" }, "__typename": "Repl" } } },
+    { "data": { "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "templateInfo": { "label": "Node.js", "__typename": "ReplTemplateInfo" }, "__typename": "Repl" } } },
+    {
+      "data": {
+        "currentUser": { "id": 6120410, "isTeacher": false, "username": "PikachuB2005", "isSubscribed": false, "flagTrackOtClientDataLoss": false, "flagPid1Ping": false, "__typename": "CurrentUser" },
+        "repl": {
+          "id": "004e53e6-7542-4099-a643-af9ccefcd833",
+          "isProject": false,
+          "isProjectFork": false,
+          "isModelSolution": false,
+          "isModelSolutionFork": false,
+          "owner": { "id": 6120410, "__typename": "User" },
+          "language": "nix",
+          "origin": null,
+          "__typename": "Repl"
+        }
+      }
+    },
+    { "data": { "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "origin": null, "timeCreated": "2022-05-21T00:41:28.507Z", "timeUpdated": "2022-05-27T14:34:17.352Z", "__typename": "Repl" } } },
+    { "data": { "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "title": "replapi-it", "__typename": "Repl" } } },
+    { "data": { "repl": { "id": "004e53e6-7542-4099-a643-af9ccefcd833", "url": "/@PikachuB2005/replapi-it", "slug": "replapi-it", "lang": { "id": "nix", "header": null, "__typename": "Language" }, "__typename": "Repl" } } }
+  ]
+}

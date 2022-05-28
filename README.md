@@ -39,8 +39,9 @@ client.on("ready", async () => {
 
 #### Client
 * `<Client>.user`: returns the logged in user as a [`<ClientUser>`](#ClientUser) object
-* `<Client>.repls`: returns a [`<ReplManager>`](#ReplManager)
-* `<Client>.users`: returns a [`<UserManager>`](#UserManager)
+* `<Client>.repls`: returns a [`<ReplManager>`](#ReplManager) object
+* `<Client>.users`: returns a [`<UserManager>`](#UserManager) object
+* `<Client>.posts`: returns a [`<PostManager>`](#PostManager) object
 
 #### ClientUser
 Also includes properties and methods from [`<User>`](#User)
@@ -79,6 +80,7 @@ Also includes properties and methods from [`<User>`](#User)
 * `<User>.isHacker`: whether or no the user is a hacker (has hacker plan)
 * `<User>.languages`: a list of languages the user has used
 * `<User>.image`: the url to the user's profile picture
+* `<User>.posts`: returns a [`<PostManager>`](#PostManager) object
 
 #### DashboardManager
 (WIP)
@@ -112,3 +114,43 @@ Requires you to do `<Repl>.connect()`
 * `<FileManger>.delete(path)`: deletes a file or directory
 * `<FileManger>.mkdir(path)`: creates a directory
 * `<FileManger>.move(oldPath, newPath)`: move a file or directory
+
+#### PostManager
+* `<PostManager>.cache`: returns a [`<Collection>`](#Collection) of [`<Post>`](#Post) objects
+* `<PostManager>.fetch(id)`: returns a [`<Post>`](#Post) object
+
+#### Post
+* `<Post>.id`: the post's id;
+* `<Post>.title`: the post's title
+* `<Post>.body`: the post's body
+* `<Post>.voteCount`: the post's vote count
+* `<Post>.commentCount`: the post's comment count
+* `<Post>.timeCreated`: when the post was created
+* `<Post>.timeUpdated`: when the post was last updated
+* `<Post>.url`: the post's url
+* `<Post>.user`: returns a [`<User>`](#User) object of the user who made the post
+* `<Post>.board`: returns a [`<Board>`](#Board) object
+* `<Post>.repl`: returns a [`<Repl>`](#Repl) object
+* `<Post>.voters`: returns a list of usernames of users who voted on the post
+* `<Post>.isAnnouncement`: is the post an announcement
+* `<Post>.isAuthor`: are you the author of the post
+* `<Post>.canEdit`: can you edit the post
+* `<Post>.canComment`: can you comment on the post
+* `<Post>.canVote`: can you vote on the post
+* `<Post>.canPin`: can you pin the post
+* `<Post>.canSetType`: can you set the type of the post
+* `<Post>.canChangeBoard`: can you change the board of the post
+* `<Post>.canLock`: can you lock the post
+* `<Post>.hasVoted`: did you vote on the post
+* `<Post>.canReport`: can you report the post
+* `<Post>.hasReported`: have you already reported the post
+* `<Post>.isAnswered`: is the post answered
+* `<Post>.isAnswerable`: can the post be answered
+* `<Post>.answeredBy`: returns a [`<User>`](#User) object
+
+### Coming soon ↓
+#### Board
+
+#### CommentManager
+
+#### Comment

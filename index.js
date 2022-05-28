@@ -1,4 +1,5 @@
-const Client = require("replapi-it");
+//const Client = require("replapi-it");
+const Client = require(__dirname + "/src/index.js");
 const client = new Client(process.env.PikachuB2005);
 
 client.on("ready", async () => {

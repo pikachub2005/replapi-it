@@ -18,7 +18,7 @@
 * Access account data
 
 #### Posts
-* Access posts
+* Access comments
 
 #### Teams
 * Access friend teams
