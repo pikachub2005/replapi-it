@@ -148,9 +148,48 @@ Requires you to do `<Repl>.connect()`
 * `<Post>.isAnswerable`: can the post be answered
 * `<Post>.answeredBy`: returns a [`<User>`](#User) object
 
-### Coming soon ↓
 #### Board
+* `<Board>.id`: the board's id
+* `<Board>.name`: the board's name
+* `<Board>.description`: the board's description
+* `<Board>.slug`: the board's slug
+* `<Board>.cta`: the board's cta
+* `<Board>.titleCta`: the board title's cta
+* `<Board>.bodyCta`: the board body's cta
+* `<Board>.template`: the board's template
+* `<Board>.buttonCta`: the board button's cta
+* `<Board>.color`: the board's hexadecimal color
+* `<Board>.replRequired`: is a repl required to post on the board
+* `<Board>.isLocked`: if the board is locked
+* `<Board>.isAnswerable`: if the board is answerable
+* `<Board>.isPrivate`: if the board is private
+* `<Board>.timeCreated`: the time the board was created
+* `<Board>.timeUpdated`: the time the board was last updated
+* `<Board>.url`: the board's url
+* `<Board>.canPost`: if you can post to the board 
 
 #### CommentManager
+* `<CommentManager>.cache`: returns a [`<Collection>`](#Collection) of [`<Comment>`](#Comment) objects
+* `<CommentManager>.user`: returns a [`<User>`](#User) object
+* `<CommentManager>.`:
 
 #### Comment
+* `<Comment>.id`: the comment's id
+* `<Comment>.body`: the comment's body
+* `<Comment>.voteCount`: the comment's vote count
+* `<Comment>.timeCreated`: the time the comment was created
+* `<Comment>.timeUpdated`: the time the comment was updated
+* `<Comment>.user`: returns a [`<User>`](#User) object
+* `<Comment>.url`: the comment's url
+* `<Comment>.post`: returns a [`<Post>`](#Post) object
+* `<Comment>.parentComment`: returns a [`<Comment>`](#Comment) object
+* `<Comment>.isAuthor`: if you're the author is the comment
+* `<Comment>.canEdit`: if you can edit the comment
+* `<Comment>.canVote`: if you can vote on the comment
+* `<Comment>.canComment`: if you can comment on the comment
+* `<Comment>.hasVoted`: if you have voted on the comment
+* `<Comment>.canReport`: if you can report the comment
+* `<Comment>.hasReported`: if you have reported the comment
+* `<Comment>.isAnswer`: if the comment is an answer
+* `<Comment>.canSelectAsAnswer`: if you can select the comment as the answer
+* `<Comment>.canUnselectAsAnswer`: if you can unselect the comment as the answer
