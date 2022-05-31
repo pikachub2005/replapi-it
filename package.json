@@ -18,8 +18,10 @@
   },
   "homepage": "https://github.com/pikachub2005/replapi-it#readme",
   "dependencies": {
+    "@replit/crosis": "^8.0.0",
     "axios": "^0.27.2",
-    "crosis4furrets": "^0.0.1-beta.7",
-    "replapi-it": "^1.0.4"
+    "lightfetch-node": "^1.1.1",
+    "replapi-it": "^1.0.4",
+    "ws": "^8.7.0"
   }
 }

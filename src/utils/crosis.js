@@ -1,0 +1,116 @@
+const {Client} = require("@replit/crosis");
+const {lightfetch} = require("lightfetch-node");
+const WebSocket = require("ws");
+
+class Crosis {
+	constructor(token, replId) {
+		this.token = token;
+		this.replId = replId;
+		this.client = new Client();
+		this.channels = {};
+	}
+	async req(url, body) {
+		let headers = {
+			'X-Requested-With': 'PikachuB2005',
+			Referrer: 'https://replit.com',
+			Cookie: `connect.sid=${this.token}`,
+		};
+		if (body) {
+			return await lightfetch(url, {method: "POST", headers: headers, body: body})
+		} else {
+			return await lightfetch(url, {headers: headers})
+		}
+	}
+	async connect() {
+		let user = (await this.req("https://replit.com/graphql", {query: "query {currentUser {username, isHacker}}"})).json().data.currentUser;
+		let t = this;
+		await new Promise((res) => {
+			this.client.connectOptions = {timeout: 3000};
+			this.client.open(
+				{
+					context: {user: {name: user.username}, repl: {id: this.replId}},
+					urlOptions: {secure: true, host: `eval.${user.isHacker ? 'hacker':'global'}.replit.com`},
+					fetchConnectionMetadata: async () => {return (await t.req(`https://replit.com/data/repls/${t.replId}/get_connection_metadata`, {clientVersion: '7561851', format: 'pbuf'})).json()},
+					WebSocketClass: WebSocket
+				},
+				({channel}) => {
+					if (!channel) return;
+					this.channels['chan0'] = channel;
+					this.connected = true;
+					res();
+				}
+			);
+			this.client.setUnrecoverableErrorHandler((error) => {throw new Error(error.message)});
+		})
+	}
+	async persist() {
+		let gcsfilesChan = await this.channel('gcsfiles');
+
+		let res = await gcsfilesChan.request({
+			persist: { path: '' },
+		});
+
+		if (res.error) throw new Error('CrosisError: ' + res.error);
+		if (res.ok) this.persisting = true;
+		return res.ok ? true : false;
+	}
+	close() {
+		this.client.close()
+	}
+	async channel(name) {
+		const stored = this.channels[name];
+		if (stored) {
+			return stored;
+		} else {
+			const chan = await new Promise((res, rej) => {
+				this.client.openChannel({ service: name }, ({ channel, error }) => {
+					if(error) rej(error);
+					if (channel) res(channel);
+				});
+			});
+
+			this.channels[name] = chan;
+			return chan;
+		}
+	}
+	async read(path, encoding = "utf-8") {
+		const filesChan = await this.channel('files');
+		let res = await filesChan.request({read: { path }});
+		if (res.error) throw new Error('CrosisError: ' + res.error);
+		return Buffer.from(res.file.content).toString(encoding);
+	}
+	async readdir(path, raw = false) {
+		const filesChan = await this.channel('files');
+		let res = await filesChan.request({readdir: { path }});
+		if (res.error) throw new Error('CrosisError: ' + res.error);
+		const { files } = res.files || {};
+		return raw ? files : files.map((file) => file.path);
+	}
+	async write(path, file) {
+		const filesChan = await this.channel('files');
+		let content = Buffer.isBuffer(file) ? file : new TextEncoder().encode(file);
+		let res = await filesChan.request({write: { path, content }});
+		if (res.error) throw new Error('CrosisError: ' + res.error);
+		return res.ok ? true : false;
+	}
+	async mkdir(path) {
+		const filesChan = await this.channel('files');
+		let res = await filesChan.request({mkdir: { path }});
+		if (res.error) throw new Error('CrosisError: ' + res.error);
+		return res.ok ? true : false;
+	}
+	async remove(path) {
+		const filesChan = await this.channel('files');
+		let res = await filesChan.request({remove: { path }});
+		if (res.error) throw new Error('CrosisError: ' + res.error);
+		return res.ok ? true : false;
+	}
+	async move(oldPath, newPath) {
+		const filesChan = await this.channel('files');
+		let res = await filesChan.request({move: { oldPath, newPath }});
+		if (res.error) throw new Error('CrosisError: ' + res.error);
+		return res.ok ? true : false;
+	}
+}
+
+module.exports = Crosis;

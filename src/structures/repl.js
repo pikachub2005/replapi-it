@@ -1,4 +1,4 @@
-const {Crosis} = require("crosis4furrets");
+const Crosis = require("../utils/crosis.js");
 
 class Repl {
 	constructor(client, data = {}) {
