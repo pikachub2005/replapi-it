@@ -19,6 +19,7 @@ class Repl {
 			this[key] = value;
 		}
 		this.crosis = new Crosis(this.client.sid, this.id);
+		this.console = this.crosis.console;
 	}
 	async delete() {
 		let req = await this.client.graphql(Queries.deleteRepl, {id: this.id});

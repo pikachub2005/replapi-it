@@ -1,6 +1,7 @@
 const {Client} = require("@replit/crosis");
 const {lightfetch} = require("lightfetch-node");
 const WebSocket = require("ws");
+const EventEmitter = require('events');
 
 class Crosis {
 	constructor(token, replId) {
@@ -8,6 +9,7 @@ class Crosis {
 		this.replId = replId;
 		this.client = new Client();
 		this.channels = {};
+		this.console = new Console(this);
 	}
 	async req(url, body) {
 		let headers = {
@@ -22,7 +24,8 @@ class Crosis {
 		}
 	}
 	async connect() {
-		let user = (await this.req("https://replit.com/graphql", {query: "query {currentUser {username, isHacker}}"})).json().data.currentUser;
+		let user = this.user = (await this.req("https://replit.com/graphql", {query: "query {currentUser {username, isHacker}}"})).json().data.currentUser;
+		this.repl = (await this.req("https://replit.com/graphql", {query: `query Repl($id: String!) {repl(id: $id){... on Repl {id, title, lang{runner: canUseShellRunner, interpreter: usesInterpreter}}}}`, variables: {id: this.replId}})).json().data.repl;
 		let t = this;
 		await new Promise((res) => {
 			this.client.connectOptions = {timeout: 3000};
@@ -41,15 +44,12 @@ class Crosis {
 				}
 			);
 			this.client.setUnrecoverableErrorHandler((error) => {throw new Error(error.message)});
-		})
+		});
+		await this.console.connect();
 	}
 	async persist() {
 		let gcsfilesChan = await this.channel('gcsfiles');
-
-		let res = await gcsfilesChan.request({
-			persist: { path: '' },
-		});
-
+		let res = await gcsfilesChan.request({persist: { path: '' }});
 		if (res.error) throw new Error('CrosisError: ' + res.error);
 		if (res.ok) this.persisting = true;
 		return res.ok ? true : false;
@@ -57,13 +57,13 @@ class Crosis {
 	close() {
 		this.client.close()
 	}
-	async channel(name) {
+	async channel(name, action = "CREATE") {
 		const stored = this.channels[name];
 		if (stored) {
 			return stored;
 		} else {
 			const chan = await new Promise((res, rej) => {
-				this.client.openChannel({ service: name }, ({ channel, error }) => {
+				this.client.openChannel({service: name, action}, ({channel, error}) => {
 					if(error) rej(error);
 					if (channel) res(channel);
 				});
@@ -113,4 +113,28 @@ class Crosis {
 	}
 }
 
+class Console extends EventEmitter {
+	constructor(crosis) {
+		super();
+		this.crosis = crosis;
+	}
+	async connect() {
+		if (!this.crosis.repl.lang.runner) throw new Error("This language doesn't have a shell runner")
+		this.runChan = await this.crosis.channel("shellrun2");
+		this.runChan.onCommand((cmd) => {
+			if (cmd.output) this.emit("input", cmd.output);
+			if (cmd.state) this.running = cmd.state == 1;
+		})
+	}
+	async send(input) {
+		this.runChan.send({input: input});
+	}
+	async run() {
+		this.runChan.send({runMain: {}})
+	}
+	async stop() {
+		this.runChan.send({clear: {}})
+	}
+}
+			
 module.exports = Crosis;

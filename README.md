@@ -193,3 +193,10 @@ Requires you to do `<Repl>.connect()`
 * `<Comment>.isAnswer`: if the comment is an answer
 * `<Comment>.canSelectAsAnswer`: if you can select the comment as the answer
 * `<Comment>.canUnselectAsAnswer`: if you can unselect the comment as the answer
+
+#### Console
+Requires you to do `<Repl>.connect()`
+* `<Console>.send(input)`: Sends string to console
+* `<Console>.run()`: Runs the repl
+* `<Console>.stop()`: Stops the repl
+* `<Console>.on("input", fn)`: event handler for console input
