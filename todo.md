@@ -9,7 +9,7 @@
 * Run / stop
 * Access database
 * Read history
-* Use console and shell
+* Use shell
 * Love
 * Access comments
 * Fork
