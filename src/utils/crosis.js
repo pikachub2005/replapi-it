@@ -23,6 +23,20 @@ class Crosis {
 			return await lightfetch(url, {headers: headers})
 		}
 	}
+	async setup() {
+		await this.console.connect();
+		this.env = await new Promise(async (res) => {
+			let shell = await this.channel("shell");
+			shell.onCommand((cmd) => {
+				let env = [...cmd.output.matchAll(/((.*?)=(.*))/gm)].reduce((a, v) => ({ ...a, [v[2]]: v[3]}), {});
+				if (Object.keys(env).length) {
+					shell.onCommandListeners = [];
+					res(env);
+				}
+			});
+			shell.send({input: "env\n"});
+		})
+	}
 	async connect() {
 		let user = this.user = (await this.req("https://replit.com/graphql", {query: "query {currentUser {username, isHacker}}"})).json().data.currentUser;
 		this.repl = (await this.req("https://replit.com/graphql", {query: `query Repl($id: String!) {repl(id: $id){... on Repl {id, title, lang{runner: canUseShellRunner, interpreter: usesInterpreter}}}}`, variables: {id: this.replId}})).json().data.repl;
@@ -45,7 +59,7 @@ class Crosis {
 			);
 			this.client.setUnrecoverableErrorHandler((error) => {throw new Error(error.message)});
 		});
-		await this.console.connect();
+		await this.setup();
 	}
 	async persist() {
 		let gcsfilesChan = await this.channel('gcsfiles');

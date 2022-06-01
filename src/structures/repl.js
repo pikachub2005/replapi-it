@@ -27,6 +27,7 @@ class Repl {
 	}
 	async connect(persist = false) {
 		await this.crosis.connect();
+		this.env = this.crosis.env;
 		if (persist) await this.crosis.persist();
 		return this;
 	}
