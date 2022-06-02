@@ -4,10 +4,9 @@
 * Move repls / folders
 
 #### Repl
-* Access environmental variables
+* Access environmental variables (WIP)
 * Access chat / threads
 * Run / stop
-* Access database
 * Read history
 * Use shell
 * Love
@@ -15,7 +14,7 @@
 * Fork
 
 #### Client user
-* Access account data
+* Access account data (username, email, connections)
 
 #### Posts
 * Access comments
