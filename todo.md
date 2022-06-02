@@ -26,3 +26,6 @@
 * Restore repls
 * Transfer repls
 * Create from template
+
+#### General
+* Use only one package for http requests
