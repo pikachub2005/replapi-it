@@ -105,7 +105,7 @@ A Map object with extra methods. Meant to be like [discord.js's Collection](http
 * `<Repl>.files`: returns a [`<FileManager>`](#FileManager) object
 * `<Repl>.connect(persist = false)`: connects to the repl. Necessary to use `<Repl>.files`. Persist updates the files as they are changed
 These require you to do `<Repl>.connect()` before usage
-* `<Repl>.env`: a dict of the repl's environment variables. WIP
+* `<Repl>.env`: a dict of the repl's environment variables.
 * `<Repl>.db`: A replit database object, if available
 
 #### FileManager

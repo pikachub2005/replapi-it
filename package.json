@@ -1,7 +1,7 @@
 {
   "name": "replapi-it",
-  "version": "1.0.7",
-  "description": "This project is a work in progress. The API may change at any time.",
+  "version": "1.0.8",
+  "description": "An all-in-one API for replit.com",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
