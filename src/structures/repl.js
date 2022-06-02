@@ -1,4 +1,5 @@
 const Crosis = require("../utils/crosis.js");
+const db = require("@replit/database");
 
 class Repl {
 	constructor(client, data = {}) {
@@ -28,6 +29,7 @@ class Repl {
 	async connect(persist = false) {
 		await this.crosis.connect();
 		this.env = this.crosis.env;
+		if (this.env.REPLIT_DB_URL) this.db = new db(this.env.REPLIT_DB_URL);
 		if (persist) await this.crosis.persist();
 		return this;
 	}

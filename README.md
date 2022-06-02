@@ -104,7 +104,9 @@ A Map object with extra methods. Meant to be like [discord.js's Collection](http
 * `<Repl>.hostedUrl`: the url the replis hosted at
 * `<Repl>.files`: returns a [`<FileManager>`](#FileManager) object
 * `<Repl>.connect(persist = false)`: connects to the repl. Necessary to use `<Repl>.files`. Persist updates the files as they are changed
-* `<Repl>.env`: a dict of the repl's environment variables. Requires you to do `<Repl>.connect()`, WIP
+These require you to do `<Repl>.connect()` before usage
+* `<Repl>.env`: a dict of the repl's environment variables. WIP
+* `<Repl>.db`: A replit database object, if available
 
 #### FileManager
 Requires you to do `<Repl>.connect()`
@@ -172,7 +174,6 @@ Requires you to do `<Repl>.connect()`
 #### CommentManager
 * `<CommentManager>.cache`: returns a [`<Collection>`](#Collection) of [`<Comment>`](#Comment) objects
 * `<CommentManager>.user`: returns a [`<User>`](#User) object
-* `<CommentManager>.`:
 
 #### Comment
 * `<Comment>.id`: the comment's id

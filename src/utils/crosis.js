@@ -24,7 +24,7 @@ class Crosis {
 		}
 	}
 	async setup() {
-		await this.console.connect();
+		try {await this.console.connect()} catch {delete this.console};
 		this.env = await new Promise(async (res) => {
 			let shell = await this.channel("shell");
 			shell.onCommand((cmd) => {

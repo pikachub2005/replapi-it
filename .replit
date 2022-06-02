@@ -1,4 +1,5 @@
 entrypoint = "index.js"
+hidden = [".github"]
 
 [interpreter]
 command = [
