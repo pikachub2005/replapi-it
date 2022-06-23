@@ -1,6 +1,6 @@
 {
   "name": "replapi-it",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "An all-in-one API for replit.com",
   "main": "src/index.js",
   "scripts": {

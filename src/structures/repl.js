@@ -1,5 +1,6 @@
 const Crosis = require("../utils/crosis.js");
 const db = require("@replit/database");
+const Queries = require("../utils/queries.js");
 
 class Repl {
 	constructor(client, data = {}) {
@@ -35,6 +36,13 @@ class Repl {
 	}
 	async disconnect() {
 		await this.crosis.close()
+	}
+	async updateInfo(title = "", description = "") {
+		let req = await this.client.graphql(Queries.updateRepl, {input: {
+			description: description || this.description,
+			id: this.id,
+			title: title || this.title
+		}});
 	}
 }
 

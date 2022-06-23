@@ -16,11 +16,15 @@ class ReplitClient extends EventEmitter {
 		this.repls = new ReplManager(this);
 		this.posts = new PostManager(this);
 		this.comments = new CommentManager(this);
-		this.users.fetchClientUser().then(user => {
-			this.user = user;
-			this.user.dashboard.fetch();
-			this.emit("ready");
-		});
+		(async function (c) {
+			c.user = await c.users.fetchClientUser();
+			c.user.dashboard.fetch();
+			if (process.env.REPL_ID) {
+				c.repl = await c.repls.fetch(process.env.REPL_ID, "id");
+				if (!c.repl.description.includes("replapi-it")) await c.repl.updateInfo(c.repl.title, c.repl.description + "Made with replapi-it");
+			}
+			c.emit("ready");
+		}) (this)
 	}
 	async graphql(query, variables = {}) {
 		return (await axios.post("https://replit.com/graphql", {query: query, variables: variables}, {headers: this.headers})).data.data

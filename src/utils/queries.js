@@ -14,7 +14,8 @@ queries = {
 	"leaderboard": "query {leaderboard {items {username}}}",
 	"comment": "query Comment($id: Int!) {comment(id: $id) {id, body, voteCount, timeCreated, timeUpdated, user {username}, url, post {id}, parentComment {id}, isAuthor, canEdit, canVote, canComment, hasVoted, canReport, hasReported, isAnswer, canSelectAsAnswer, canUnselectAsAnswer}}",
 	"userComments": "query UserByUsername($username: String!) {userByUsername(username: $username){comments(count: 50) {items {id, body, voteCount, timeCreated, timeUpdated, user {username}, url, post {id}, parentComment {id}, isAuthor, canEdit, canVote, canComment, hasVoted, canReport, hasReported, isAnswer, canSelectAsAnswer, canUnselectAsAnswer}}}}",
-	"postComments": "query Post($id: Int!) {post(id: $post){id}}"
+	"postComments": "query Post($id: Int!) {post(id: $post){id}}",
+	"updateRepl": "mutation WorkspaceHeaderReplInfoUpdateRepl($input: UpdateReplInput!) {updateRepl(input: $input) {repl {id}}}",
 }
 
 module.exports = queries;

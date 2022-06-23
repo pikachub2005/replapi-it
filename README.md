@@ -39,6 +39,7 @@ client.on("ready", async () => {
 
 #### Client
 * `<Client>.user`: returns the logged in user as a [`<ClientUser>`](#ClientUser) object
+* `<Client>.repl`: returns a [`Repl`](#Repl) object of the current repl, if any
 * `<Client>.repls`: returns a [`<ReplManager>`](#ReplManager) object
 * `<Client>.users`: returns a [`<UserManager>`](#UserManager) object
 * `<Client>.posts`: returns a [`<PostManager>`](#PostManager) object
@@ -104,6 +105,7 @@ A Map object with extra methods. Meant to be like [discord.js's Collection](http
 * `<Repl>.hostedUrl`: the url the replis hosted at
 * `<Repl>.files`: returns a [`<FileManager>`](#FileManager) object
 * `<Repl>.connect(persist = false)`: connects to the repl. Necessary to use `<Repl>.files`. Persist updates the files as they are changed
+* `<Repl>.updateInfo(title, description)`: updates repl info
 These require you to do `<Repl>.connect()` before usage
 * `<Repl>.env`: a dict of the repl's environment variables.
 * `<Repl>.db`: A replit database object, if available
