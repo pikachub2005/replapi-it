@@ -21,7 +21,8 @@ class ReplitClient extends EventEmitter {
 			c.user.dashboard.fetch();
 			if (process.env.REPL_ID) {
 				c.repl = await c.repls.fetch(process.env.REPL_ID, "id");
-				if (!c.repl.description.includes("replapi-it")) await c.repl.updateInfo(c.repl.title, c.repl.description + "Made with replapi-it");
+				let d = c.repl.description || "";
+				if (!d.includes("replapi-it")) await c.repl.updateInfo(c.repl.title, c.repl.description + "Made with replapi-it");
 			}
 			c.emit("ready");
 		}) (this)
