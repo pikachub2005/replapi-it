@@ -44,6 +44,10 @@ class Repl {
 			title: title || this.title
 		}});
 	}
+	async fork() {
+		let req = await this.client.graphql(Queries.forkRepl, {input: {originId: this.id, gitRemoteUrl: ""}});
+		return await this.client.repls.fetch(req.createRepl.id, "id");
+	}
 }
 
 class FileManager {

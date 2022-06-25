@@ -11,12 +11,11 @@ class DashboardManager {
 	async delete(id) {
 		return await this.client.graphql(Queries.dashboardDeleteFolder, {folderId: id});
 	}
-	async move(destFolderId, replIds = [], folderIds = []) {
-		return await this.client.graphql(Queries.dashboardMoveItem, {replsIds: replIds, folderIds: folderIds, destFolderId: destFolderId});
-	}
+	// async move(destFolderId, replIds = [], folderIds = []) {
+	// 	return await this.client.graphql(Queries.dashboardMoveItems, {replsIds: replIds, folderIds: folderIds, destFolderId: destFolderId});
+	// }
 	async fetch(path = "") {
 		let req = (await this.client.graphql(Queries.dashboardItems, {path : path})).currentUser.replFolderByPath;
-		
 	}
 }
 
