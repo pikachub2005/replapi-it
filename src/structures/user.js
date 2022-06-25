@@ -1,5 +1,5 @@
 const ReplManager = require("../managers/replmanager.js");
-const DashboardManager = require("../managers/dashboardmanager.js");
+const Dashboard = require("./dashboard.js");
 const PostManager = require("../managers/postmanager.js");
 const CommentManager = require("../managers/commentmanager.js");
 
@@ -20,7 +20,7 @@ class User {
 class ClientUser extends User {
 	constructor(client, data = {}) {
 		super(client, data);
-		this.dashboard = new DashboardManager(this.client);
+		this.dashboard = new Dashboard(this.client);
 	}
 }
 
