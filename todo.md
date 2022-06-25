@@ -1,14 +1,8 @@
 ## TODO
 
-#### Dashboard
-* Move repls / folders
-
 #### Repl
-* Access environmental variables (WIP)
 * Access chat / threads
-* Run / stop
 * Read history
-* Use shell
 * Love
 * Access comments
 * Fork
@@ -25,7 +19,6 @@
 #### ReplManager
 * Restore repls
 * Transfer repls
-* Create from template
 
 #### General
 * Use only one package for http requests
