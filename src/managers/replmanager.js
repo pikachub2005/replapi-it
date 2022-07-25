@@ -7,7 +7,10 @@ class ReplManager {
 		this.client = client;
 		this.cache = new Collection();
 		this.user = user;
-		if (this.user != this.client.user) delete this.create;
+		if (this.user != this.client.user) {
+			delete this.create;
+			delete this.trash;
+		}
 	}
 	async fetch() {
 	 	let args = [...arguments];
@@ -31,6 +34,22 @@ class ReplManager {
 		let input = {title: title, language: language};
 		let repl = new Repl(this.client, (await this.client.graphql(Queries.createRepl, {"input": input})).createRepl);
 		return repl;
+	}
+	async trash() {
+		let repls = (await this.client.graphql(Queries.trash)).clui.trash.view.rows.map(data => new DeletedRepl(this.client, data));
+		return repls;
+	}
+}
+
+class DeletedRepl {
+	constructor(client, data = {}) {
+		this.client = client;
+		for (let [key, value] of Object.entries(data)) {
+			if (["title", "language", "description", "time_deleted"].includes(key)) this[key] = value;
+		}
+	}
+	async restore() {
+		await this.client.graphql(Queries.restore, {title: this.title});
 	}
 }
 

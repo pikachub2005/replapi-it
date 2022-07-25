@@ -5,10 +5,9 @@
 * Read history
 * Love
 * Access comments
-* Fork
 
 #### Client user
-* Access account data (username, email, connections)
+* Access account data (email, connections)
 
 #### Posts
 * Access comments
@@ -17,7 +16,7 @@
 * Access friend teams
 
 #### ReplManager
-* Restore repls
+* return restored repl
 * Transfer repls
 
 #### General
