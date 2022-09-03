@@ -1,0 +1,26 @@
+{
+  "name": "replapi-it",
+  "version": "3.2.0",
+  "description": "An all-in-one API for replit.com",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "PikachuB2005",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pikachub2005/replapi-it.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pikachub2005/replapi-it/issues"
+  },
+  "homepage": "https://github.com/pikachub2005/replapi-it#readme",
+  "dependencies": {
+    "@replit/crosis": "^9.1.0",
+    "@replit/database": "^2.0.2",
+    "axios": "^0.27.2",
+    "datauri": "^4.1.0"
+  }
+}

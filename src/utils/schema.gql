@@ -1,0 +1,7008 @@
+schema {
+  query: RootQueryType
+  mutation: RootMutationType
+  subscription: RootSubscriptionType
+}
+
+# The top level entry point for querying the graph
+type RootQueryType {
+  currentUser: CurrentUser
+
+  # Finds a single user via a unique identifier
+  user(id: Int!): User
+
+  # Find a Repl by id or url
+  repl(id: String, url: String): ReplQueryOutput!
+
+  # Finds a single user via a unique identifier
+  team(id: Int!): Team
+
+  # Fetches a team organization by id
+  teamOrganization(id: Int!): TeamOrganizationOutput!
+
+  # A Board
+  board(id: Int!): Board
+
+  # A Post
+  post(id: Int!): Post
+
+  # A Comment
+  comment(id: Int!): Comment
+
+  # Finds the curent user's seen state of a tour.
+  toursSeen(name: String!): ToursSeenQueryResult!
+
+  # Finds recently edited repls
+  recentRepls(count: Int = 3): [Repl!]!
+
+  # Finds a board by slug
+  boards(slugs: [String]): [Board!]!
+
+  # Finds a board by slug
+  boardBySlug(slug: String!): Board
+
+  # A user's profile
+  userByUsername(username: String!): User
+
+  # A team by username
+  teamByUsername(username: String!): TeamOutput!
+
+  # Finds all banned users
+  bannedBoardUsers: [BannedBoardUser]!
+
+  # Finds all reports on repls, posts and comments
+  boardReports(unresolvedOnly: Boolean!, count: Int): [BoardReport!]!
+
+  # Get a board report by providing its Id
+  boardReportsById(input: BoardReportsByIdInput!): boardReportsById
+
+  # Finds a folder from its ID
+  replFolderByPath(path: String!, teamName: String): ReplFolder
+
+  # Finds a folder from its ID
+  replFolderParentById(folderId: String): ReplFolder
+
+  # Finds the number of repls in your unnamed repls folder
+  unnamedReplsCount: Int!
+
+  # Returns @mention suggestions based on context and search string
+  atMentionSuggestions(
+    search: String
+    contextType: String
+    contextId: Int
+    limit: Int
+  ): [User]
+
+  # Finds the current user's notifications
+  notifications(
+    after: String
+    count: Int
+    seen: Boolean
+  ): NotificationConnection!
+
+  # Finds users whose usernames start with a given query
+  usernameSearch(query: String!, limit: Int): [User!]!
+
+  # Admin object
+  admin: Admin
+
+  # Finds tutorials
+  tutorials(languages: [String!]): [Tutorial!]!
+
+  # Finds trending posts with repls
+  trendingReplPosts(count: Int, minVoteCount: Int): [Post!]!
+
+  # ClUI root command
+  clui: CluiQuery
+
+  # Gets a coupon by id
+  coupon(id: String!): CouponQueryOutput!
+
+  # Returns a unique Repl title for the logged in user
+  replTitle(title: String, teamId: Int): String!
+
+  # Replit languages
+  languages(search: String, limit: Int): [Language!]!
+
+  # Finds users based on id (100 max)
+  usersByIds(ids: [Int!]!): [User!]!
+
+  # Replit language
+  language(id: String!): Language
+
+  # Gets the viewer's theme
+  theme: String! @deprecated(reason: "Use CurrentUser.editorPreferences.theme")
+
+  # Find an annotationAnchor by id
+  annotationAnchor(id: String!): AnnotationQueryOutput!
+
+  # Find a Repl comment
+  replComment(id: Int!): ReplCommentOutput!
+
+  # Get all comments of a user
+  getUserReplComments(
+    input: GetUserReplCommentsInput!
+  ): GetUserReplCommentsOutput
+
+  # A notification
+  notification(id: Int): NotificationOutput!
+
+  # Returns information about connections to repls which belong to the team with the id provided
+  getTeamConnections(
+    # The id of the team which connections are to be fetched from
+    teamId: Int!
+  ): [ReplConnections!]!
+
+  # A site-wide banner message
+  siteBanner: Banner
+
+  # The query used to fetch a template share link by its code
+  teamTemplateShareLink(
+    # The code of the link which we are fetching
+    code: String!
+  ): TeamTemplateShareLink!
+
+  # App env key/values
+  appEnv: [AppEnvConfig!]!
+
+  # App env value
+  appEnvValue(key: String!): String
+
+  # Finds a single tag via a unique identifier
+  tag(id: String!): Tag
+
+  # Returns existing tags in the order provided
+  tags(tags: [String!]!): [Tag!]!
+
+  # Google Classrooms associated with this user's Google account
+  getGoogleClassroomCourses: GetGoogleClassroomCoursesOutput
+
+  # Fetches the Google Classroom synced with Replit by id
+  googleClassroomById(id: Int!): GoogleClassroomByIdOutput
+
+  # Google Classroom students fetched from the API
+  getGoogleClassroomStudents(
+    courseId: String!
+  ): GetGoogleClassroomStudentsOutput
+  replTemplateById(id: Int!): ReplTemplateOutput
+  languageTemplateRepls: [Repl!]!
+    @deprecated(reason: "Use templateRepl2 to search for templates instead")
+
+  # Returns published curriculum for Teams
+  curricula: [Curriculum!]!
+  curriculumBySlug(slug: String!): CurriculumBySlugOutput!
+
+  # Sample Youtube video metadata used by the Youtube in the WS experiment
+  sampleYoutubeVideos: [YoutubeVideoMetadata!]!
+
+  # Returns Repl templates and repls published as templates
+  templateRepls(includeLanguages: Boolean): [TemplateReplObject!]!
+    @deprecated(reason: "Use templateRepls2")
+
+  # Returns Repl templates and Repls published as templates
+  templateRepls2(options: TemplateRepls2QueryOptions!): TemplateRepls2Output!
+  explainCode(
+    code: String!
+    language: String!
+    replId: String
+  ): ExplainCodeOutput!
+  generateCode(input: GenerateCodeInput!): GenerateCodeOutput!
+  searchCode(input: SearchCodeInput!): SearchCodeOutput!
+  transformCode(input: TransformCodeInput!): TransformCodeOutput!
+
+  # Finds all posts
+  replPosts(options: ReplPostsQueryOptions): PostConnection!
+
+  # Finds all pinned posts
+  pinnedPosts: [Post!]!
+
+  # Returns tags in official and community groups
+  tagGroups: TagGroups!
+  previewInvoice(input: PreviewInvoiceInput!): PreviewInvoice
+
+  # Search
+  search(options: SearchQueryOptions!): SearchQueryOutput!
+  lookForErrors(
+    code: String!
+    language: String!
+    replId: String
+    rangesToSuppress: JSON
+  ): LookForErrorsOutput
+  threadsByFile(replId: String!, path: String!): ThreadsByFileOutput
+
+  # Get paginated list of user events for current user.
+  getUserEventsFeed(after: String, count: Int): UserEventConnection
+
+  # Get a list of tutorial Repls, optionally filtered by category
+  tutorialRepls(input: TutorialReplsInput!): TutorialReplsOutput
+
+  # Returns the user's country code
+  country: String
+  hostingStats(input: HostingStats!): HostingStatsOutput!
+  instantGitHubImport(
+    input: InstantGitHubImportInput!
+  ): InstantGitHubImportOutput!
+
+  # The moderator audit logs
+  moderatorAuditLog(
+    input: ModeratorAuditLogInputType!
+  ): ModeratorAuditLogOutput!
+
+  # Paginated image scan results
+  imageScans(after: String, count: Int, threshold: Float!): ImageScansOutput
+}
+
+# Authenticated user
+type CurrentUser {
+  id: Int!
+  email: String!
+  username: String!
+  firstName: String
+  lastName: String
+  locale: String!
+  emailNotifications: Boolean!
+  isVerified: Boolean
+  displayName: String!
+  fullName: String!
+  url: String!
+  bio: String
+  socials: [UserSocial!]!
+  hasRepl: Boolean!
+  hasRole(role: UserRoles!): Boolean!
+  hasPrivacyRole: Boolean!
+  roles(only: [UserRoles!]): [UserRole!]!
+  isLoggedIn: Boolean!
+  isSubscribed: Boolean!
+  timeCreated: DateTime!
+
+  # Finds the user's warnings
+  warnings: [Warning]
+
+  # Finds the user's comments
+  comments(after: String, count: Int, order: String): CommentConnection
+  followers(after: String, count: Int): UserConnection!
+  followerCount: Int!
+  follows(after: String, count: Int): UserConnection!
+  followCount: Int!
+
+  # Determines whether a user is banned from talk/canny
+  isBannedFromBoards: Boolean!
+
+  # Determines whether a user has a hacker plan
+  isHacker: Boolean!
+  gate(feature: String!): Boolean!
+  gateVariation(feature: String!): String!
+  tourSeen(name: String!): Boolean!
+  toursSeen(tours: [String!]!): [TourSeen!]!
+  cannySSOToken: String!
+  canUpdate(column: UserUpdateColumns!): Boolean!
+
+  #
+  replSearch(
+    search: String!
+
+    # Only include repls owned by the user.
+    excludeMultiplayer: Boolean = true
+
+    # Only include public repls.
+    excludePrivate: Boolean = false
+    count: Int
+  ): [Repl!]!
+  state: UserState
+  suggestedTutorials(count: Int): [Tutorial!]!
+
+  # A list of langauges the current user has coded in, and optially the langauges they have selected as interested in
+  languages(includeInterestedIn: Boolean, limit: Int): [Language!]!
+  device: UserDevice!
+  sidebarClosed: Boolean!
+  search: UserSearchResults!
+  hasProfileImage: Boolean!
+  image: String!
+
+  # User profile cover image
+  coverImage: CoverImage
+  socialSignup: Boolean!
+  auth(provider: UserAuthProviders!): UserAuth
+  repositories(
+    count: Int
+    after: String
+    privacy: RepositoryPrivacy
+  ): RepositoriesOutput
+
+  # GitHub specific information for a GitHub authed user
+  gitHubInfo: GitHubInfo
+
+  # A Repl with slug matching the user's username
+  usernameRepl: Repl
+  daysSinceSignup: Int!
+
+  # User storage information
+  storage: UserStorage!
+  clui: JSON!
+
+  # User's editor preferences
+  editorPreferences: EditorPreferences!
+
+  # Finds a folder based on id
+  replFolder(id: String!, teamId: Int): ReplFolder
+
+  # Finds a folder based on path
+  replFolderByPath(path: String!): ReplFolder
+
+  # How many teams is the user part of
+  teamsCount: Int!
+
+  # List of teams the user is a member of
+  teams: [Team!]!
+
+  # List of teams without a subscription
+  freeTeams: [Team!]!
+  teamOrganizations(
+    # Select a type of org by subscription type
+    subscriptionType: TeamOrganizationSubscriptionTypeEnum
+  ): [TeamOrganization!]!
+
+  # Teams that are connected to a Google Classroom
+  googleClassroomTeams: [Team!]!
+
+  # Returns true if a user has boost remaining, false otherwise
+  canBoost: Boolean!
+
+  # Finds the current user's notification count
+  notificationCount: Int!
+
+  # The current user's billing info
+  billingInfo: BillingInfo
+
+  # The current user's customer entity
+  customer: Customer
+
+  # If a user qualifies for onboarding
+  hasOnboarding: Boolean! @deprecated(reason: "This experiment is done")
+
+  # If a user qualifies for apps onboarding
+  hasAppsOnboarding: Boolean! @deprecated(reason: "This experiment is done")
+
+  # If a user should see a privacy update
+  hasPrivacyUpdate: Boolean!
+  subscription: UserSubscription
+    @deprecated(
+      reason: "UserSusbcription is deprecated in preference for Subscription"
+    )
+
+  # Whether the user has authorized Replit to access their Google Classroom data
+  hasGoogleClassroomScope: Boolean!
+
+  # A list of groups of template repls or langauges
+  createReplOptions: [CreateReplOptionGroup!]!
+
+  # A list of the users favorite template repls or langauges
+  favoriteCreateReplOptions: [CreateReplOptions!]!
+  hasExplainCode: Boolean!
+  hasGenerateCode: Boolean!
+  canCreateNewFreeTeam: Boolean!
+
+  # Subscription capabilities for the user
+  capabilities: SubscriptionCapabilities
+
+  # Determines whether to show the user's presence on the site
+  showPresence: Boolean!
+
+  # Determines wether user has completed edu verification form
+  showVerifyTeacherBanner: Boolean!
+
+  # Determines wether user is currently in firewall mode or not
+  isFirewallMode: Boolean!
+
+  # Cycles state for the user
+  cycles: Cycles!
+
+  # Searches repls a user can publish
+  publishableReplSearch(search: String!, count: Int): [Repl!]!
+
+  # The active custom installed Theme, or an official Replit Theme
+  activeTheme: UserTheme!
+
+  # The User's custom installed Themes
+  installedCustomThemes: [CustomUserTheme!]!
+
+  # Repl Power Ups summary
+  replPowerUps: [ReplPowerUpDescriptionType!]!
+
+  # User Power Ups summary
+  userPowerUps: [UserPowerUpDescriptionType!]!
+  powerUpCosts: UserPowerUpCost!
+
+  # Fetches a course by slug for the authed user.
+  course(slug: String!): UserCourseOutput!
+}
+
+# Social media profile links associated with a user profile
+type UserSocial {
+  id: Int!
+  url: String!
+  type: user_socialstypeEnumType!
+}
+
+enum user_socialstypeEnumType {
+  twitter
+  facebook
+  linkedin
+  github
+  discord
+  youtube
+  twitch
+  website
+}
+
+enum UserRoles {
+  SELF_LEARNER
+  TEACHER
+  STUDENT
+  ADMIN
+  MODERATOR
+  EXPLORER
+  CONTENT_CREATOR
+  DETECTIVE
+  TESTER
+  DEVELOPER
+  LANGUAGE_JAMMER
+  PRIVACY_LIMITED_ACCESS
+  GITHUB_CLASSROOM_USER
+  TEMPLATE_DEVELOPER
+  BUSINESS
+  ONBOARDING_EXPERIENCE_NONE
+  ONBOARDING_EXPERIENCE_LOW
+  ONBOARDING_EXPERIENCE_MEDIUM
+  ONBOARDING_EXPERIENCE_HIGH
+  INTENT_PERSONAL
+  INTENT_STUDENT
+  INTENT_TEACHER
+  INTENT_BUSINESS
+  TEACHER_UNVERIFIED
+  TEACHER_REJECTED
+  REPLIT_STAFF
+  FEATURED
+  REPLIT_REP
+  REPLIT_IDENTITY_TESTING
+  DAYS_OF_CODE
+}
+
+# A role belonging to a user
+type UserRole {
+  id: String!
+  key: UserRoles!
+  name: String!
+  tagline: String
+}
+
+# A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+scalar DateTime
+
+# A warning received by the user from Repl Talk moderators.
+type Warning {
+  id: Int!
+  reason: String!
+
+  # The user who received the warning.
+  user: User
+
+  # The moderator who issued the warning.
+  moderator: User
+  timeCreated: DateTime!
+}
+
+# A user of Replit
+type User {
+  id: Int!
+  username: String!
+  firstName: String
+  lastName: String
+  locale: String!
+  isVerified: Boolean
+  displayName: String!
+  fullName: String!
+  url: String!
+  bio: String
+  socials: [UserSocial!]!
+  hasRole(role: UserRoles!): Boolean!
+  hasPrivacyRole: Boolean!
+  roles(only: [UserRoles!]): [UserRole!]!
+  isFollowedByCurrentUser: Boolean!
+  isFollowingCurrentUser: Boolean!
+  isBlockedByCurrentUser: Boolean!
+  isBlockingCurrentUser: Boolean!
+  isLoggedIn: Boolean!
+  isSubscribed: Boolean!
+  timeCreated: DateTime!
+
+  # Finds the public repls for a user
+  publicRepls(
+    pinnedReplsFirst: Boolean
+    showUnnamed: Boolean
+    before: String
+    after: String
+    count: Int
+    order: String
+    direction: String
+  ): ReplConnection!
+  followers(after: String, count: Int): UserConnection!
+  followerCount: Int!
+  follows(after: String, count: Int): UserConnection!
+  followCount: Int!
+
+  # Repls pinned on the profile
+  pinnedRepls: [Repl!]!
+
+  # Repls searched on the profile
+  profileRepls(
+    search: String
+    before: String
+    after: String
+    count: Int
+    order: String
+    direction: String
+  ): ReplConnection!
+
+  # Finds the user's warnings
+  warnings: [Warning]
+
+  # Finds the user's posts
+  posts(
+    after: String
+    count: Int
+    order: String
+    unlisted: Boolean
+  ): PostConnection
+
+  # Finds the user's comments
+  comments(after: String, count: Int, order: String): CommentConnection
+
+  # Determines whether a user is banned from talk/canny
+  isBannedFromBoards: Boolean!
+
+  # Determines whether a user has a hacker plan
+  isHacker: Boolean!
+
+  # A list of langauges the user has coded in
+  languages(limit: Int): [Language!]!
+
+  # Whether a user has a gated feature
+  gate(feature: String!): Boolean!
+  image: String!
+
+  # User profile cover image
+  coverImage: CoverImage
+  teamPermissions(teamId: Int!): TeamPermission
+  redirectToTeamDashboard: Boolean!
+
+  # Gives datetime for last time this user was seenon the site and whether they should be considered online now
+  presenceStatus: UserPresenceStatus!
+}
+
+# A connection to a list of Repls.
+type ReplConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of Repls.
+  items: [Repl!]!
+}
+
+# Information about pagination in a connection.
+type PageInfo {
+  # Next results available
+  hasNextPage: Boolean!
+
+  # Previous results available
+  hasPreviousPage: Boolean!
+
+  # Cursor to fetch next page
+  nextCursor: String
+
+  # Cursor to fetch previous page
+  previousCursor: String
+}
+
+# A repl
+type Repl {
+  id: String!
+  isProject: Boolean!
+  isPrivate: Boolean!
+  isStarred: Boolean!
+  title: String!
+  slug: String!
+  imageUrl: String
+  folderId: String
+  isRenamed: Boolean
+
+  # The comment count for a repl
+  commentCount: Int!
+
+  # The like count for a repl
+  likeCount: Int!
+
+  # If the current has liked this repl
+  currentUserDidLike: Boolean!
+
+  # A list of groups of repls
+  relatedRepls(limitPerGroup: Int): [RelatedReplsGroup!]!
+
+  # The category of the template if the Repl is one
+  templateCategory: String
+  languageExamples(asText: Boolean): [LanguageExample!]
+    @deprecated(reason: "User legacyLanguageConfig.examples")
+  deprecatedLanguageConfig(asText: Boolean): Language!
+
+  # Whether or not this Repl was posted to Talk/Community
+  wasPosted: Boolean!
+
+  # Whether or not this Repl was published to Apps
+  wasPublished: Boolean!
+
+  # The Repl's layout for the current user
+  layoutState: JSON
+  language: String!
+  user: User
+  origin: Repl
+  lang: Language!
+
+  # The icon url for a repl
+  iconUrl: String!
+
+  # The template label for a repl
+  templateLabel(disableFallbackToTitle: Boolean): String!
+  url(lite: Boolean): String!
+  inviteUrl: String
+  multiplayerInvites: [MultiplayerInvite!]!
+  historyUrl: String
+  analyticsUrl: String
+  rootOriginReplUrl: String
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  isOwner(canWrite: Boolean): Boolean
+  config: ReplConfig!
+  pinnedToProfile: Boolean!
+
+  # Sum of size (in bytes) of all files in this repl
+  size: Int!
+  hostedUrl(
+    dotty: Boolean
+    protocol: Protocols
+    dev: Boolean
+    noCustomDomain: Boolean
+  ): String!
+  terminalUrl: String!
+  nextPagePathname: String!
+
+  # Can the requester edit the repl title, description, and public status, also if can they delete it and move it between folders
+  currentUserPermissions: ReplUpdatePermissions!
+  database: Database
+  checkDomain(domain: String!): DomainStatus
+  checkDomain2(domain: String!): CheckDomain2
+  permissions: [ReplPermission!]! @deprecated(reason: "Use multiplayers field")
+  template: ReplTemplate
+  isProjectFork: Boolean!
+  isModelSolution: Boolean!
+  isModelSolutionFork: Boolean!
+  workspaceCta: ReplWorkspaceCta!
+  submission: ReplSubmission
+  annotationAnchors: [AnnotationAnchor!]!
+  owner: ReplOwner
+  currentUserEditRequest: EditRequest
+    @deprecated(reason: "This feature is deprecated")
+  hasEducationPane: Boolean
+    @deprecated(reason: "Education pane has been completely rolled out")
+  unitTests: ReplUnitTestsWithMeta
+  unitTestResults: [ReplUnitTestResultsOutput]
+  hasUnitTesting: Boolean
+    @deprecated(reason: "Unit tests are now available on all repls")
+  ioTests: [ReplTemplateTest!]!
+  recentForks(count: Int): [Repl!]!
+  posts(after: String, count: Int): PostConnection!
+  comments(after: String, count: Int): ReplCommentConnection!
+  commentSettings: ReplCommentSetting
+
+  # Count of public forks of this repl
+  publicForkCount: Int!
+
+  # Number of times this repl has been run
+  runCount: Int!
+
+  # Public forks of this repl
+  publicForks(after: String, count: Int): ReplConnection!
+  isAlwaysOn: Boolean!
+  isBoosted: Boolean!
+
+  # Deployment for this repl
+  deployment: ReplDeployment
+
+  # Releases of this repl
+  releases(after: String, count: Int): ReplReleaseConnection!
+  gateOnOwner(feature: String!): Boolean!
+  multivariateGateOnOwner(feature: String!): String!
+
+  # Tags on this repl
+  tags: [Tag!]!
+
+  # When the repl was last published
+  lastPublishedAt: DateTime
+
+  # Results for when IO tests where executed most recently on the repl, only for edu repls.
+  ioTestResults: [IOTestResult!]
+
+  # Multiplayers of this Repl
+  multiplayers: [User!]!
+
+  # The language this nix template Repl is replacing
+  nixedLanguage: String
+
+  # Returns how this repl was published or null if unpublished
+  publishedAs: PublishedReplKind
+
+  # Files stored in the db that are associated with this Repl (non-container files)
+  attachments(
+    # Optional attachment filename to fetch
+    fileName: String
+  ): [ReplAttachment!]!
+
+  # Return's a repl's source
+  source: ReplSource
+
+  # Returns apps derived from this Repl if it's a template
+  derivedApps(after: String, count: Int): ReplConnection
+
+  # The count of public repls forked from one of this repl's releases
+  publicReleasesForkCount: Int!
+
+  # Return's a repl's description
+  description(
+    # removes Markdown formatting from text
+    plainText: Boolean
+  ): String
+  hasExplainCode: Boolean!
+  hasGenerateCode: Boolean!
+
+  # Information about a Repl's template. For Repls that don't have a template, returns information about the canonical language Repl
+  templateInfo: ReplTemplateInfo!
+  recentComments: [ReplComment!]!
+
+  # All domains associated with this repl.
+  domains: [Domain]
+
+  # Address for the apex domain proxy for apex domain linking.
+  apexProxy: String!
+  replViewSettings: ReplViewSettings
+  powerUpCosts: PowerUpCostsOutput!
+
+  # The template label for a repl
+  templateReview: TemplateReview
+  isTutorial: Boolean!
+}
+
+# A group of related repls
+type RelatedReplsGroup {
+  # The name of the group
+  name: String!
+
+  # A list of repls
+  repls: [Repl!]!
+}
+
+# Example code for a language
+type LanguageExample {
+  mainFile: String!
+  name: String!
+  code: String!
+}
+
+# A Repl language
+type Language {
+  id: String!
+  supportsMultiFiles: Boolean!
+  usesInterpreter: Boolean!
+  canUseShellRunner: Boolean!
+  usesTerminal2: Boolean!
+  hasUPM: Boolean!
+  hasLibSearch: Boolean!
+  supportsPackager3: Boolean!
+  supportsGit: Boolean!
+  displayName: String!
+  key: String!
+  category: String!
+  tagline: String!
+  icon: String
+  engine: String
+  isNew: Boolean
+  isDeprecated: Boolean!
+  mainFile: String!
+  examples: [LanguageExample!]
+  header: String
+  tagName: String!
+  aliases: [LanguageAlias!]
+  hasReplboxWebview: Boolean!
+  hasReplboxUrlBar: Boolean!
+  nixTemplateRepl: Repl
+  templateRepl: Repl
+  betaTemplateRepl: Repl
+  recentReplsCreatedCount: Int!
+  hasDAP: Boolean!
+  hasGit: Boolean!
+}
+
+# Example code for a language
+type LanguageAlias {
+  displayName: String!
+  tagline: String!
+  icon: String!
+  category: String!
+}
+
+# The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+scalar JSON
+
+# An emailed invite to join repl.it multiplayer
+type MultiplayerInvite {
+  email: String!
+  replId: String!
+  type: multiplayer_invitestypeEnumType!
+  repl: Repl
+}
+
+enum multiplayer_invitestypeEnumType {
+  r
+  rw
+}
+
+type ReplConfig {
+  isServer: Boolean
+  gitRemoteUrl: String
+  domain: String
+  isVnc: Boolean
+  alwaysOn: Boolean @deprecated(reason: "Superseded by repl.isAlwaysOn")
+  doClone: Boolean
+}
+
+# Web protocols
+enum Protocols {
+  HTTPS
+  WSS
+}
+
+# Allowed actions to be taken by the requesting user
+type ReplUpdatePermissions {
+  changeTitle: Boolean!
+  changeDescription: Boolean!
+  changeImageUrl: Boolean!
+  changeIconUrl: Boolean!
+  changeTemplateLabel: Boolean!
+  changeLanguage: Boolean!
+  changeConfig: Boolean!
+  changePrivacy: ReplChangePrivacyPermission!
+  star: Boolean!
+  pin: Boolean!
+  move: Boolean!
+  delete: Boolean!
+  leaveMultiplayer: Boolean!
+  editMultiplayers: Boolean!
+  viewHistory: Boolean!
+  containerAttach: Boolean!
+  containerWrite: Boolean!
+  changeAlwaysOn: ReplChangeAlwaysOnPermission!
+  linkDomain: Boolean!
+  writeTests: Boolean!
+  changeCommentSettings: Boolean!
+  inviteGuests: Boolean!
+  publish: Boolean!
+  fork: Boolean!
+}
+
+enum ReplChangePrivacyPermission {
+  Allowed
+  SubscriptionRequired
+  Disallowed
+}
+
+enum ReplChangeAlwaysOnPermission {
+  Allowed
+  SubscriptionRequired
+  Disallowed
+}
+
+# A repl-specific key-value database
+type Database {
+  id: ID!
+  jwt: String!
+    @deprecated(
+      reason: "Clients should no longer use a JWT to talk directly to kv.repl.it. Use sibling fields on Database instead."
+    )
+  keysCount: Int
+  sizeMB: Float
+}
+
+# Checks if CNAME is correctly configued for a given domain to be linked.
+type DomainStatus {
+  status: String
+  retry: Boolean!
+  verified: Boolean!
+}
+
+union CheckDomain2 = NotFoundError | ServiceUnavailable | DomainStatus2
+
+# An error caused by being unable to locate a resource
+type NotFoundError {
+  message: String!
+}
+
+# An error caused by a service being unavailable
+type ServiceUnavailable {
+  message: String!
+}
+
+# Checks if CNAME is correctly configued for a given domain to be linked.
+type DomainStatus2 {
+  status: String
+  retry: Boolean!
+  verified: Boolean!
+  records: DomainStatusRecords
+}
+
+# DNS records that were obtained as part of a domain link check.
+type DomainStatusRecords {
+  A: [String!]
+  CNAME: [String!]
+  TXT: [String!]
+}
+
+# Access permissions for a repl
+type ReplPermission {
+  id: Int!
+  userId: Int!
+  replId: String!
+  type: repl_permissionstypeEnumType!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  repl: Repl
+  user: User
+}
+
+enum repl_permissionstypeEnumType {
+  r
+  rw
+}
+
+# A template for repls
+type ReplTemplate {
+  id: Int!
+  imageUrl: String
+  hoverImageUrl: String
+  order: Int
+  dueDate: Date
+  availableStartDate: Date
+  availableEndDate: Date
+  isPublished: Boolean!
+  isGroupProject: Boolean!
+  restrictAfterSubmit: Boolean!
+  allowSelfGrouping: Boolean!
+  selfGroupSize: Int
+  repl: Repl!
+  modelSolution: ReplTemplateModelSolution
+  author: User!
+  tests: [ReplTemplateTest!]!
+  team: Team
+  url: String!
+
+  # Returns all project submission groups. Only applies to group projects.
+  submissionGroups: [ReplSubmissionGroup!]!
+  submissionInfo: ReplTemplateSubmissionInfo
+
+  # Returns the submissions the user has permission to access.
+  submissions: [ReplSubmission!]!
+  userSubmissionGroup: ReplSubmissionGroup
+}
+
+# A special custom Scalar type for Dates that converts to a ISO formatted string
+scalar Date
+
+# A model submission for a Repl template
+type ReplTemplateModelSolution {
+  id: Int!
+  visibleAfterSubmitting: Boolean!
+  visibleAfterDueDate: Boolean!
+  visibleAfterPassingTests: Boolean!
+
+  # Repl containing the solution files
+  repl: Repl!
+
+  # Can the current user fork the model solution. Determined by the rules of the model solution
+  canStudentFork: Boolean!
+
+  # Student fork of the model solution. Student only view the model solution via a fork.
+  studentFork: Repl
+}
+
+# A test for a template repl
+type ReplTemplateTest {
+  id: Int!
+  name: String!
+  input: String!
+  output: String!
+  timeCreated: Date!
+  type: ReplTemplateTestType!
+  template: ReplTemplate!
+}
+
+enum ReplTemplateTestType {
+  match
+  exact
+  regex
+  compatibility
+}
+
+# A team inside repl.it
+type Team {
+  id: Int!
+  username: String!
+
+  # Whether this Team has been archived
+  archived: Boolean
+
+  # Description of the team
+  description: String!
+
+  # Display name for the team
+  displayName: String!
+
+  # List of members of the team
+  memberCount: Int!
+
+  # A list of pending invites
+  openInvites: [TeamInvite]!
+
+  # Google Classroom connected to this Team
+  googleClassroom: GoogleClassroom
+
+  # List of members of the team, only visible to users in the team
+  members(
+    permissions: String
+
+    # Optionally limit the number of members queried and returned.
+    limit: Int
+  ): [TeamMembership!]!
+
+  # Organization that owns this team (only for paid teams)
+  organization: TeamOrganization
+
+  # Profile image for the team
+  image: String!
+
+  # Whether the user is a member of the team or not
+  isMember: Boolean!
+
+  # Whether the current user is an admin in the team or not
+  isAdmin: Boolean!
+
+  # Whether the current user is the team owner or not.
+  isOwner: Boolean!
+
+  # Whether the current user has permission to manage the team's billing or not
+  hasBillingPerms: Boolean!
+  inviteLink: TeamInviteLink
+  recentRepls(count: Int!): [Repl!]!
+
+  # Determines if this team has privacy invites
+  hasPrivacyInvites: Boolean!
+
+  # Determines if this team is eligible for team templates
+  hasTemplates: Boolean!
+
+  # Visible team templates based on the requesting user's role
+  templates(published: Boolean): [ReplTemplate!]!
+
+  # Checks subscription type
+  subscriptionIsType(
+    # Select a type of org by subscription type
+    subscriptionType: TeamSubscriptionTypeEnum
+  ): Boolean!
+
+  # Gates applying to the team as opposed to the user
+  gate(
+    feature: String!
+
+    # Select a type of org by subscription type
+    subscriptionType: TeamSubscriptionTypeEnum
+  ): Boolean!
+
+  # Returns true if this team has not been migrated to use stacks for its templates
+  needsMigrationToStacks: Boolean!
+
+  # Returns a stack of template repls that do not belong to any stack
+  defaultTemplateStack: Stack!
+
+  # Returns a stack of repls that do not belong to any stack
+  defaultReplStack: Stack!
+
+  # Stacks belonging to the team
+  stacks: [Stack!]!
+
+  # Collections of templates
+  collections(
+    # Optional size for templates.
+    batchSize: Int
+  ): [TeamCollection!]!
+
+  # The template share links for the team
+  templateShareLinks: [TeamTemplateShareLink!]!
+
+  # Records of templates being shared
+  templateShares: [TeamTemplateShare!]!
+  url: String!
+
+  # List of guests of the team
+  guests: [TeamGuest!]!
+
+  # Curricula that has been impored into this team
+  curriculumImports: [Curriculum!]!
+
+  # Subscription capabilities for the organization this team belongs to
+  capabilities: SubscriptionCapabilities
+  userPermissions: TeamUserPermissions
+  followerCount: Int!
+  isFollowedByCurrentUser: Boolean!
+}
+
+# An invite to a team
+type TeamInvite {
+  id: Int!
+  externalId: String
+
+  # The team the invite belongs to
+  team: Team!
+
+  # Whether the invitation has been accepted or not
+  accepted: Boolean!
+
+  # The username for the user the invite belongs to (or their email)
+  usernameOrEmail: String
+
+  # The icon for the user the invite belongs to
+  image: String!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Google Classroom entry point
+type GoogleClassroom {
+  id: Int!
+  name: String!
+  courseId: String!
+
+  # Google Classroom students invites to Replit
+  members: [GoogleClassroomMember]!
+}
+
+type GoogleClassroomMember {
+  id: Int!
+  externalId: String!
+  user: User
+  invite: TeamInvite
+}
+
+# A member of a team
+type TeamMembership {
+  id: Int!
+  nickname: String
+  user: User
+
+  # The member's permissions for the team
+  permissions: TeamPermission!
+
+  # Team member email; only visible to team admin
+  email: String
+}
+
+# The permissions a user has for a team
+enum TeamPermission {
+  admin
+  member
+  billing_admin
+  owner
+}
+
+# Owns and manages teams
+type TeamOrganization {
+  id: Int!
+  name: String!
+  isVerified: Boolean!
+  customer: Customer
+
+  # If the current team organization is expired
+  isExpired: Boolean!
+  subscription: TeamOrganizationSubscription
+
+  # Whether the pending verification badge is visible or not
+  showVerificationBadge: Boolean!
+
+  # Determines if the user owns the organizaiton
+  isOwner: Boolean
+
+  # Determines if the user is an admin on the organization
+  isAdmin: Boolean!
+
+  # List of members of the org
+  members: [TeamOrganizationMembership!]!
+  teams: [Team!]!
+
+  # Count of active teams belonging to this org
+  teamsCount: Int
+  archivedTeams: [Team!]!
+
+  # Count of archived teams belonging to this org
+  archivedTeamsCount: Int
+  unsubscribedTeams: [Team!]!
+  unsubscribedTeamsCount: Int
+
+  # Subscription capabilities for the organization
+  capabilities: SubscriptionCapabilities
+  userPermissions: TeamOrganizationUserPermissions
+  pendingInvites: [TeamOrganizationInvite!]!
+  inviteLink: TeamOrganizationInviteLink
+  canBeDeleted: Boolean!
+}
+
+# Customer billing information; all subscriptions are parented to this entity.
+type Customer {
+  id: Int!
+  stripeCustomerId: String
+  paymentMethod: customerspaymentMethodEnumType
+  timeUpdated: Date
+  timeCreated: Date!
+  timeDeleted: Date
+}
+
+enum customerspaymentMethodEnumType {
+  card
+  check
+  bank
+}
+
+# Team organization subscription information
+type TeamOrganizationSubscription {
+  id: Int!
+  stripeStatus: team_organization_subscriptionsstripeStatusEnumType
+  planId: String!
+  origin: String!
+  isTrial: Boolean!
+  months: Int
+  quantity: Int
+  quickbooksInvoiceId: String
+  timeExpired: Date
+  timeUpdated: Date
+  timeCreated: Date!
+  timeDeleted: Date
+  isEducationPlan: Boolean!
+  isBusinessPlan: Boolean!
+  isPerSeatPlan: Boolean!
+  canAddEducationTeam: Boolean!
+  isFlatPlan: Boolean!
+  isExpiring(daysFromNow: Int!): Boolean!
+
+  # Subscriptions that do not have a Stripe subscription were manually provisioned
+  isManuallyProvisioned: Boolean!
+  interval: TeamOrganizationSubscriptionIntervalType
+  teamOrganization: TeamOrganization
+  stripeCustomer: StripeCustomer
+  canCreateNewTeam: Boolean!
+}
+
+enum team_organization_subscriptionsstripeStatusEnumType {
+  active
+  past_due
+  unpaid
+  canceled
+  incomplete
+  incomplete_expired
+  trialing
+}
+
+enum TeamOrganizationSubscriptionIntervalType {
+  MONTH
+  YEAR
+}
+
+# Represents underlying stripe API object
+type StripeCustomer {
+  id: String!
+  balance: Int!
+  created: Int!
+  subscriptions: [StripeSubscription]!
+  defaultSource: StripeSource
+  address: StripeAddress
+}
+
+# Represents underlying stripe API object
+type StripeSubscription {
+  id: String!
+  currentPeriodStart: Int!
+  currentPeriodEnd: Int!
+  defaultSource: StripeSource
+  latestInvoice: StripeInvoice
+  status: StripeSubscriptionStatus!
+}
+
+# Represents underlying stripe API object
+type StripeSource {
+  id: String!
+  object: String!
+  type: String
+  bankName: String
+  receiver: StripeSourceReceiver
+  last4: String
+  status: StripeSourceStatus
+}
+
+type StripeSourceReceiver {
+  address: String
+  amountCharged: Int
+  amountReceived: Int
+  amountReturned: Int
+}
+
+enum StripeSourceStatus {
+  pending
+  chargeable
+  consumed
+  canceled
+  failed
+  new
+  validated
+  verified
+  verificationFailed
+  errored
+}
+
+# Represents underlying stripe API object
+type StripeInvoice {
+  id: String!
+  collectionMethod: StripeCollectionMethod!
+  hostedInvoiceUrl: String
+  subscription: String
+  periodStart: Int!
+  periodEnd: Int!
+  dueDate: Int
+  paid: Boolean!
+  amountDue: Int!
+  amountPaid: Int!
+  amountRemaining: Int!
+  nextPaymentAttempt: Int
+}
+
+enum StripeCollectionMethod {
+  charge_automatically
+  send_invoice
+}
+
+enum StripeSubscriptionStatus {
+  active
+  pastDue
+  unpaid
+  canceled
+  incomplete
+  incompleteExpired
+  trialing
+}
+
+type StripeAddress {
+  city: String
+  country: String
+  line1: String
+  line2: String
+  postal_code: String
+  state: String
+}
+
+# A member of an org
+type TeamOrganizationMembership {
+  id: Int!
+  role: team_organization_membersroleEnumType
+  user: User
+}
+
+enum team_organization_membersroleEnumType {
+  team
+  owner
+  admin
+}
+
+# Capabilities for subscriptions and users on subscriptions
+type SubscriptionCapabilities {
+  isEducationPlan: Boolean!
+  isBusinessPlan: Boolean!
+  isPerSeatPlan: Boolean!
+  canAddEducationTeam: Boolean!
+
+  # Whether or not the current user can create an edu trial
+  canCreateEduTrial: Boolean!
+  isFlatPlan: Boolean!
+  isExpiring(daysFromNow: Int!): Boolean!
+  canCreateNewTeam: Boolean!
+  canCreatePrivateRepl: Boolean!
+  canViewOwnPrivateRepl: Boolean!
+  availableSeats: Int!
+  hasValidSubscription: Boolean!
+  memberCount: Int!
+  associatedUserIds: [Int]!
+  canBoost: Boolean!
+}
+
+# Organization permissions that the current user has
+type TeamOrganizationUserPermissions {
+  canViewOrgSettings: Boolean!
+  canEditBilling: Boolean!
+  canCancelPlan: Boolean!
+  canDeleteOrg: Boolean!
+  canLeaveOrg: Boolean!
+  canAddOrgOwners: Boolean!
+  canAddOrgAdmins: Boolean!
+  canRemoveOrgAdmins: Boolean!
+  canRemoveOrgOwners: Boolean!
+  canCreateTeamsInOrg: Boolean!
+  canViewTitlesOfAllTeams: Boolean!
+  canViewContentsOfAllTeams: Boolean!
+}
+
+# An invite to a team organization
+type TeamOrganizationInvite {
+  id: Int!
+
+  # The organization the invite belongs to
+  organization: TeamOrganization!
+
+  # Whether the invitation has been accepted or not
+  accepted: Boolean!
+
+  # The username for the user the invite belongs to (or their email)
+  usernameOrEmail: String
+
+  # The invited user
+  user: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# An invite link for a team organization
+type TeamOrganizationInviteLink {
+  id: Int!
+  code: String!
+}
+
+# An invite link for a team
+type TeamInviteLink {
+  id: Int!
+  code: String!
+  eduSignup: Boolean!
+}
+
+enum TeamSubscriptionTypeEnum {
+  EDUCATION
+  PRO
+}
+
+# List of ordered repls
+type Stack {
+  id: Int!
+  title: String!
+  description: String
+
+  # Number of repls in the stack
+  replsCount: Int!
+
+  # Repls that belong to the stack
+  repls: [Repl!]!
+}
+
+# Collection of team templates
+type TeamCollection {
+  # Title of the collection. Can be null if unnamed
+  title: String
+
+  # Does the collection contain any group projects
+  hasGroupProject: Boolean!
+
+  # Templates loaded from the collection
+  templates: [ReplTemplate]!
+}
+
+# A link which can be used to copy templates from one team to another.
+type TeamTemplateShareLink {
+  id: Int!
+  code: String!
+
+  # The templates which should be copied when the link is used
+  templates: [ReplTemplate!]!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# An instance where a body of templates were copied from one team to another.
+type TeamTemplateShare {
+  id: Int!
+
+  # The team which the templates that were copied were copied from
+  from: Team!
+
+  # The team which the templates copied were copied to
+  to: Team!
+
+  # The templates which were copied
+  templates: [ReplTemplate!]!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# A guest of a team
+type TeamGuest {
+  id: Int!
+  user: User
+}
+
+# Education content created for Teams
+type Curriculum {
+  id: Int!
+  slug: String!
+  title: String!
+  description: String!
+  coverPhotoUrl: String
+  isFeatured: Boolean
+
+  # Languages used in curriculum projects
+  languages: [Language]!
+
+  # Stacks containing the lessons as repls in. Returns the latest curriculum version; otherwise, provide a specific curriculum version.
+  contents(
+    # Optional version number for fetching a specific curriculum version
+    versionNumber: Int
+  ): CurriculumContentOutput!
+}
+
+union CurriculumContentOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | CurriculumContent
+
+# An error caused by a user's request being bad / invalid
+type UserError {
+  message: String!
+}
+
+# An error caused by a user attempting to access a resource without authorization
+type UnauthorizedError {
+  message: String!
+}
+
+type CurriculumContent {
+  versionNumber: Int!
+  units: [Stack!]!
+}
+
+# Team permissions that the current user has
+type TeamUserPermissions {
+  canArchiveTeam: Boolean!
+  canDeleteTeam: Boolean!
+  canRenameTeam: Boolean!
+  canLeaveTeam: Boolean!
+  canAddTeamOwners: Boolean!
+  canAddTeamAdmins: Boolean!
+  canRemoveTeamAdmins: Boolean!
+  canAddTeamMembers: Boolean!
+  canRemoveTeamMembers: Boolean!
+  canAddGuests: Boolean!
+  canRemoveGuests: Boolean!
+  canCreateTeamRepls: Boolean!
+  canEditTeamRepls: Boolean!
+  canDeleteTeamRepls: Boolean!
+  canSubmitProjects: Boolean!
+}
+
+# A submission for template repls
+type ReplSubmissionGroup {
+  submission: ReplSubmission
+  users: [User]!
+}
+
+# A submission for template repls
+type ReplSubmission {
+  id: Int!
+  timeSubmitted: Date
+  timeLastReviewed: Date
+  isGroupSubmission: Boolean!
+  repl: Repl
+  author: User
+  submissionGroup: ReplSubmissionGroup
+}
+
+type ReplTemplateSubmissionInfo {
+  submittedCount: Int!
+  startedCount: Int!
+}
+
+enum ReplWorkspaceCta {
+  Share
+  ShareUpgrade
+  CreateTemplate
+  PublishTemplate
+  EditTemplate
+  Submit
+  Resubmit
+  UpdateModelSolution
+  ReviewSubmission
+  Auth
+}
+
+# A single Annotation Anchor
+type AnnotationAnchor {
+  id: String!
+  path: String
+  otVersion: Int
+  indexStart: Int
+  indexEnd: Int
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+
+  # Whether the annotation is resolved
+  isResolved: Boolean!
+
+  # The messages attached to the Annotation Anchor
+  messages: [AnnotationMessage!]!
+
+  # The users participating in the thread
+  participants: [User!]!
+  repl: Repl
+  user: User
+
+  # The number of messages in the thread
+  messageCount: Int!
+  unreadCount: Int!
+  currentUserIsAuthor: Boolean!
+  isGeneral: Boolean!
+}
+
+# A single Annotation Message
+type AnnotationMessage {
+  id: String!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  text: String! @deprecated(reason: "Superseded by content")
+  content: MessageContentType!
+  anchor: AnnotationAnchor
+  user: User
+  seen: Boolean
+  currentUserIsAuthor: Boolean!
+}
+
+union MessageContentType =
+    TextMessageContentType
+  | StatusMessageContentType
+  | PreviewMessageContentType
+
+# A thread message containing text, usually from a user
+type TextMessageContentType {
+  text: String!
+}
+
+# A thread message indicating a status change.
+type StatusMessageContentType {
+  status: String!
+}
+
+# A thread message previewing a message. It may or may not have text.
+type PreviewMessageContentType {
+  preview: String
+}
+
+union ReplOwner = Team | User
+
+# A request to edit a repl
+type EditRequest {
+  id: Int!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  status: EditRequestStatus
+  requester: User
+  repl: Repl
+}
+
+enum EditRequestStatus {
+  PENDING
+  ACCEPTED
+  DENIED
+}
+
+# a suite of unit tests with included metadata
+type ReplUnitTestsWithMeta {
+  tests: [ReplUnitTest!]!
+  meta: ReplUnitTestMeta
+}
+
+# A unit test for a Repl Repl
+type ReplUnitTest {
+  id: Int!
+  name: String!
+  code: String
+  failureMessage: String
+  repl: Repl!
+  lastRun(replId: String!): ReplUnitTestLastRunOutput
+}
+
+union ReplUnitTestLastRunOutput = ReplUnitTestLastRun | UserError
+
+type ReplUnitTestLastRun {
+  status: ReplUnitTestLastRunStatus
+}
+
+enum ReplUnitTestLastRunStatus {
+  PASSED
+  FAILED
+  NONE
+}
+
+# Metadata for a Repl unit test
+type ReplUnitTestMeta {
+  id: Int!
+  imports: String
+  initialization: String
+  setup: String
+  tearDown: String
+}
+
+type ReplUnitTestResultsOutput {
+  id: Int!
+  status: ReplUnitTestLastRunStatus
+}
+
+# A connection to a list of Posts.
+type PostConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of Posts.
+  items: [Post!]!
+}
+
+# A board to post repls to
+type Post {
+  id: Int!
+  title: String
+  showHosted: Boolean
+  voteCount: Int!
+  commentCount: Int!
+  isPinned: Boolean
+  isHidden: Boolean!
+  isLocked: Boolean
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  body: String!
+  url: String!
+  user: User
+  board: Board
+  repl: Repl
+  replComment: ReplComment
+  comments(after: String, count: Int, order: String): CommentConnection
+
+  # Finds a post's votes
+  votes(
+    before: String
+    after: String
+    count: Int
+    order: String
+    direction: String
+  ): PostVoteConnection
+  isAnnouncement: Boolean!
+  isAuthor: Boolean!
+  canEdit: Boolean!
+  canComment: Boolean!
+  canVote: Boolean!
+  canPin: Boolean!
+  canHide: Boolean!
+  canSetType: Boolean!
+  canChangeBoard: Boolean!
+  canLock: Boolean!
+  hasVoted: Boolean!
+  canReport: Boolean!
+  hasReported: Boolean!
+  isAnswered: Boolean!
+  isAnswerable: Boolean!
+  answeredBy: User
+  answer: Comment
+  preview(length: Int, removeMarkdown: Boolean): String!
+  recentComments(count: Int): [Comment!]
+  recentReplComments: [ReplComment!]
+}
+
+# A board to post repls to
+type Board {
+  id: Int!
+  name: String!
+  description: String
+  slug: String!
+  cta: String
+  titleCta: String
+  bodyCta: String
+  template: String
+  buttonCta: String
+  color: String
+  replRequired: Boolean!
+  isLocked: Boolean!
+  isAnswerable: Boolean!
+  isPrivate: Boolean!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  url: String!
+  canPost: Boolean!
+}
+
+# A comment on a post or another comment
+type ReplComment {
+  id: Int!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  body(removeMarkdown: Boolean): String!
+  user: User
+  isHidden: Boolean
+  repl: Repl
+  parentComment: ReplComment
+  post: Post
+  replies: [ReplComment!]!
+  canEdit: Boolean! @deprecated(reason: "Use currentUserPermissions.edit")
+  canComment: Boolean!
+  currentUserPermissions: ReplCommentPermissions
+}
+
+# Allowed actions to be taken by the user viewing a comment
+type ReplCommentPermissions {
+  id: Int!
+  edit: Boolean!
+  delete: Boolean!
+  banAuthor: Boolean!
+  canHideComment: Boolean!
+  report: Boolean!
+}
+
+# A connection to a list of Comments.
+type CommentConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of Comments.
+  items: [Comment!]!
+}
+
+# A comment on a post or another comment
+type Comment {
+  id: Int!
+  body: String!
+  voteCount: Int!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  user: User
+  url: String!
+  post: Post
+  repl: Repl
+  parentComment: Comment
+  comments: [Comment]
+  isAuthor: Boolean!
+  canEdit: Boolean!
+  canVote: Boolean!
+  canComment: Boolean!
+  hasVoted: Boolean!
+  canReport: Boolean!
+  hasReported: Boolean!
+  isAnswer: Boolean!
+  canSelectAsAnswer: Boolean!
+  canUnselectAsAnswer: Boolean!
+  preview(length: Int, removeMarkdown: Boolean): String!
+}
+
+# A connection to a list of PostVotes.
+type PostVoteConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of PostVotes.
+  items: [PostVote!]!
+}
+
+# A board to post repls to
+type PostVote {
+  id: Int!
+  user: User
+  post: Post
+}
+
+# A connection to a list of ReplComments.
+type ReplCommentConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of ReplComments.
+  items: [ReplComment!]!
+}
+
+# comment related settings for a repl
+type ReplCommentSetting {
+  id: Int!
+  enabled: Boolean!
+}
+
+# A repl deployment
+type ReplDeployment {
+  id: Int!
+  domain: String
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  repl: Repl
+  activeRelease: ReplRelease
+}
+
+# A Repl release
+type ReplRelease {
+  id: String!
+  description: String!
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  repl: Repl
+  user: User
+
+  # Returns a summary of changes between the repl's current files and this release's files.
+  pendingChanges: [ReplFileChange!]!
+  hostedUrl: String!
+}
+
+type ReplFileChange {
+  fileName: String!
+  changeType: ReplFileChangeType!
+}
+
+enum ReplFileChangeType {
+  NewFile
+  ModfiedFile
+  DeletedFile
+}
+
+# A connection to a list of ReplReleases.
+type ReplReleaseConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of ReplReleases.
+  items: [ReplRelease!]!
+}
+
+# A tag
+type Tag {
+  id: String!
+  isOfficial: Boolean!
+}
+
+# The result of an IO test being run on a repl
+type IOTestResult {
+  # The output of the program when the test was executed.
+  output: String!
+
+  # The status of the test that was executed.
+  status: IOTestResultStatus!
+
+  # A unique ID for the result type
+  id: ID!
+
+  # The test which was executed to get the result
+  test: IOTestResultTestType!
+
+  # The repl which the test the result belongs to was executed on for this result.
+  repl: IOTestResultReplType!
+}
+
+# The status of a result of an IO test.
+enum IOTestResultStatus {
+  # The IO tests passed.
+  passed
+
+  # The IO tests failed.
+  failed
+}
+
+union IOTestResultTestType = NotFoundError | ReplTemplateTest
+
+union IOTestResultReplType = NotFoundError | Repl
+
+enum PublishedReplKind {
+  RegularRepl
+  Template
+  App
+}
+
+type ReplAttachment {
+  id: Int!
+  fileName: String!
+  mimeType: String!
+  timeCreated: Date!
+  timeUpdated: Date
+
+  # File contents
+  contents: String!
+}
+
+# A source points to a specific release of a repl
+type ReplSource {
+  release: ReplRelease
+  deployment: ReplDeployment
+}
+
+# The template info for a repl
+type ReplTemplateInfo {
+  label: String!
+  iconUrl: String!
+}
+
+# A domain linked to a repl.
+type Domain {
+  domain: String!
+  state: String!
+}
+
+# settings related to viewing a Repl outside of the workspace
+type ReplViewSettings {
+  id: Int!
+  defaultView: repl_view_settingsdefaultViewEnumType!
+  replFile: String
+  repl: Repl!
+  replImage: String
+}
+
+enum repl_view_settingsdefaultViewEnumType {
+  repl_file
+  repl_image
+}
+
+union PowerUpCostsOutput = UnauthorizedError | NotFoundError | PowerUpCostsType
+
+# The cost associated with various Power Ups for a given Repl
+type PowerUpCostsType {
+  boost: PowerUpCostDetailType!
+  alwaysOn: PowerUpCostDetailType!
+}
+
+# The cost associated with a given Power Up
+type PowerUpCostDetailType {
+  cycles: Int!
+  explanation: PowerUpCostExplanationEnumType!
+}
+
+# The explanation for how a cost was set
+enum PowerUpCostExplanationEnumType {
+  # Requires the user to buy more cycles
+  NEEDS_CYCLES
+
+  # Requires the user to get a subscription (i.e. Hacker or Teams Pro)
+  NEEDS_SUBSCRIPTION
+
+  # Included in the user's subscription (i.e. Hacker or Teams Pro)
+  INCLUDED_IN_SUBSCRIPTION
+
+  # Included in a user or Repl's existing order
+  INCLUDED_IN_EXISTING_ORDER
+
+  # Requires the user to spend cycles
+  SPEND_CYCLES
+
+  # Requires activation an existing order
+  ACTIVATE_EXISTING_ORDER
+}
+
+# Review status of a Template
+type TemplateReview {
+  id: Int!
+  promoted: Boolean!
+  timeCreated: Date!
+  timeUpdated: Date
+  timeDeleted: Date
+  repl: Repl
+  release: ReplRelease
+  deployment: ReplDeployment
+  reviewedBy: User
+}
+
+# A connection to a list of Users.
+type UserConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of Users.
+  items: [User!]!
+}
+
+type CoverImage {
+  url: String!
+  offsetY: Int!
+}
+
+type UserPresenceStatus {
+  # Datetime for last time this user was seen on the site
+  lastSeen: DateTime
+
+  # Whether the user should be considered online
+  isOnline: Boolean!
+}
+
+# A tour and its seen status
+type TourSeen {
+  id: String!
+  seen: Boolean!
+}
+
+enum UserUpdateColumns {
+  EMAIL
+  USERNAME
+}
+
+# An object for keeping user state
+type UserState {
+  id: Int!
+  skillLevel: String
+  interestedIn: String
+  languagesInterestedIn: [Language!]!
+}
+
+# A tutorial from Repl Talk / Learn
+type Tutorial {
+  id: String!
+  post: Post
+  category: TutorialCategory!
+  lang: Language
+}
+
+# A category of tutorials from Repl Talk / Learn
+type TutorialCategory {
+  id: String!
+  name: String!
+  tutorials: [Tutorial!]!
+  image: TutorialCategoryImage
+}
+
+# A an image for a TutorialCategory
+type TutorialCategoryImage {
+  id: Int!
+  url: String!
+}
+
+# User device info
+type UserDevice {
+  isMobile: Boolean!
+  isMac: Boolean!
+}
+
+# Grouped Search results for authenticated user
+type UserSearchResults {
+  repls(query: String, count: Int): [Repl!]!
+  posts(query: String, count: Int): [Post!]! @deprecated
+  languages(query: String, count: Int): [Language!]! @deprecated
+}
+
+# An object for keeping user auth from diffrent providers
+type UserAuth {
+  accessToken: String
+  provider: UserAuthProviders!
+}
+
+enum UserAuthProviders {
+  GOOGLE
+  GITHUB
+  FACEBOOK
+}
+
+# Possible results when querying currentUser.repositories
+union RepositoriesOutput = RepositoryConnection | UserAuthProviderError
+
+# A connection to a list of Repositorys.
+type RepositoryConnection {
+  # Number of repostories requested per installation
+  count: Int
+
+  # A list of Repositorys.
+  items: [Repository!]!
+}
+
+# A user repository
+type Repository {
+  id: String!
+  provider: String!
+  name: String!
+  nameWithOwner: String!
+  ownerName: String!
+  gitUrl: String!
+  url: String!
+  isPrivate: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  description: String
+  primaryLanguage: GitHubLanguage
+  starCount: Int!
+  repls: [Repl!]
+}
+
+# A GitHub language
+type GitHubLanguage {
+  id: String!
+  name: String!
+  color: String
+}
+
+# A user auth provider error
+type UserAuthProviderError {
+  provider: UserAuthProviders!
+  message: String!
+}
+
+enum RepositoryPrivacy {
+  PRIVATE
+  PUBLIC
+}
+
+type GitHubInfo {
+  accessToken: String
+  installations: [GitHubUserInstallations!]
+  userInfo: GitHubUserInfo
+}
+
+type GitHubUserInstallations {
+  id: String
+  type: String!
+  avatarUrl: String
+  name: String!
+}
+
+type GitHubUserInfo {
+  name: String
+  email: String
+  avatarUrl: String
+}
+
+# User storage information
+type UserStorage {
+  # Storage limit in megabytes
+  limit: Int
+
+  # Sum of size (in megabytes) of all files in all the user's repls
+  used: Int!
+}
+
+# A user's editor preferences
+type EditorPreferences {
+  isLayoutStacked: Boolean!
+  theme: String!
+  fontSize: Int!
+  indentIsSpaces: Boolean!
+  indentSize: Int!
+  keyboardHandler: String
+  wrapping: Boolean!
+  codeIntelligence: Boolean!
+  codeSuggestion: Boolean!
+  codeSuggestionEngine: String!
+  accessibleTerminal: Boolean!
+  extraDelight: Boolean!
+}
+
+# A folder of repls
+type ReplFolder {
+  id: String!
+  userId: Int
+  name: String!
+  parentId: String
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  path: String!
+  pathnames: [String!]!
+  canEdit: Boolean!
+  canCreateSubFolders: Boolean!
+  replsCount: Int
+  parent: ReplFolder
+  image: String
+  folderType: ReplFolderTypes
+  folders(search: String): [ReplFolder!]!
+  repls(
+    count: Int
+    order: String
+    after: String
+    starred: Boolean
+    search: String
+    languages: [String!]
+  ): ReplConnection!
+}
+
+enum ReplFolderTypes {
+  MULTIPLAYER
+  BOOSTS
+  ALWAYS_ON
+  TEAM
+  ALL_TEAMS
+  VIRTUAL
+  DEFAULT
+}
+
+enum TeamOrganizationSubscriptionTypeEnum {
+  EDUCATION
+  PRO
+}
+
+# A user's billing info
+type BillingInfo {
+  cardInfo: BillingCardInfo
+  planInfo: PlanInfo
+  expiration: DateTime
+}
+
+type BillingCardInfo {
+  brand: String!
+  last4: String!
+}
+
+type PlanInfo {
+  # The unit amount in cents to be charged, represented as a whole integer if possible
+  amount: Int
+  nextPaymentDue: DateTime
+  description: String!
+  interval: String
+  cancelAt: DateTime
+  coupon: DiscountInfo
+}
+
+type DiscountInfo {
+  amount: Int
+  percent: Int
+  endAt: DateTime
+}
+
+# User subscription information
+type UserSubscription {
+  id: Int!
+  userId: Int!
+  customerId: String
+  planId: String!
+  months: Int
+  quantity: Int
+  paymentMethod: user_subscriptionspaymentMethodEnumType!
+  stripeStatus: user_subscriptionsstripeStatusEnumType
+  timeExpired: Date
+  timeUpdated: Date
+  timeCreated: Date!
+  timeDeleted: Date
+  isPaying: Boolean!
+  isExpiring(daysFromNow: Int!): Boolean!
+  isEducationPlan: Boolean!
+  isPaidPlan: Boolean!
+  isFlatPlan: Boolean!
+  isPerSeatPlan: Boolean!
+  stripeCustomer: StripeCustomer
+}
+
+enum user_subscriptionspaymentMethodEnumType {
+  card
+  check
+  bank
+}
+
+enum user_subscriptionsstripeStatusEnumType {
+  active
+  past_due
+  unpaid
+  canceled
+  incomplete
+  incomplete_expired
+  trialing
+}
+
+# A group of template repls or languages
+type CreateReplOptionGroup {
+  # The name of the group
+  name: String!
+
+  # A list of template repls or languages
+  options: [CreateReplOptions!]!
+}
+
+union CreateReplOptions = Language | Repl
+
+# Information about Cycles related entities for the current user
+type Cycles {
+  # Cycles balance
+  balance: CyclesBalanceOutput!
+
+  # Paginated transactions for the current user
+  transactions(after: String, count: Int): CyclesTransactionConnection
+
+  # Forecasts for a user's cycles
+  forecast(
+    # Days from current time to calculate the forecast
+    daysFromNow: Int!
+  ): CyclesForecastOutput!
+}
+
+union CyclesBalanceOutput =
+    UnauthorizedError
+  | ServiceUnavailable
+  | CyclesBalance
+
+type CyclesBalance {
+  cycles: Float!
+  lastUpdated: DateTime!
+}
+
+# A connection to a list of CyclesTransactions.
+type CyclesTransactionConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of CyclesTransactions.
+  items: [CyclesTransaction!]!
+}
+
+type CyclesTransaction {
+  # Transaction ID
+  id: String!
+
+  # User ID for the party whose balance is affected by the transaction
+  principal_user_id: Int!
+
+  # Number of cycles
+  amount: Int!
+
+  # Number of cycles
+  cycles: Int!
+
+  # The type of transaction (e.g. purchased, granted, retired, redeemed)
+  type: CyclesTransactionTypeEnumType!
+
+  # When the transaction was created
+  time_created: DateTime
+}
+
+enum CyclesTransactionTypeEnumType {
+  purchased
+  granted
+  redeemed
+  retired
+}
+
+union CyclesForecastOutput =
+    UserError
+  | UnauthorizedError
+  | ServiceUnavailable
+  | CyclesForecast
+
+type CyclesForecast {
+  # Indicates if the user's current Cycles balance is enough to fulfill their currently active Power Ups up to and including the specified date
+  hasSufficientCycles: Boolean!
+}
+
+# A custom theme or a replit official theme
+union UserTheme = CustomUserTheme | OfficialReplitUserTheme
+
+# User installed custom Theme
+type CustomUserTheme {
+  id: String!
+  name: String!
+  filePath: String!
+  repl: Repl!
+  values: UserThemeValues!
+  colorScheme: UserThemeColorScheme!
+}
+
+# The values from a custom Theme or official Theme
+type UserThemeValues {
+  global: UserThemeValuesGlobal!
+  editor: UserThemeValuesEditor!
+}
+
+# The global Theme values
+type UserThemeValuesGlobal {
+  backgroundRoot: String!
+  backgroundDefault: String!
+  backgroundHigher: String!
+  backgroundHighest: String!
+  backgroundOverlay: String!
+  foregroundDefault: String!
+  foregroundDimmer: String!
+  foregroundDimmest: String!
+  outlineDimmest: String!
+  outlineDimmer: String!
+  outlineDefault: String!
+  outlineStronger: String!
+  outlineStrongest: String!
+  accentPrimaryDimmest: String!
+  accentPrimaryDimmer: String!
+  accentPrimaryDefault: String!
+  accentPrimaryStronger: String!
+  accentPrimaryStrongest: String!
+  accentPositiveDimmest: String!
+  accentPositiveDimmer: String!
+  accentPositiveDefault: String!
+  accentPositiveStronger: String!
+  accentPositiveStrongest: String!
+  accentNegativeDimmest: String!
+  accentNegativeDimmer: String!
+  accentNegativeDefault: String!
+  accentNegativeStronger: String!
+  accentNegativeStrongest: String!
+  redDimmest: String!
+  redDimmer: String!
+  redDefault: String!
+  redStronger: String!
+  redStrongest: String!
+  orangeDimmest: String!
+  orangeDimmer: String!
+  orangeDefault: String!
+  orangeStronger: String!
+  orangeStrongest: String!
+  yellowDimmest: String!
+  yellowDimmer: String!
+  yellowDefault: String!
+  yellowStronger: String!
+  yellowStrongest: String!
+  limeDimmest: String!
+  limeDimmer: String!
+  limeDefault: String!
+  limeStronger: String!
+  limeStrongest: String!
+  greenDimmest: String!
+  greenDimmer: String!
+  greenDefault: String!
+  greenStronger: String!
+  greenStrongest: String!
+  tealDimmest: String!
+  tealDimmer: String!
+  tealDefault: String!
+  tealStronger: String!
+  tealStrongest: String!
+  blueDimmest: String!
+  blueDimmer: String!
+  blueDefault: String!
+  blueStronger: String!
+  blueStrongest: String!
+  blurpleDimmest: String!
+  blurpleDimmer: String!
+  blurpleDefault: String!
+  blurpleStronger: String!
+  blurpleStrongest: String!
+  purpleDimmest: String!
+  purpleDimmer: String!
+  purpleDefault: String!
+  purpleStronger: String!
+  purpleStrongest: String!
+  magentaDimmest: String!
+  magentaDimmer: String!
+  magentaDefault: String!
+  magentaStronger: String!
+  magentaStrongest: String!
+  pinkDimmest: String!
+  pinkDimmer: String!
+  pinkDefault: String!
+  pinkStronger: String!
+  pinkStrongest: String!
+  greyDimmest: String!
+  greyDimmer: String!
+  greyDefault: String!
+  greyStronger: String!
+  greyStrongest: String!
+  brownDimmest: String!
+  brownDimmer: String!
+  brownDefault: String!
+  brownStronger: String!
+  brownStrongest: String!
+  black: String!
+  white: String!
+}
+
+# The editor Theme values
+type UserThemeValuesEditor {
+  syntaxHighlighting: [UserThemeEditorSyntaxHighlighting!]!
+}
+
+# An object which contains CSS styles that are applied to a given set of editor tags
+type UserThemeEditorSyntaxHighlighting {
+  tags: [UserThemeEditorTag!]!
+  values: JSON!
+}
+
+# A selector for a given editor tag
+type UserThemeEditorTag {
+  name: String!
+  modifiers: [String!]
+}
+
+enum UserThemeColorScheme {
+  light
+  dark
+}
+
+# An official Replit Theme
+type OfficialReplitUserTheme {
+  id: String!
+  name: String!
+  values: UserThemeValues!
+  colorScheme: UserThemeColorScheme!
+}
+
+type ReplPowerUpDescriptionType {
+  # Power Up ID
+  id: Int!
+
+  # The Repl to which the Power Up relates
+  repl: Repl!
+
+  # Whether the Power Up is active
+  active: Boolean!
+
+  # The type of Power Up (e.g. boost, always on, private)
+  type: ReplPowerUpTypeEnumType!
+
+  # When the Power Up was last fulfilled
+  time_last_fulfilled: DateTime
+
+  # When the Power Up will be fulfilled next
+  time_fulfillment_due: DateTime
+}
+
+enum ReplPowerUpTypeEnumType {
+  alwaysOn
+  boost
+}
+
+# Power Ups which relate to the user (as-compared-with repl-specific Power Ups)
+type UserPowerUpDescriptionType {
+  # Power Up ID
+  id: Int!
+
+  # Whether the Power Up is active
+  active: Boolean!
+
+  # The type of Power Up
+  type: UserPowerUpTypeEnumType!
+
+  # When the Power Up was last fulfilled
+  time_last_fulfilled: DateTime
+
+  # When the Power Up will be fulfilled next
+  time_fulfillment_due: DateTime
+}
+
+enum UserPowerUpTypeEnumType {
+  private
+}
+
+union UserPowerUpCost = UnauthorizedError | UserError | UserPowerUpCostsType
+
+# The cost associated with various Power Ups for the user
+type UserPowerUpCostsType {
+  # Cost for making repls owned by the user private
+  private: UserPowerUpCostDetailType!
+}
+
+# The cost associated with a given Power Up
+type UserPowerUpCostDetailType {
+  cycles: Int!
+  explanation: PowerUpCostExplanationEnumType!
+}
+
+union UserCourseOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | UserCourse
+
+# A course started by a user.
+type UserCourse {
+  id: Int!
+  courseSlug: String!
+  timeCreated: Date!
+
+  # The course lessons the user has started.
+  lessons: [UserCourseLesson!]
+}
+
+# A course lesson started by a user.
+type UserCourseLesson {
+  id: Int!
+  lessonSlug: String!
+  timeCompleted: Date
+  timeCreated: Date!
+
+  # The course under which the lesson belongs.
+  course: UserCourse!
+
+  # The forked Repl belonging to this lesson. Nullable in case the Repl is deleted.
+  repl: Repl
+}
+
+union ReplQueryOutput = Repl | ReplRedirect | SubscriptionExpiredError
+
+# Redirect information for a Repl that has been renamed or owned by user
+type ReplRedirect {
+  replUrl: String!
+  repl: Repl
+}
+
+# A user can no longer access their Repl because it is private and they are no longer subscribed
+type SubscriptionExpiredError {
+  replId: String!
+  title: String
+  isOwner: Boolean!
+}
+
+union TeamOrganizationOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | TeamOrganization
+
+# If a user has seen a given tour.
+type ToursSeenQueryResult {
+  seen: Boolean!
+}
+
+union TeamOutput = Team | UserError
+
+# Users who are banned from social boards
+type BannedBoardUser {
+  id: Int!
+  reason: String!
+  timeExpired: Date
+  timeCreated: Date!
+  isActive: Boolean!
+  user: User
+  creator: User
+}
+
+# A report on a post or comment
+type BoardReport {
+  id: Int!
+  reportedUserId: Int
+  reason: String
+  resolved: Boolean!
+  timeCreated: Date!
+  isEscalated: Boolean
+  creator: User
+  reportedUser: User
+  type: String!
+  post: Post
+  comment: Comment
+  replComment: ReplComment
+  repl: Repl
+}
+
+union boardReportsById = NotFoundError | UnauthorizedError | BoardReport
+
+input BoardReportsByIdInput {
+  reportId: Int!
+}
+
+# A connection to a list of Notifications.
+type NotificationConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of Notifications.
+  items: [Notification!]!
+}
+
+union Notification =
+    MentionedInPostNotification
+  | MentionedInCommentNotification
+  | RepliedToCommentNotification
+  | RepliedToPostNotification
+  | AnswerAcceptedNotification
+  | MultiplayerJoinedEmailNotification
+  | MultiplayerJoinedLinkNotification
+  | MultiplayerInvitedNotification
+  | MultiplayerOverlimitNotification
+  | WarningNotification
+  | TeamInviteNotification
+  | TeamOrganizationInviteNotification
+  | BasicNotification
+  | TeamTemplateSubmittedNotification
+  | TeamTemplateReviewedStatusNotification
+  | AnnotationNotification
+  | EditRequestCreatedNotification
+  | EditRequestAcceptedNotification
+  | ReplCommentCreatedNotification
+  | ReplCommentReplyCreatedNotification
+  | ReplCommentMentionNotification
+  | ThreadNotification
+  | NewFollowerNotification
+
+# Notification for when a user is at-metioned in a post
+type MentionedInPostNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  post: Post
+}
+
+# Notification for when a user is at-metioned in a comment
+type MentionedInCommentNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  comment: Comment
+}
+
+# Notification for when a user's comment has been replied to
+type RepliedToCommentNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  comment: Comment
+}
+
+# Notification for when a user's post is commented on
+type RepliedToPostNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  comment: Comment
+}
+
+# Notification for when a user's comment was marked as the answer
+type AnswerAcceptedNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  post: Post
+}
+
+# Notification for when a user joined a multiplayer session via email invite
+type MultiplayerJoinedEmailNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Notification for when a user joined a multiplayer session via email link
+type MultiplayerJoinedLinkNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Notification for when a user gets an invite to collab on a multiplayer repl
+type MultiplayerInvitedNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Notification for when a user tried to join a multiplayer session but couldnt due to limits
+type MultiplayerOverlimitNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Notification for when a user is warned.
+type WarningNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Notification for when a user is invited to a team.
+type TeamInviteNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  invite: TeamInvite
+}
+
+# Notification for when a user is invited to an organization.
+type TeamOrganizationInviteNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  invite: TeamOrganizationInvite
+}
+
+# The default Replit Notification type
+type BasicNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Notification for when a user submits a project repl
+type TeamTemplateSubmittedNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  repl: Repl
+}
+
+# Notification for when a user's Repl submission has been marked as reviewed, or marked as no longer reviewed
+type TeamTemplateReviewedStatusNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  repl: Repl
+}
+
+# Notification for when a user receives an annotation
+type AnnotationNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# A user has requested to edit a repl
+type EditRequestCreatedNotification {
+  id: Int!
+  url: String!
+  seen: Boolean!
+  creator: User
+  editRequest: EditRequest
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# A user accepted an edit request
+type EditRequestAcceptedNotification {
+  id: Int!
+  url: String!
+  seen: Boolean!
+  creator: User
+  editRequest: EditRequest
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# A comment was made on a repl
+type ReplCommentCreatedNotification {
+  id: Int!
+  url: String!
+  seen: Boolean!
+  creator: User
+  replComment: ReplComment
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# A comment was replied to
+type ReplCommentReplyCreatedNotification {
+  id: Int!
+  url: String!
+  seen: Boolean!
+  creator: User
+  replComment: ReplComment
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# A user was mentioned in a Repl comment or reply
+type ReplCommentMentionNotification {
+  id: Int!
+  url: String!
+  seen: Boolean!
+  creator: User
+  replComment: ReplComment
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# Notification for when a user receives an update on their thread
+type ThreadNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+  participants: [User!]!
+  thread: AnnotationAnchor
+}
+
+# notification for when you gain a new follower
+type NewFollowerNotification {
+  id: Int!
+  url: String!
+  text: String
+  seen: Boolean!
+  context: String!
+  creator: User
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+# An object for fields restricted to admins
+type Admin {
+  user: User!
+  boardTrendingAlgorithmSettings: BoardTrendingAlgorithmSettings!
+  tutorialCategories: [TutorialCategory!]!
+}
+
+# Settings for post + comment trending algorithm
+type BoardTrendingAlgorithmSettings {
+  id: String!
+  postsExponent: Float!
+  postsCommentWeight: Float!
+  commentsExponent: Float!
+}
+
+type CluiQuery {
+  # Admin CLUI operations
+  admin: AdminCluiQuery
+
+  # Manage your account
+  account: UserCliAccountQuery
+
+  # Moderator CLUI operations
+  moderator: ModeratorCluiQuery
+
+  # List and restore deleted repls
+  trash: TrashQuery
+
+  # View and manage your teams
+  team: TeamQuery
+}
+
+type AdminCluiQuery {
+  # View, impersonate, ban, etc.
+  user: AdminCliUserQuery
+
+  # Manage site settings
+  site: AdminCliSiteQuery
+
+  # Manage user roles
+  roles: AdminCliRolesQuery
+
+  # View a team organization
+  team: AdminTeamOrgQuery
+
+  # Manage site banner
+  banners: AdminCliBannersQuery
+
+  # Set app wide key/value
+  appEnv: AdminCliAppEnvQuery
+
+  # Configure templates
+  templates: AdminCliTemplatesQuery
+
+  # View and publish curriculum hub content
+  curriculum: AdminCurriculumHubQuery
+
+  # Configure billing
+  billing: AdminCliBillingQuery
+
+  # Configure organizations
+  org: AdminCliBillingOrgsQuery
+
+  # Support tools
+  support: AdminCliSupportQuery
+
+  # Configure subscriptions
+  subscriptions: AdminCliSubscriptionsQuery
+
+  # Configure community
+  community: AdminCliCommuniyQuery
+
+  # View and update manually curated content for trending
+  curation: ManualCurationQuery
+}
+
+type AdminCliUserQuery {
+  # View user info
+  view(
+    # User's username or email
+    user: String!
+  ): CluiOutput
+
+  # View and manage users' Cycles balances
+  cycles: AdminCliUserCyclesQuery
+}
+
+union CluiOutput =
+    CluiSuccessOutput
+  | CluiMarkdownOutput
+  | CluiTableOutput
+  | CluiComponentOutput
+  | CluiErrorOutput
+
+type CluiSuccessOutput {
+  message: String!
+  json: JSON
+}
+
+type CluiMarkdownOutput {
+  markdown: String!
+}
+
+type CluiTableOutput {
+  columns: [CluiTableColumn!]!
+  rows: [JSON!]!
+}
+
+type CluiTableColumn {
+  label: String!
+  key: String!
+}
+
+type CluiComponentOutput {
+  component: String!
+}
+
+type CluiErrorOutput {
+  error: String!
+  json: JSON
+}
+
+type AdminCliUserCyclesQuery {
+  # Get a user's Cycles balance.
+  balance(
+    # The username or email of the user
+    username: String!
+  ): CluiOutput
+}
+
+type AdminCliSiteQuery {
+  # Anyone who loaded the client before the set date will be asked to reload
+  getLastUpdateTime: CluiOutput
+
+  # Gets the Heroku slug commit version
+  version: CluiOutput
+}
+
+type AdminCliRolesQuery {
+  # View roles for a user
+  view(
+    # User's username or email
+    user: String!
+  ): CluiOutput
+}
+
+type AdminTeamOrgQuery {
+  # View team members
+  viewTeamMembers(
+    # team name
+    team: String!
+  ): CluiOutput
+}
+
+type AdminCliBannersQuery {
+  # View latest unresolved banner
+  view: CluiOutput
+}
+
+type AdminCliAppEnvQuery {
+  # List app environment variables
+  list: CluiOutput
+}
+
+type AdminCliTemplatesQuery {
+  # View and update associations between languages and template repls
+  languages: CluiOutput
+
+  # View and update template Repl categories
+  categories: CluiOutput
+}
+
+type AdminCurriculumHubQuery {
+  # View curriculum
+  viewCurriculum(
+    # Curriculum url slug
+    slug: String
+  ): CluiOutput
+}
+
+type AdminCliBillingQuery {
+  # Configure coupons
+  coupons: AdminCliBillingCouponsQuery
+}
+
+type AdminCliBillingCouponsQuery {
+  # View all admin created coupons
+  view(
+    # Replit coupon code
+    code: String
+
+    # Filter by product
+    product: AdminCLUIBillinProductsEnum
+  ): CluiOutput
+}
+
+enum AdminCLUIBillinProductsEnum {
+  hacker_1mo
+  hacker_12mo
+  hacker_voucher_1mo
+  hacker_gh_student_dev_pack_1mo
+  teams_pro_beta_per_seat_1mo_usd
+}
+
+type AdminCliBillingOrgsQuery {
+  # Show all organizations a user is a member of and all members of those organizations.
+  view(
+    # Team or user name
+    teamOrUserName: String!
+  ): CluiOutput
+}
+
+type AdminCliSupportQuery {
+  # View user and Repl data for debugging (and tickets)
+  info(
+    # a username, userid, email, replid, or the link to a Repl (prefix with `https://`, can be repl.co or repl.com)
+    userOrRepl: String!
+
+    # if true, userOrRepl is a user id
+    isUserId: Boolean
+  ): CluiOutput
+}
+
+type AdminCliSubscriptionsQuery {
+  # View subscriptions by username or organization ID
+  view(
+    # username or email
+    username: String
+
+    # organization ID
+    orgId: Int
+  ): CluiOutput
+}
+
+type AdminCliCommuniyQuery {
+  # Edit trending algorithm
+  algorithm: CluiOutput
+}
+
+type ManualCurationQuery {
+  # View Trending Repl picks
+  list: CluiOutput
+}
+
+type UserCliAccountQuery {
+  # View warnings you have been issued.
+  viewWarns: CluiOutput
+}
+
+type ModeratorCluiQuery {
+  # View Repl Talk bans
+  viewBans: CluiOutput
+
+  # Manage a post.
+  post: ModeratorCliPostQuery
+
+  # Ban, warn, view-warns, etc.
+  user: ModeratorCliUserQuery
+
+  # View moderator audits
+  audit: ModeratorCliAuditQuery
+}
+
+type ModeratorCliPostQuery {
+  # View a post/comments voters.
+  showVotes(
+    # The post's id
+    postId: Int
+
+    # The comment's id
+    commentId: Int
+  ): CluiOutput
+}
+
+type ModeratorCliUserQuery {
+  # View a users warnings.
+  viewWarns(
+    # User's username or email
+    user: String!
+  ): CluiOutput
+}
+
+type ModeratorCliAuditQuery {
+  # View the moderator audit log.
+  viewAudit(
+    # The creator of the action
+    creator: String
+
+    # The model the audit is for
+    model: ModeratorAuditModels
+
+    # The type of the action
+    actionType: ModeratorAuditActionType
+
+    # The page of audits
+    page: Int
+
+    # What order to show the results in
+    order: ModeratorAuditSorting
+  ): CluiOutput
+
+  # View the moderator audit log.
+  viewItem(id: Int!): CluiOutput
+}
+
+# The accessible models for the moderator audit.
+enum ModeratorAuditModels {
+  BannedBoardUsers
+  Warning
+  Comments
+  Posts
+  BoardReports
+}
+
+enum ModeratorAuditActionType {
+  CREATE
+  DELETE
+  UPDATE
+}
+
+enum ModeratorAuditSorting {
+  # Sort newest to oldest
+  NEWEST
+
+  # Sort oldest to newest
+  OLDEST
+}
+
+type TrashQuery {
+  # View your most recently deleted repls
+  view: CluiOutput
+}
+
+type TeamQuery {
+  # View the members of your team
+  view(
+    # team name
+    team: String!
+  ): CluiOutput
+}
+
+union CouponQueryOutput = Coupon | UserError
+
+# A subscription coupon
+type Coupon {
+  id: String!
+
+  # Amount (in dollars) that will be taken off the subtotal of any invoices for this customer.
+  amountOff: Int
+
+  # Percent that will be taken off the subtotal of any invoices for this customer for the duration of the coupon. For example, a coupon with percent_off of 50 will make a $100 invoice $50 instead.
+  percentOff: Float
+
+  # If duration is repeating, the number of months the coupon applies. Null if coupon duration is forever or once
+  months: Int
+
+  # Weather or not the coupon repeats.
+  repeating: Boolean!
+
+  # Describes the coupon
+  message: String
+}
+
+union AnnotationQueryOutput = AnnotationAnchor | UserError
+
+union ReplCommentOutput = ReplComment | UserError
+
+union GetUserReplCommentsOutput = UnauthorizedError | UserReplCommentsOutput
+
+type UserReplCommentsOutput {
+  comments: [ReplComment]!
+}
+
+input GetUserReplCommentsInput {
+  userId: Int!
+}
+
+union NotificationOutput = NotificationOutputItem | UserError
+
+# An object containing the language token
+type NotificationOutputItem {
+  item: Notification!
+}
+
+# A Repl and the connections to it
+type ReplConnections {
+  # The Repl which users are connected to
+  repl: Repl!
+
+  # The users that are connected to the Repl
+  users: [User!]!
+
+  # The time when the data was returned
+  epoch: DateTime!
+}
+
+# A site banner
+type Banner {
+  id: Int!
+  message: String!
+}
+
+type AppEnvConfig {
+  key: String!
+  value: String!
+}
+
+union GetGoogleClassroomCoursesOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | GoogleClassroomCourseOutput
+
+type GoogleClassroomCourseOutput {
+  courses: [GoogleClassroomCourseInfo]!
+}
+
+type GoogleClassroomCourseInfo {
+  id: String!
+  name: String!
+}
+
+union GoogleClassroomByIdOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | GoogleClassroom
+
+union GetGoogleClassroomStudentsOutput =
+    UserError
+  | UnauthorizedError
+  | GoogleClassroomStudentOutput
+
+type GoogleClassroomStudentOutput {
+  students: [GoogleClassroomStudentInfo]!
+}
+
+type GoogleClassroomStudentInfo {
+  id: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+}
+
+union ReplTemplateOutput = UnauthorizedError | NotFoundError | ReplTemplate
+
+union CurriculumBySlugOutput = UnauthorizedError | NotFoundError | Curriculum
+
+type YoutubeVideoMetadata {
+  title: String!
+  videoId: String!
+  thumbnail: String!
+  viewCount: String!
+  publishedAt: String!
+  duration: String!
+}
+
+union TemplateReplObject = Repl | ReplTemplate
+
+union TemplateRepls2Output = UserError | TemplateReplSearchConnection
+
+type TemplateReplSearchConnection {
+  items: [Repl!]!
+  searchQuery: String!
+  total: Int!
+  orderBy: TemplateRepls2OrderBy!
+  promotionStatus: TemplateRepls2PromotionStatus!
+  pageInfo: PageInfo!
+}
+
+enum TemplateRepls2OrderBy {
+  forks
+  recent
+  searchRelevancy
+}
+
+enum TemplateRepls2PromotionStatus {
+  all
+  promoted
+  notPromoted
+}
+
+input TemplateRepls2QueryOptions {
+  after: Int
+  searchQuery: String
+  activeCategory: String
+  count: Int
+  promotionStatus: TemplateRepls2PromotionStatus
+  orderBy: TemplateRepls2OrderBy
+}
+
+union ExplainCodeOutput = UserError | UnauthorizedError | ExplainCodeResult
+
+type ExplainCodeResult {
+  id: String!
+  explanation: String!
+}
+
+union GenerateCodeOutput = UserError | UnauthorizedError | GenerateCodeResult
+
+type GenerateCodeResult {
+  id: String!
+  code: String!
+  metadata: String!
+}
+
+input GenerateCodeInput {
+  # The user-provided prompt for the code to generate
+  prompt: String!
+
+  # The programming language to generate code in
+  language: String!
+
+  # The ID of the Repl in which the code generation is requested. Used for analytics only
+  replId: String!
+}
+
+union SearchCodeOutput = UserError | UnauthorizedError | SearchCodeResult
+
+type SearchCodeResult {
+  id: String!
+  codes: [SearchCodeResultCode!]!
+  metadata: String!
+}
+
+type SearchCodeResultCode {
+  code: String!
+  url: String!
+}
+
+input SearchCodeInput {
+  # The user-provided query
+  prompt: String!
+
+  # Whether to rerank search results
+  rerank: Boolean!
+
+  # Whether to do contextual search
+  contextual: Boolean!
+
+  # Code context for contextual search
+  codeContext: String!
+
+  # The current programming language
+  language: String!
+
+  # The ID of the repl in which the code search is requested. Used for analytics only
+  replId: String!
+}
+
+union TransformCodeOutput = UserError | UnauthorizedError | TransformCodeResult
+
+type TransformCodeResult {
+  id: String!
+  code: String!
+  metadata: String!
+}
+
+input TransformCodeInput {
+  # The user-provided prompt for the code to transform
+  prompt: String!
+
+  # The code to transform
+  input: String!
+
+  # The programming language to transform code in
+  language: String!
+
+  # The ID of the repl in which the code generation is requested. Used for analytics only
+  replId: String!
+}
+
+input ReplPostsQueryOptions {
+  after: String
+  searchQuery: String
+  count: Int
+  order: ReplPostsOrder
+  boardSlugs: [String!]
+  tags: [String!]
+  pinPinned: Boolean
+  pinAnnouncements: Boolean
+}
+
+enum ReplPostsOrder {
+  Hot
+  New
+  Top
+}
+
+type TagGroups {
+  official(limit: Int, search: String): [Tag!]!
+  community(limit: Int, search: String): [Tag!]!
+}
+
+union PreviewInvoice =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | PreviewInvoiceOutput
+
+type PreviewInvoiceOutput {
+  total: Float!
+  balance: Float!
+  chargeDate: DateTime
+  currentItems: [PreviewInvoiceLineItemGroup!]!
+  upcomingItems: [PreviewInvoiceLineItemGroup!]!
+}
+
+type PreviewInvoiceLineItemGroup {
+  periodStart: DateTime!
+  periodEnd: DateTime!
+  type: String!
+  items: [PreviewInvoiceLineItem!]!
+}
+
+type PreviewInvoiceLineItem {
+  description: String
+  amount: Float!
+  quantity: Int
+}
+
+input PreviewInvoiceInput {
+  orgId: Int!
+  product: PreviewInvoiceLineItemInput!
+}
+
+input PreviewInvoiceLineItemInput {
+  # Product ID (only if changing subscribed product)
+  id: Int
+
+  # Subscription quantity (only if changing quantity)
+  quantity: Int
+}
+
+union SearchQueryOutput = UserError | UnauthorizedError | SearchQueryResults
+
+type SearchQueryResults {
+  replResults: SearchQueryResultsRepls!
+  templateResults: SearchQueryResultsTemplates!
+  fileResults: SearchQueryResultsFiles!
+  userResults: SearchQueryResultsUsers!
+  postResults: SearchQueryResultsPosts!
+  docResults: SearchQueryResultsDocs!
+  tagResults: SearchQueryResultsTags!
+}
+
+type SearchQueryResultsRepls {
+  hitInfo: SearchQueryHitInfo!
+  results: ReplConnection!
+}
+
+# Information about how many hits there were for a search
+type SearchQueryHitInfo {
+  totalHits: Int!
+  totalPages: Int!
+}
+
+type SearchQueryResultsTemplates {
+  hitInfo: SearchQueryHitInfo!
+  results: ReplConnection!
+}
+
+type SearchQueryResultsFiles {
+  hitInfo: SearchQueryHitInfo!
+  results: SearchResultIndexedFileConnection!
+}
+
+# A connection to a list of SearchResultIndexedFiles.
+type SearchResultIndexedFileConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of SearchResultIndexedFiles.
+  items: [SearchResultIndexedFile!]!
+}
+
+# An indexed file returned from file search
+type SearchResultIndexedFile {
+  repl: Repl!
+  filePath: String!
+  fileContents: String!
+  fileContentMatches: [SearchResultIndexedFileMatches!]!
+}
+
+# The location of a match in a SearchResultIndexedFile's fileContents
+type SearchResultIndexedFileMatches {
+  start: Int!
+  length: Int!
+}
+
+type SearchQueryResultsUsers {
+  hitInfo: SearchQueryHitInfo!
+  results: UserConnection!
+}
+
+type SearchQueryResultsPosts {
+  hitInfo: SearchQueryHitInfo!
+  results: PostConnection!
+}
+
+type SearchQueryResultsDocs {
+  hitInfo: SearchQueryHitInfo!
+  results: SearchResultIndexedDocConnection!
+}
+
+# A connection to a list of SearchResultIndexedDocs.
+type SearchResultIndexedDocConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of SearchResultIndexedDocs.
+  items: [SearchResultIndexedDoc!]!
+}
+
+# An indexed doc returned from doc search
+type SearchResultIndexedDoc {
+  path: String!
+  section: String!
+  contents: String!
+  contentMatches: [SearchResultIndexedFileMatches!]!
+}
+
+type SearchQueryResultsTags {
+  hitInfo: SearchQueryHitInfo!
+  results: SearchResultTagConnection!
+}
+
+# A connection to a list of SearchResultTags.
+type SearchResultTagConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of SearchResultTags.
+  items: [SearchResultTag!]!
+}
+
+# An indexed tag returned from tag search
+type SearchResultTag {
+  tag: Tag!
+  timeLastUsed: DateTime!
+  numReplsTotal: Int!
+}
+
+input SearchQueryOptions {
+  query: String!
+  categories: [SearchQueryCategory!]!
+  onlyCalculateHits: Boolean
+  categorySettings: SearchCategorySettings
+}
+
+enum SearchQueryCategory {
+  Repls
+  Templates
+  Files
+  Users
+  Posts
+  Docs
+  Tags
+}
+
+input SearchCategorySettings {
+  repls: SearchQueryReplsSearchSettings
+  templates: SearchQueryTemplatesSearchSettings
+  files: SearchQueryFilesSearchSettings
+  posts: SearchQueryPostsSearchSettings
+  users: SearchQueryUsersSearchSettings
+  docs: SearchQueryDocsSearchSettings
+  tags: SearchQueryTagsSearchSettings
+}
+
+input SearchQueryReplsSearchSettings {
+  sort: SearchQueryReplSort
+  page: SearchQueryPageFilter
+  dateCreated: SearchQueryDateFilter
+  dateModified: SearchQueryDateFilter
+  ownerId: Int
+  tags: [String!]
+  exactMatch: Boolean
+}
+
+enum SearchQueryReplSort {
+  Relevant
+  Trending
+  RecentlyCreated
+  RecentlyModified
+  MostLikes
+  MostRuns
+  MostForks
+}
+
+# Filter to set the page number (via after) and how many results should be fetched (via first)
+input SearchQueryPageFilter {
+  after: String
+  first: Int
+}
+
+input SearchQueryDateFilter {
+  gte: DateTime!
+}
+
+input SearchQueryTemplatesSearchSettings {
+  page: SearchQueryPageFilter
+  status: SearchQueryTemplateStatus
+  ownerId: Int
+  exactMatch: Boolean
+}
+
+enum SearchQueryTemplateStatus {
+  All
+  Official
+  Community
+}
+
+input SearchQueryFilesSearchSettings {
+  sort: SearchQueryFileSort
+  page: SearchQueryPageFilter
+  fileExtension: String
+  exactMatch: Boolean
+}
+
+enum SearchQueryFileSort {
+  Relevant
+  RecentlyModified
+}
+
+input SearchQueryPostsSearchSettings {
+  sort: SearchQueryPostSort
+  page: SearchQueryPageFilter
+  dateCreated: SearchQueryDateFilter
+  exactMatch: Boolean
+}
+
+enum SearchQueryPostSort {
+  Relevant
+  RecentlyCreated
+  Trending
+  MostVotes
+  MostComments
+}
+
+input SearchQueryUsersSearchSettings {
+  page: SearchQueryPageFilter
+  exactMatch: Boolean
+}
+
+input SearchQueryDocsSearchSettings {
+  page: SearchQueryPageFilter
+  exactMatch: Boolean
+  section: String
+}
+
+input SearchQueryTagsSearchSettings {
+  page: SearchQueryPageFilter
+  exactMatch: Boolean
+}
+
+union LookForErrorsOutput = UserError | UnauthorizedError | LookForErrorsResult
+
+type LookForErrorsResult {
+  id: String!
+  highlights: JSON
+}
+
+union ThreadsByFileOutput =
+    NotFoundError
+  | UnauthorizedError
+  | ThreadsByFileResult
+
+type ThreadsByFileResult {
+  threads: [AnnotationAnchor!]!
+}
+
+# A connection to a list of UserEvents.
+type UserEventConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of UserEvents.
+  items: [UserEvent!]!
+}
+
+# User events triggered by current user's followed users.
+type UserEvent {
+  id: Int!
+  eventType: user_eventseventTypeEnumType!
+  timeUpdated: Date!
+  user: User!
+  following: User
+  comment: ReplComment
+  post: Post
+  reaction: ReplReaction
+  repl: Repl
+}
+
+enum user_eventseventTypeEnumType {
+  user_comment
+  publish_post
+  update_post
+  publish_template
+  update_template
+  create_reaction
+  user_following
+}
+
+# User events triggered by current user's following users.
+type ReplReaction {
+  id: Int!
+  userId: Int!
+  reactionType: repl_reactionsreactionTypeEnumType!
+  repl: Repl
+}
+
+enum repl_reactionsreactionTypeEnumType {
+  heart
+  rocket
+  eyes
+  fire
+  open_mouth
+}
+
+union TutorialReplsOutput = UnauthorizedError | TutorialReplsResults
+
+type TutorialReplsResults {
+  results: [Repl!]!
+}
+
+input TutorialReplsInput {
+  category: TutorialReplsCategory!
+}
+
+enum TutorialReplsCategory {
+  all
+  codealong
+  remix
+}
+
+union HostingStatsOutput =
+    UnauthorizedError
+  | ServiceUnavailable
+  | HostingStatsResult
+
+type HostingStatsResult {
+  start: DateTime!
+  end: DateTime!
+  pageViews: [HostingStatsPageView!]
+  uniquePageViews: Int!
+  topURLs: [HostingStatsURL!]
+  topReferers: [HostingStatsReferer!]
+}
+
+type HostingStatsPageView {
+  timestamp: DateTime!
+  numViews: Int!
+}
+
+type HostingStatsURL {
+  url: String!
+  numHits: Int!
+}
+
+type HostingStatsReferer {
+  referer: String!
+  numHits: Int!
+}
+
+input HostingStats {
+  # The ID of the Repl whose hosting stats are being requested.
+  replId: String!
+
+  # The start time (in seconds) from which to request hosting stats data relative to now (defaults to 1 week ago)
+  startTime: Int
+}
+
+union InstantGitHubImportOutput =
+    NotFoundError
+  | UserError
+  | InstantGitHubImportResult
+
+type InstantGitHubImportResult {
+  language: String!
+  templateId: String!
+  isPrivate: Boolean!
+}
+
+input InstantGitHubImportInput {
+  username: String!
+  repository: String!
+}
+
+union ModeratorAuditLogOutput = UnauthorizedError | ModeratorAuditLogConnection
+
+# A connection to a list of ModeratorAuditLogs.
+type ModeratorAuditLogConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of ModeratorAuditLogs.
+  items: [ModeratorAuditLog!]!
+}
+
+# A moderator audit log entry.
+type ModeratorAuditLog {
+  id: Int!
+  model: moderator_action_recordmodelEnumType!
+  type: moderator_action_recordtypeEnumType!
+  updateBody: String
+  moderator: User
+  post: Post
+  comment: ReplComment
+  bannedUser: User
+  boardReport: BoardReport
+  warning: Warning
+  repl: Repl
+  timeCreated: DateTime!
+  timeUpdated: DateTime!
+}
+
+enum moderator_action_recordmodelEnumType {
+  Boards
+  Posts
+  Comments
+  BannedBoardUsers
+  BoardReports
+  Warning
+  Repls
+}
+
+enum moderator_action_recordtypeEnumType {
+  create
+  update
+  delete
+}
+
+# Additional options for pagination and filtering audit log
+input ModeratorAuditLogInputType {
+  after: Int
+  limit: Int
+  moderator: Int
+  model: ModeratorAuditLogModel
+  type: ModeratorAuditLogType
+  targetId: Int
+  replId: String
+  order: ModeratorAuditLogOrder
+}
+
+enum ModeratorAuditLogModel {
+  boards
+  posts
+  comments
+  bannedBoardUsers
+  boardReports
+  warning
+  repls
+}
+
+enum ModeratorAuditLogType {
+  create
+  update
+  delete
+}
+
+enum ModeratorAuditLogOrder {
+  newest
+  oldest
+}
+
+union ImageScansOutput = UserError | UnauthorizedError | ImageScanConnection
+
+# A connection to a list of ImageScans.
+type ImageScanConnection {
+  # Information to aid in pagination.
+  pageInfo: PageInfo!
+
+  # A list of ImageScans.
+  items: [ImageScan!]!
+}
+
+type ImageScan {
+  # Image scan ID
+  id: String!
+
+  # ID of the image that corresponds to the scan
+  image_id: Int!
+
+  # Context in which the image was uploaded
+  upload_context: String!
+
+  # URL to the image
+  image_url: String!
+
+  # User who uploaded the image
+  creator: User!
+
+  # Score associated to the image by the scanning model
+  score: Float!
+
+  # When the image was uploaded
+  time_image_uploaded: DateTime
+
+  # When the image scan was completed
+  time_scan_results_obtained: DateTime
+}
+
+# The top level entry point for mutating the graph
+type RootMutationType {
+  # Marks a tour as seen
+  toursSeen(name: String!): ToursSeenMuationResult!
+
+  # Marks a tour as seen
+  markTourAsSeen(name: String!): TourSeen!
+
+  # Updates a Repl
+  updateRepl(input: UpdateReplInput!): UpdateReplPayload!
+
+  # Deletes a repl
+  deleteRepl(id: String!): Repl!
+
+  # Boost a repl
+  boostRepl(replId: String!): BoostReplOutput!
+
+  # Unboost a repl
+  unboostRepl(replId: String!): UnboostReplOutput!
+
+  # Updates time_updated of a repl
+  updateReplTimeUpdated(id: String!): UpdateReplTimeUpdatedOutput!
+
+  # Updates a Post
+  updatePost(input: UpdatePostInput!): UpdatePostPayload!
+
+  # Deletes a post
+  deletePost(id: Int!): Post
+  createPostVote(postId: Int!): PostVote
+  deletePostVote(postId: Int!): PostVote
+
+  # Creates a Comment
+  createComment(input: CreateCommentInput!): CreateCommentPayload!
+
+  # Updates a Comment
+  updateComment(input: UpdateCommentInput!): UpdateCommentPayload!
+
+  # Deletes a comment
+  deleteComment(id: Int!): Comment
+  pinReplToProfile2(replId: String!): PinReplToProfileOutput!
+  unpinReplFromProfile2(replId: String!): UnpinReplFromProfileOutput!
+  createBannedBoardUser(username: String!, reason: String!): BannedBoardUser!
+    @deprecated(reason: "Use banCommunityUser instead")
+  deleteBannedBoardUser(username: String!): BannedBoardUser!
+    @deprecated(reason: "Use unbanCommunityUser instead")
+  createCommentVote(commentId: Int!): CommentVote
+  deleteCommentVote(commentId: Int!): CommentVote
+  createBoardReport(
+    postId: Int
+    commentId: Int
+    replId: String
+    reason: String!
+    reportedUserId: Int
+  ): BoardReport!
+  reportReplComment(
+    replCommentId: Int!
+    reason: String!
+  ): ReportReplCommentOutput!
+  resolveBoardReport(id: Int!): BoardReport!
+  unresolveBoardReport(id: Int!): BoardReport!
+  createReplFolder(name: String!, parentId: String, teamId: Int): ReplFolder!
+  deleteReplFolder(folderId: String!): ReplFolder!
+  updateReplFolder(folderId: String!, name: String!): ReplFolder!
+  moveItemsToFolder(
+    replIds: [String]!
+    folderIds: [String]!
+    destFolderId: String!
+    teamId: Int
+  ): [DashboardItem!]!
+  selectCommentAsAnswer(id: Int!): Comment
+  unselectCommentAsAnswer(id: Int!): Comment
+  addMultiplayerUser(
+    username: String!
+    replId: String!
+    type: String!
+  ): ReplPermission!
+  removeMultiplayerUser(username: String!, replId: String!): ReplPermission!
+
+  # Marks all notifications as seen
+  markAllNotificationsAsSeen: CurrentUser!
+
+  # Marks all notifications of a certain type as seen
+  markNotificationsAsSeen(
+    context: NotificationContext
+    url: String
+    id: Int
+    ids: [Int]
+  ): Int!
+
+  # Refreshes a multiplayer invite link
+  refreshMultiplayerInviteLink(replId: String!): Repl!
+  createMultiplayerInvite2(
+    email: String!
+    replId: String!
+    type: String!
+  ): MultiplayerInviteOutput!
+  deleteMultiplayerInvite(
+    email: String!
+    replId: String!
+  ): MultiplayerInviteOutput!
+  updateBoardTrendingAlgorithmSettings(
+    input: UpdateBoardTrendingAlgorithmSettingsInput!
+  ): BoardTrendingAlgorithmSettings!
+  createTutorialCategory(name: String!, imageId: Int!): TutorialCategory!
+  updateTutorialCategory(
+    id: String!
+    name: String!
+    imageId: Int!
+  ): TutorialCategory!
+  upsertTutorial(categoryId: String!, postId: Int!, language: String): Tutorial!
+  removeTutorial(categoryId: String!, postId: Int!): TutorialCategory!
+  removeTutorialCategory(id: String!): Boolean!
+  sendUserVerificationEmail: SendUserVerificationEmailOutput!
+
+  # Updates the current user's email if allowed
+  updateEmail(email: String!, password: String): UpdateUserOutput
+
+  # Unshares a shared repl with the current user
+  removeSharedRepl(replId: String!): Repl!
+  createRepl(
+    input: CreateReplInput!
+    isTitleAutoGenerated: Boolean
+  ): CreateReplOutput!
+  updateCurrentUser(input: UpdateCurrentUserInput!): CurrentUser
+
+  # Updates the current user's password if allowed
+  updatePassword(
+    currentPassword: String!
+    newPassword: String!
+  ): UpdateUserOutput
+  updateLocale(locale: String!): UpdateLocaleOutput
+
+  # Updates the current user's email if allowed
+  updateRole(role: UserRoles!, flag: Boolean!): UpdateUserOutput
+
+  # ClUI root command
+  clui: CluiMutation
+  updateLanguagesInterestedIn(languages: [String]!): CurrentUser!
+  linkReplDomain(replId: String!, domain: String!): LinkDomainOutput!
+
+  # Link a custom domain name to a repl
+  linkReplDomain2(replId: String!, domain: String!): LinkReplDomain2!
+  createAnnotationAnchor(
+    annotationAnchor: AnnotationAnchorInput!
+    annotationMessage: AnnotationMessageInput
+    highlight: AnnotationHighlightInput
+  ): CreateAnnotationAnchorOutput
+  createAnnotationMessage(
+    replId: String!
+    anchorId: String!
+    annotationMessage: AnnotationMessageInput!
+    highlight: AnnotationHighlightInput
+  ): CreateAnnotationMessageOutput
+  updateAnnotationAnchor(
+    id: String!
+    changes: AnnotationAnchorChangesInput!
+  ): UpdateAnnotationAnchorOutput
+  deleteTeam(input: DeleteTeamInput!): TeamOutput!
+  updateTeam(input: UpdateTeamInput!): TeamOutput!
+  removeTeamMember(input: RemoveTeamMemberInput!): RemoveTeamMemberOutput!
+  leaveTeam(teamId: Int!): LeaveTeamOutput!
+  createTeamInvite(input: CreateTeamInviteInput!): CreateTeamInviteOutput!
+  deleteTeamInvite(input: DeleteTeamInviteInput!): DeleteTeamInviteOutput!
+
+  # Creates a test event for graphql subscriptions
+  testSubscription: Boolean
+  createTeamInviteLink(teamId: Int!): CreateTeamInviteLinkOutput!
+  deleteTeamInviteLink(teamId: Int!): DeleteTeamInviteLinkOutput!
+  updateTeamUserPermissions(
+    input: UpdateTeamUserPermissionsInput!
+  ): UpdateTeamUserPermissionsOutput!
+  createReplTemplate(input: CreateReplTemplateInput!): CreateReplTemplateOutput!
+  createReplAsTemplate(
+    input: CreateReplAsTemplateInput!
+  ): CreateReplAsTemplateOutput!
+  updateReplTemplate(
+    input: UpdateReplTemplateInput!
+  ): UpdateReplTemplateOutputType!
+  deleteReplTemplate(id: Int!): DeletedReplTemplatOutput!
+
+  # ...
+  submitRepl(replId: String!): SubmitReplOutput!
+
+  # Lets a teacher unsubmit a Repl submission
+  unsubmitRepl(replId: String!): UnsubmitReplOutput!
+
+  # Mark a submission reviewed
+  reviewRepl(replId: String!, status: Boolean!): ReviewReplOutput!
+
+  # The mutation used to fork a project.
+  createReplSubmission(templateId: Int!): CreateReplSubmissionOutput!
+  updateTeamInviteLinkEduSignup(
+    teamId: Int!
+    enabled: Boolean!
+  ): UpdateTeamInviteLinkEduSignupOutput!
+  createTemplateTest(input: CreateTemplateTestInput!): TemplateTestOutput!
+  createReplUnitTest(input: CreateReplUnitTestInput!): ReplUnitTestOutput!
+  deleteReplUnitTest(testId: Int!): ReplUnitTestOutput!
+  updateReplUnitTest(input: UpdateReplUnitTestInput!): ReplUnitTestOutput!
+  createReplUnitTestMeta(
+    input: CreateReplUnitTestMetaInput!
+  ): ReplUnitTestMetaOutput!
+  updateReplUnitTestMeta(
+    input: UpdateReplUnitTestMetaInput!
+  ): ReplUnitTestMetaOutput!
+  updateReplUnitTestLastRun(
+    input: UpdateReplUnitTestLastRunInput!
+  ): UpdateReplUnitTestLastRunOutput
+
+  # Creates goval connection metadata with limited capabilities. Notably no network access and reduced CPU and memory.
+  createLanguageConnectionMetadata(
+    language: String!
+    overrideClusterMetadata: ClusterMetadata
+  ): CreateLanguageConnectionMetadataOutput!
+  deleteTemplateTest(testId: Int!): DeleteReplTemplateOutput!
+  updateTemplateTest(input: UpdateTemplateTestInput!): TemplateTestOutput!
+  updateEditorPreferences(input: UpdateEditorPreferencesInput!): CurrentUser!
+  createReplComment(input: CreateReplCommentInput!): ReplCommentOutput!
+  setReplCommentSettings(input: SetReplCommentSettingsInput!): ReplOutput!
+  createReplCommentReply(
+    input: CreateReplCommentReplyInput!
+  ): ReplCommentOutput!
+  ownAnonRepl(input: OwnAnonReplInput!): ReplOutput!
+  updateReplComment(input: UpdateReplCommentInput!): ReplCommentOutput!
+  deleteReplComment(id: Int!): ReplCommentOutput!
+  createTeamInvitesFromCSV(input: CSVFileInput!): TeamOutput!
+  createTemplateShareLink(teamId: Int!, templateIds: [Int!]!): Team!
+  resetPrivacyStudentPassword(
+    teamId: Int!
+    userId: Int!
+    password: String!
+  ): ResetPrivacyStudentPasswordOutput!
+
+  # The mutation used to get the templates from another team via the code of a template share link
+  useTemplateShareLink(
+    # The id of the team which the templates should be copied to
+    teamId: Int!
+
+    # The code of the link which we should copy templates from
+    code: String!
+
+    # The templates which should be taken from the link
+    content: [Int!]!
+
+    # Whether the timestamps for the templates should be copied or not
+    withDates: Boolean!
+  ): Int!
+
+  # The mutation used to update a template share link for a team
+  updateTemplateShareLink(
+    # The id of the team which the link belongs to
+    teamId: Int!
+
+    # The id of the link which is to be updated.
+    linkId: Int!
+    templateIds: [Int!]!
+  ): TeamTemplateShareLink!
+
+  # The mutation used to delete a team's template share link
+  deleteTemplateShareLink(
+    # The id of the team which the link belongs to
+    teamId: Int!
+
+    # The id of the link which should be deleted
+    linkId: Int!
+  ): Team
+
+  # Reverts a template share transaction.
+  undoTemplateShare(
+    # The id of the team which the transaction that should be reverted belongs to.
+    teamId: Int!
+
+    # The id of the template share transaction which should be reverted.
+    shareId: Int!
+  ): Team!
+  deleteProjectAndSubmissions(id: Int!): DeletedProjectAndSubmissionOutput!
+  disconnectAuthProvider(provider: UserAuthProviders!): CurrentUser!
+  setAlwaysOn(replId: ID!, enabled: Boolean!): SetAlwaysOnOutput!
+  createReplRelease(input: CreateReplReleaseInput!): CreateReplReleaseOutput!
+  revertReplRelease(input: RevertReplReleaseInput!): RevertReplReleaseOutput!
+  promoteReplRelease(input: PromoteReplRelease!): ReplReleaseOutput!
+
+  # Creates a deployment and release
+  createReplDeployment(
+    input: CreateReplDeployemntInput!
+  ): CreateReplDeployemntOutput!
+  deleteReplDeployment(
+    input: DeleteReplDeploymentInput!
+  ): DeleteReplDeploymentOutput!
+
+  # Marks all messages in thread as read
+  markMessagesAsSeen(
+    replId: String!
+    threadId: String
+    messageIds: [String!]
+  ): MarkMessagesAsSeenOutput
+
+  # Deletes a user's account
+  deleteAccount: Boolean!
+  createReplRun(replId: String!): ReplOutput!
+
+  # Change conversation message preview in response to user input
+  updateThreadPreview(
+    threadId: String!
+    messageId: String!
+    message: String
+  ): Boolean
+  updateTeamOrganization(
+    input: UpdateTeamOrganizationInput!
+  ): UpdateTeamOrganizationOutput!
+  saveIOTestResults(
+    # The ID of the team which the Repl the results are for belongs to.
+    teamId: Int!
+
+    # The ID of the Repl which the test results are for.
+    replId: String!
+
+    # The results of the I/O tests executed on the Repl.
+    results: [IOTestResultInput!]!
+  ): SaveIOTestResultOutput
+  removeTeamGuest(teamId: Int!, userId: Int!): RemoveTeamGuestOutput!
+
+  # Updates a team member's nickname
+  updateTeamMember(input: UpdateTeamMemberInput!): UpdateTeamMemberOutput!
+
+  # Adds a new team to the organization, or adds a new free team if not associated with org.
+  createTeamV2(input: CreateTeamV2Input!): CreateTeamV2Output!
+  connectGoogleClassroom(
+    input: ConnectGoogleClassroomInput!
+  ): ConnectGoogleClassroomOutput
+  deleteMultiplayerInviteLink(replId: String!): DeleteMultiplayerInviteLink!
+  exportTeamSubmissions(teamId: Int!): ExportTeamSubmissionsOutput!
+  disconnectGoogleClassroom(
+    input: DisconnectGoogleClassroomInput!
+  ): DisconnectGoogleClassroomOutput!
+
+  # Creates a group project submission
+  createReplSubmissionGroup(
+    input: CreateReplSubmissionGroupInput!
+  ): CreateReplSubmissionGroupOutput!
+
+  # Creates a group project submission
+  joinReplSubmissionGroup(
+    input: JoinReplSubmissionGroupInput!
+  ): JoinReplSubmissionGroupOutput
+  exportProjectsOverview(
+    input: ExportProjectsOverviewInput!
+  ): ExportProjectsOverviewOutput!
+  archiveTeam(input: ArchiveTeamInput!): ArchviveTeamInput!
+  unarchiveTeam(input: UnarchiveTeamInput!): UnarchiveTeamOutput!
+  setLanguageTemplateRepl(
+    input: SetLanguageTemplateInput!
+  ): SetLanguageTemplateOutput!
+  createStack(input: CreateStackInput!): CreateStackOutput
+  arrangeStackItem(input: ArrangeStackItemInput!): ArrangeStackItemOutput
+  uploadReplAttachment(
+    input: UploadReplAttachmentInput!
+  ): UploadReplAttachmentOutput
+  importCurriculum(input: ImportCurriculumInput!): ImportCurriculumOutput!
+
+  # Migrates team from old hacky collections to stacks
+  migrateTeamToStacks(teamId: Int!): MigrateTeamToStacksOutput
+  updateStack(input: UpdateStackInput!): UpdateStackOutput!
+  deleteStack(stackId: Int!): DeleteStackOutput!
+  arrangeStack(input: ArrangeStackInput!): ArrangeStackOutput!
+  createReplPost2(input: CreateReplPost2Input!): CreateReplPost2Output!
+  unpublishReplFromCommunity(
+    input: UnpublishReplFromCommunityInput!
+  ): UnpublishReplFromCommunityOutput!
+  giveCodexFeedback2(input: CodexFeedback2Input!): CodexFeedback2Output!
+  toggleReplLike(input: ToggleReplLikeInput!): ToggleReplLikeOutput!
+  setFollowing(input: setFollowingInput!): setFollowing
+  setBlocking(input: SetBlockingInput!): SetBlocking
+  setTemplateReplCategory(
+    input: SetTemplateReplCategoryInput!
+  ): SetTemplateCategoryOutput!
+  setOnboardingExperience(
+    role: OnboardingExperience!
+  ): SetOnboardingExperienceOutput!
+  setOnboardingIntent(role: Intent!): SetOnboardingIntentOutput!
+
+  # Creates a model solution for a project
+  createReplTemplateModelSolution(
+    input: CreateReplTemplateModelSolutionInput!
+  ): CreateReplTemplateModelSolutionOutput!
+
+  # Creates a model solution fork for students to view and edit
+  createReplTemplateModelSolutionFork(
+    input: CreateReplTemplateModelSolutionForkInput!
+  ): CreateReplTemplateModelSolutionForkOutput!
+
+  # Creates a model solution for a project
+  updateReplTemplateModelSolution(
+    input: UpdateReplTemplateModelSolutionInput!
+  ): UpdateReplTemplateModelSolutionOutput!
+  claimVoucher(input: ClaimVoucherInput!): ClaimVoucherOutput
+  updateTeamOrganizationMember(
+    input: UpdateTeamOrganizationMemberInput!
+  ): UpdateTeamOrganizationMemberOutput!
+  deleteTeamOrganizationMember(
+    input: DeleteTeamOrganizationMemberInput!
+  ): DeleteTeamOrganizationMemberOutput!
+  deleteTeamOrganization(
+    input: DeleteTeamOrganizationInput!
+  ): DeleteTeamOrganizationOutput!
+  createTeamOrganizationInvite(
+    input: CreateTeamOrgInviteInput!
+  ): CreateTeamOrgInviteOutput!
+  deleteTeamOrganizationInvite(
+    input: DeleteTeamOrgInviteInput!
+  ): DeleteTeamOrgInviteOutput!
+  updateSubscription(input: UpdateSubscriptionInput!): UpdateSubscription!
+  createTeamOrgInviteLink(orgId: Int!): CreateTeamOrgInviteLinkOutput!
+  deleteTeamOrgInviteLink(orgId: Int!): DeleteTeamOrgInviteLinkOutput!
+  copyTeamTemplate(input: CopyTeamTemplateInput!): CopyTeamTemplateOutput!
+  joinTeamAsOrgAdmin(teamId: Int!): JoinTeamAsOrgAdminOutput!
+  setUserSocials(input: SetUserSocialsInput!): SetUserSocialsOutput!
+  updateUserSitePresence: UpdateUserSitePresenceOutput!
+  updateUserPrivacyPreferences(
+    input: UpdateUserPrivacyPreferencesInput!
+  ): UpdateUserPrivacyPreferencesOutput!
+  setUserCoverImage(input: SetUserCoverImageInput!): SetUserCoverImageOutput!
+  setUserActiveTheme(input: SetUserActiveThemeInput!): SetUserActiveThemeOutput
+  addUserCustomTheme(input: AddUserCustomThemeInput!): AddUserCustomThemeOutput
+  removeUserCustomTheme(
+    input: RemoveUserCustomThemeInput!
+  ): RemoveUserCustomThemeOutput
+  toggleHiddenComment(
+    commentId: Int!
+    isHidden: Boolean!
+  ): ToggleHiddenCommentOutput!
+  toggleHiddenPost(postId: Int!, isHidden: Boolean!): ToggleHiddenPostOutput!
+  importGithubRepo(input: ImportGithubRepoInput!): ImportGithubRepoOutput!
+
+  # Warn a user
+  warnUser(username: String!, reason: String!): WarnUserOutput!
+
+  # Remove a warning from a user
+  removeWarn(username: String!, warnId: Int!): RemoveWarnOutput!
+
+  # Ban a user from community.
+  banCommunityUser(
+    username: String!
+    reason: String!
+    timeExpired: DateTime
+  ): BanCommunityUserOutput!
+  setReplLayoutState(input: SetReplLayoutStateInput!): SetReplLayoutStateOutput!
+  setReplTags(input: SetReplTagsInput!): SetReplTagsOutput!
+  deleteReplLayoutState(
+    input: DeleteReplLayoutStateInput!
+  ): DeleteReplLayoutStateOutput!
+  createNewTeamsEduOrganization(
+    input: CreateNewTeamsEduOrganizationInput!
+  ): CreateNewTeamsEduOrganizationOutput!
+
+  # Sets the settings that control the repl view outside the workspace.
+  setReplViewSettings(
+    input: SetReplViewSettingsInput!
+  ): SetReplViewSettingsOutput!
+  createTeacherVerificationResponse(
+    input: CreateTeacherVerificationResponseInput!
+  ): CreateTeacherVerificationResponseOutput!
+
+  # Escalate a report for admins to review.
+  escalateBoardReport(id: Int!): EscalateBoardUserOutput!
+
+  # Review a Template to either promote or demote it from the create Repl form
+  reviewTemplate(input: ReviewTemplateInput!): ReviewTemplateOutput!
+  createAsanaSupportTask(
+    input: CreateAsanaSupportTaskInput!
+  ): CreateAsanaSupportTaskOutput
+  createAsanaFeedbackTask(
+    input: CreateAsanaFeedbackTaskInput!
+  ): CreateAsanaFeedbackTaskOutput!
+
+  # When `active` is true, either find and update an existing order or charge the user and create a new one. When `active` is false, either update an existing order or return an error if none is found
+  updatePrivatePowerUp(active: Boolean!): UpdatePrivatePowerUpOutput!
+
+  # Deletes all community bans on a user.
+  unbanCommunityUser(input: UnbanCommunityUserInput!): UnbanCommunityUserOutput!
+
+  # Changes a repls language to Nix, does not do any migrations, only updates metadata
+  changeLanguageToNix(id: String!): ChangeLanguagetoNixOutput!
+
+  # Unpublish a user's repl from the community and notify the user.
+  moderatorUnpublish(input: ModeratorUnpublishInput!): ModeratorUnpublishOutput!
+  createUserCourse(input: CreateUserCourseInput!): CreateUserCourseOutput
+  createUserCourseLesson(
+    input: CreateUserCourseLessonInput!
+  ): CreateUserCourseLessonOutput
+  completeUserCourseLesson(
+    input: CompleteUserCourseLessonInput!
+  ): UpdateUserCourseLessonOutput
+}
+
+type ToursSeenMuationResult {
+  name: String!
+  success: Boolean!
+}
+
+type UpdateReplPayload {
+  repl: Repl!
+}
+
+input UpdateReplInput {
+  id: String!
+  title: String
+  description: String
+  imageUrl: String
+  iconUrl: String
+  isPrivate: Boolean
+  isStarred: Boolean
+  language: String
+  templateLabel: String
+  isServer: Boolean
+  isVnc: Boolean
+  domain: String
+  removeDomain: String
+  doClone: Boolean
+}
+
+union BoostReplOutput = UserError | ReplBoost
+
+# Metadata about a boosted repl
+type ReplBoost {
+  id: Int!
+  replId: String!
+  customerId: Int!
+  timeExpired: Date
+  timeCreated: Date!
+  timeUpdated: Date
+  timeDeleted: Date
+  repl: Repl
+}
+
+union UnboostReplOutput = UserError | ReplBoost
+
+union UpdateReplTimeUpdatedOutput = UserError | NotFoundError | Repl
+
+type UpdatePostPayload {
+  post: Post!
+}
+
+input UpdatePostInput {
+  id: Int!
+  title: String
+  body: String
+  isPinned: Boolean
+  postType: String
+  isLocked: Boolean
+  boardId: Int
+  replId: String
+  showHosted: Boolean
+  isHidden: Boolean
+}
+
+type CreateCommentPayload {
+  comment: Comment!
+}
+
+input CreateCommentInput {
+  body: String!
+  postId: Int
+  replId: String
+  commentId: Int
+}
+
+type UpdateCommentPayload {
+  comment: Comment!
+}
+
+input UpdateCommentInput {
+  id: Int!
+  body: String!
+}
+
+union PinReplToProfileOutput =
+    UnauthorizedError
+  | UserError
+  | NotFoundError
+  | Repl
+
+union UnpinReplFromProfileOutput =
+    UnauthorizedError
+  | UserError
+  | NotFoundError
+  | Repl
+
+# A vote on a comment
+type CommentVote {
+  id: Int!
+  user: User
+  comment: Comment!
+}
+
+union ReportReplCommentOutput = UserError | UnauthorizedError | BoardReport
+
+union DashboardItem = Repl | ReplFolder
+
+enum NotificationContext {
+  classroom
+  board
+  multiplayer
+  team
+  annotation
+}
+
+union MultiplayerInviteOutput = MultiplayerInvite | ReplPermission | UserError
+
+input UpdateBoardTrendingAlgorithmSettingsInput {
+  postsExponent: Float!
+  postsCommentWeight: Float!
+  commentsExponent: Float!
+}
+
+union SendUserVerificationEmailOutput =
+    UserVerificationEmailSent
+  | UserVerificationAlreadyVerified
+
+# The user was sent a verification email
+type UserVerificationEmailSent {
+  to: String!
+}
+
+# The user is already verified
+type UserVerificationAlreadyVerified {
+  user: CurrentUser!
+}
+
+union UpdateUserOutput = CurrentUser | UserError
+
+union CreateReplOutput = UserError | Repl
+
+input CreateReplInput {
+  title: String
+  description: String
+  language: String
+  folderId: String
+  gitRemoteUrl: String
+  originId: String
+  replReleaseId: String
+  isPrivate: Boolean
+  forkToPersonal: Boolean
+  teamId: Int
+  stackId: Int
+  files: [ReplFileInput!]
+}
+
+input ReplFileInput {
+  name: String!
+  content: String!
+}
+
+input UpdateCurrentUserInput {
+  firstName: String
+  lastName: String
+  bio: String
+  profileImageId: Int
+  emailNotifications: Boolean
+}
+
+union UpdateLocaleOutput = CurrentUser | UserError
+
+type CluiMutation {
+  # Admin CLUI operations
+  admin: AdminCluiMutation
+
+  # Manage your account
+  account: UserCliAccountMutation
+
+  # Moderator CLUI operations
+  moderator: ModeratorCluiMutation
+
+  # List and restore deleted repls
+  trash: TrashMutation
+
+  # View and manage your teams
+  team: TeamMutation
+}
+
+type AdminCluiMutation {
+  # View, impersonate, ban, etc.
+  user: AdminCliUserMutation
+
+  # Manage site settings
+  site: AdminCliSiteMutation
+
+  # Manage user roles
+  roles: AdminCliRolesMutation
+
+  # Provision a team
+  team: AdminTeamMutation
+
+  # Manage site banner
+  banners: AdminCliBannersMutation
+
+  # Set app wide key/value
+  appEnv: AdminCliAppEnvMutation
+
+  # Poison, cleanse, etc.
+  repl: AdminCliReplMutation
+
+  # Configure templates
+  templates: AdminCliTemplatesMutation
+
+  # View and publish curriculum hub content
+  curriculum: AdminCurriculumHubMutation
+
+  # Configure billing
+  billing: AdminCliBillingMutation
+
+  # Configure organizations
+  org: AdminCliBillingOrgsMutation
+
+  # Configure subscriptions
+  subscriptions: AdminCliSubscriptionsMutation
+
+  # View and update manually curated content for trending
+  curation: ManualCurationMutation
+}
+
+type AdminCliUserMutation {
+  # This does terrible things to a user's account. This is not a Repl Talk ban, this is a SITE WIDE BAN. All their Repls go poof and they will no longer be able to access their account.
+  ban(
+    # User's username or email
+    user: String!
+
+    # Reason for ban
+    reason: String!
+  ): CluiOutput
+
+  # This makes everything better again. This is not a repl talk unban, this is a SITE WIDE UNBAN. All their repls come back and they will have to access their account again.
+  unban(
+    # User's username or email
+    user: String!
+
+    # set the first name of the user
+    firstName: String!
+
+    # set the last name of the user
+    lastName: String!
+
+    # (optional) force restore repls by this time (2021-12-31T23:59:59.999Z in UTC)
+    time: String
+  ): CluiOutput
+
+  # WARNING THIS DELETES THE USER AND ALL OF THEIR REPLS. USE THIS WITH CAUTION!!
+  delete(
+    # User's username or email
+    user: String!
+  ): CluiOutput
+
+  # Restore a users account and their repls
+  restore(
+    # User's username or email
+    user: String!
+
+    # (optional) force restore repls by this time (2021-12-31T23:59:59.999Z in UTC)
+    time: String
+  ): CluiOutput
+
+  # Change a users email
+  changeEmail(
+    # User's username or email
+    user: String!
+
+    # set the email of the user
+    email: String!
+  ): CluiOutput
+
+  # Change a users username
+  changeUsername(
+    # User's username or email
+    user: String!
+
+    # set the username of the user
+    username: String!
+  ): CluiOutput
+
+  # Impersonate a user
+  impersonate(
+    # User's username or email
+    user: String!
+  ): CluiOutput
+
+  # Modify a user's trust level
+  trust(
+    # User's username or email
+    user: String!
+
+    # Desired trust level; empty removes the trust level
+    level: UserTrustEnum
+  ): CluiOutput
+
+  # Override a user's default cluster
+  cluster(
+    # User's username or email
+    user: String!
+
+    # Override cluster; empty removes the override
+    cluster: String
+  ): CluiOutput
+
+  # Provisions a trial user subscription for a set amount of time
+  provision(
+    # Username or email of existing user
+    username: String!
+
+    # Duration of trial subscription (in months)
+    months: Int!
+  ): CluiOutput
+
+  # Expires a user subscription
+  deprovision(
+    # Username or email of existing user
+    username: String!
+  ): CluiOutput
+
+  # Mark the user as email verified
+  verify(
+    # Username or email of existing user
+    username: String!
+  ): CluiOutput
+
+  # View and manage users' Cycles balances
+  cycles: AdminCliUserCyclesMutation
+}
+
+enum UserTrustEnum {
+  low
+}
+
+type AdminCliUserCyclesMutation {
+  # Retire cycles from a user. Please read these guidelines first: https://replit.com/@util/handbook#cycles/clui_rules.md
+  retire(
+    # The username or email of the user
+    username: String!
+
+    # The number of cycles to retire.
+    cycles: Int!
+
+    # The reason for retiring cycles.
+    internalComment: String!
+  ): CluiOutput
+
+  # Grant cycles to a user. Please read these guidelines first: https://replit.com/@util/handbook#cycles/clui_rules.md
+  grant(
+    # The username or email of the user
+    username: String!
+
+    # The number of cycles to grant.
+    cycles: Int!
+
+    # The reason for granting cycles.
+    internalComment: String!
+  ): CluiOutput
+}
+
+type AdminCliSiteMutation {
+  # Anyone who loaded the client before the set date will be asked to reload
+  setLastUpdateTime(
+    # epoch in milliseconds (leave empty for Date.now())
+    date: Int
+  ): CluiOutput
+
+  # Anyone who loaded the client before the set date will be asked to reload
+  clearKue(
+    # Name of job
+    jobName: String!
+
+    # State to clear (e.g. failed)
+    state: String!
+  ): CluiOutput
+}
+
+type AdminCliRolesMutation {
+  # Adds role to user
+  add(
+    # The role to add
+    role: UserRoles!
+
+    # User's username or email
+    user: String!
+  ): CluiOutput
+
+  # Removes role from user
+  remove(
+    # The role
+    role: UserRoles!
+
+    # User's username or email
+    user: String!
+  ): CluiOutput
+}
+
+type AdminTeamMutation {
+  # Moves team to destination org.
+  moveTeamToOrg(
+    # team name
+    team: String!
+
+    # org id
+    orgId: Int!
+  ): CluiOutput
+
+  # Add or remove team member
+  addRemoveTeamMember(
+    # User's username or email
+    user: String!
+
+    # team name
+    team: String!
+
+    # Permission level. If the user is already a team member, it will change the permissions level to one selected.
+    permissions: TeamPermission
+
+    # Select if you want to remove this member from the team
+    remove: Boolean
+  ): CluiOutput
+}
+
+type AdminCliBannersMutation {
+  # Adds a site-wide banner
+  add(
+    # The message to add
+    message: String!
+  ): CluiOutput
+
+  # Removes the site-wide banner
+  remove: CluiOutput
+}
+
+type AdminCliAppEnvMutation {
+  # Append a value to an app-wide list variable
+  append(
+    # The key name
+    key: String!
+
+    # The value to append
+    value: String!
+  ): CluiOutput
+
+  # Remove a value from an app-wide list variable
+  remove(
+    # The key name
+    key: String!
+
+    # The value to remove
+    value: String!
+  ): CluiOutput
+
+  # Set an app-wide variable
+  set(
+    # The key name
+    key: String!
+
+    # The value
+    value: String!
+  ): CluiOutput
+
+  # Unset an app-wide variable
+  unset(
+    # The key to unset
+    key: String!
+  ): CluiOutput
+}
+
+type AdminCliReplMutation {
+  # Poison a Repl. Transfers the Repl and all forks (recursively) to the tarpit.
+  poison(
+    # repl ID
+    repl: String!
+  ): CluiOutput
+
+  # Removes the poison status from the target Repl and all its forks recursively. This moves all those repls back to the appropriate cluster. For heavily forked repls (>20k), this job might time out. In that case you should run the script/cleasneReplTree script locally against production.
+  cleanse(
+    # repl ID
+    repl: String!
+  ): CluiOutput
+
+  # Delete a Repl (will appear in the user's trash)
+  delete(
+    # repl ID
+    repl: String!
+  ): CluiOutput
+
+  # Takedown a Repl (if the Repl is deleted but still running)
+  takedown(
+    # repl ID
+    repl: String!
+  ): CluiOutput
+}
+
+type AdminCliTemplatesMutation {
+  # Unpublish a template.
+  unpublish(
+    # The template repl id
+    replId: String!
+  ): CluiOutput
+}
+
+type AdminCurriculumHubMutation {
+  # Export a team as curriculum
+  exportCurriculum(
+    # Source team username
+    team: String!
+  ): CluiOutput
+
+  # Export a team as curriculum
+  changeCurriculumStatus(
+    # Curriculum version id
+    versionId: Int!
+
+    # Version status
+    status: CurriculumVersionStatus!
+  ): CluiOutput
+}
+
+enum CurriculumVersionStatus {
+  draft
+  in_review
+  published
+}
+
+type AdminCliBillingMutation {
+  # Configure coupons
+  coupons: AdminCliBillingCouponsMutation
+}
+
+type AdminCliBillingCouponsMutation {
+  # Create an assocation to an external coupon
+  create(
+    # Product
+    product: AdminCLUIBillinProductsEnum!
+
+    # Code used visible by user (does not need to be named similary to Stripe).
+    #         Code can only contain alphanumeric characters (letters A-Z, numbers 0-9) or hyphens.
+    code: String!
+
+    # Prefer to use promotion code on coupon when possible.
+    discountType: AdminCLUIBillingDiscountEnumType!
+
+    # Should the user be forced to enter a valid credit card.
+    requirePaymentMethod: Boolean
+
+    # Apply a trial period, in number of days, at the beginning of the subscription
+    trialPeriod: Int
+
+    # Coupon or promotion code ID from Stripe or other payment provider
+    externalId: String!
+  ): CluiOutput
+}
+
+enum AdminCLUIBillingDiscountEnumType {
+  coupon
+  promotion_code
+}
+
+type AdminCliBillingOrgsMutation {
+  # Add or remove an admin from the org.
+  addRemoveAdmin(
+    # The org id
+    orgId: Int!
+
+    # The user id to add or remove as an admin.
+    userId: Int!
+
+    # Select if you want to remove this user from the org
+    remove: Boolean
+  ): CluiOutput
+
+  # Verify a team organization
+  verify(
+    # Team org id
+    teamOrgId: Int!
+  ): CluiOutput
+
+  # Verify or reject teachers
+  verifyTeacher(
+    # User IDs (comma or space separated)
+    userIds: String!
+
+    # Verification action
+    action: action!
+  ): CluiOutput
+
+  # Provision an organization
+  provision(
+    # Username of the organization owner
+    owner: String!
+
+    # Organization name
+    name: String!
+
+    # Team name
+    teamName: String
+
+    # Plan prefix
+    plan: CLUITeamOrganizationPlanPrefix!
+
+    # Billing interval
+    interval: CLUITeamOrganizationBillingInterval
+
+    # When the trial period ends (yyyy-mm-dd)
+    trialEnd: String
+
+    # Seat count (only applies to per-seat plans)
+    seatCount: Int
+    customDeal: Boolean
+
+    # When the subscription ends (yyyy-mm-dd); only applicable to custom deals
+    timeExpired: String
+  ): CluiOutput
+
+  # Update the refund status for a Teams Edu organization
+  updateRefund(
+    # Team org id
+    teamOrgId: Int!
+
+    # Refund action
+    refundStatus: refund!
+  ): CluiOutput
+}
+
+enum action {
+  verify
+  reject
+}
+
+enum CLUITeamOrganizationPlanPrefix {
+  teams_pro
+}
+
+enum CLUITeamOrganizationBillingInterval {
+  monthly
+  annual
+}
+
+enum refund {
+  info
+  setRefunded
+  setNotRefunded
+}
+
+type AdminCliSubscriptionsMutation {
+  # Override subscriptions (leave blank to view overrides)
+  override(
+    # username or email
+    username: String
+
+    # organization ID
+    orgId: Int
+
+    # Override expiration (format: yyyy-mm-dd)
+    overrideExpiration: String
+
+    # Ignore expiration? (infinite subscription)
+    ignoreExpiration: OverrideBehaviorEnum
+
+    # Override quantity (only for seat-based plans)
+    overrideQuantity: Int
+
+    # Ignore quantity? (infinite quantity)
+    ignoreQuantity: OverrideBehaviorEnum
+
+    # Why is this override being modified? (required if any override provided)
+    reason: String
+  ): CluiOutput
+}
+
+enum OverrideBehaviorEnum {
+  enabled
+  disabled
+}
+
+type ManualCurationMutation {
+  # Make a Repl trend in the community
+  add(
+    # The Repl URL to add to the trending stack
+    url: String!
+  ): CluiOutput
+
+  # remove a selected Repl from the curated homepage picks
+  remove(
+    # The Repl URL to remove from the trending list
+    url: String!
+  ): CluiOutput
+
+  # reset the redis cache for trending items manually (add & remove do this automatically)
+  refresh: CluiOutput
+}
+
+type UserCliAccountMutation {
+  # Change your username (this can only be done once)
+  changeUsername(username: String!): CluiOutput
+}
+
+type ModeratorCluiMutation {
+  # Unpublish a repl
+  unpublish(
+    # The repl's url
+    replUrl: String!
+
+    # Reason for unpublishing (10 words or less)
+    reason: String!
+  ): CluiOutput
+
+  # Remove a tag on Apps
+  removeTag(
+    # The tag (do not include the #)
+    tag: String!
+
+    # Reason for removing tag (5 words or less)
+    reason: String!
+
+    # This will ban the tag from future use and send a Warn to any user that has used this tag.
+    banTag: Boolean!
+  ): CluiOutput
+
+  # Ban, warn, view-warns, etc.
+  user: ModeratorCliUserMutation
+}
+
+type ModeratorCliUserMutation {
+  # Ban a user from Repl Talk.
+  ban(
+    # User's username or email
+    user: String!
+
+    # Reason for ban
+    reason: String
+  ): CluiOutput
+
+  # Warn a user.
+  warn(
+    # User's username or email
+    user: String!
+
+    # Reason for warn
+    reason: String!
+  ): CluiOutput
+
+  # Remove a warning by its id.
+  removeWarn(
+    # User's username or email
+    user: String!
+
+    # Id of warning to remove
+    warnId: Int!
+  ): CluiOutput
+}
+
+type TrashMutation {
+  # Restore a deleted Repl by its title
+  restore(
+    # title of Repl that will be restored
+    title: String!
+  ): CluiOutput
+}
+
+type TeamMutation {
+  # transfer one of your Repls to a team
+  transferRepl(
+    # The Repl slug or url
+    repl: String!
+
+    # team name
+    team: String!
+  ): CluiOutput
+
+  # Forks an existing Repl to create a team project
+  forkReplToProject(
+    # The Repl url
+    replUrl: String!
+
+    # If "checked" it will create a group project (you can not change this later)
+    isGroupProject: Boolean = false
+
+    # team name
+    team: String!
+  ): CluiOutput
+
+  # restore one of your deleted projects in a team
+  restoreProject(
+    # The title of project that will be restored
+    project: String!
+
+    # team name
+    team: String!
+
+    # If checked, will restore student submissions for this project
+    submissions: Boolean
+  ): CluiOutput
+
+  # restore one of your deleted repls in a team (WARNING: use restoreEduProject command for Teams for Education projects, not this command!)
+  restoreRepl(
+    # The title of repl that will be restored
+    title: String!
+
+    # team name
+    team: String!
+  ): CluiOutput
+
+  # Team actions for jams.
+  jam: TeamCliJamMutation
+}
+
+type TeamCliJamMutation {
+  # participate in the language jam
+  enter(
+    # team name
+    team: String!
+  ): CluiOutput
+}
+
+union LinkDomainOutput = Repl | LinkDomainError
+
+type LinkDomainError {
+  retry: Boolean!
+  status: String
+}
+
+union LinkReplDomain2 =
+    UnauthorizedError
+  | ServiceUnavailable
+  | NotFoundError
+  | Repl
+
+union CreateAnnotationAnchorOutput = UserError | AnnotationAnchor
+
+input AnnotationAnchorInput {
+  id: String!
+  replId: String!
+  path: String
+  otVersion: Int
+  indexStart: Int
+  indexEnd: Int
+  isResolved: Boolean
+  isGeneral: Boolean
+}
+
+input AnnotationMessageInput {
+  id: String!
+  text: String!
+  mentions: [String!]
+  anchorId: String
+}
+
+input AnnotationHighlightInput {
+  precode: String
+  code: String
+  postcode: String
+}
+
+union CreateAnnotationMessageOutput = UserError | AnnotationAnchor
+
+union UpdateAnnotationAnchorOutput = UserError | AnnotationAnchor
+
+input AnnotationAnchorChangesInput {
+  path: String
+  otVersion: Int
+  indexStart: Int
+  indexEnd: Int
+  isResolved: Boolean
+}
+
+input DeleteTeamInput {
+  teamId: Int!
+  cancelationReason: String
+}
+
+input UpdateTeamInput {
+  id: Int!
+  username: String
+  description: String
+  displayName: String
+  profileImage: String
+}
+
+union RemoveTeamMemberOutput = UserError | Team
+
+input RemoveTeamMemberInput {
+  teamId: Int!
+  memberId: Int!
+}
+
+union LeaveTeamOutput = UserError | Team
+
+union CreateTeamInviteOutput = UserError | Team
+
+input CreateTeamInviteInput {
+  teamId: Int!
+  usernameOrEmail: String!
+}
+
+union DeleteTeamInviteOutput = UserError | Team
+
+input DeleteTeamInviteInput {
+  teamId: Int!
+  usernameOrEmail: String
+  inviteId: Int
+}
+
+union CreateTeamInviteLinkOutput = UserError | Team
+
+union DeleteTeamInviteLinkOutput = UserError | Team
+
+union UpdateTeamUserPermissionsOutput = UserError | Team
+
+input UpdateTeamUserPermissionsInput {
+  # The ID of the team
+  id: Int!
+
+  # The user whose permissions should be changed.
+  user: Int!
+
+  # The permissions the user should get
+  permissions: TeamPermission!
+}
+
+union CreateReplTemplateOutput = UserError | ReplTemplate
+
+input CreateReplTemplateInput {
+  replId: String!
+  imageUrl: String
+  isPublished: Boolean
+  dueDate: String
+  availableStartDate: String
+  availableEndDate: String
+}
+
+union CreateReplAsTemplateOutput = UserError | ReplTemplate
+
+input CreateReplAsTemplateInput {
+  title: String!
+  language: String
+  originId: String
+  replReleaseId: String
+  description: String
+  teamId: Int!
+  imageUrl: String
+  isPublished: Boolean
+  isGroupProject: Boolean
+  dueDate: String
+  availableStartDate: String
+  availableEndDate: String
+  restrictAfterSubmit: Boolean
+  allowSelfGrouping: Boolean
+  selfGroupSize: Int
+  stackId: Int
+}
+
+union UpdateReplTemplateOutputType = UserError | ReplTemplate
+
+input UpdateReplTemplateInput {
+  id: Int!
+  imageUrl: String
+  isPublished: Boolean
+  submissionGroups: [SubmissionGroupInput]
+  dueDate: String
+  availableStartDate: String
+  availableEndDate: String
+  allowSelfGrouping: Boolean
+  selfGroupSize: Int
+}
+
+input SubmissionGroupInput {
+  submissionId: Int
+  userIds: [Int]!
+}
+
+union DeletedReplTemplatOutput = Repl | UserError
+
+union SubmitReplOutput = Repl | UserError
+
+union UnsubmitReplOutput = Repl | UserError
+
+union ReviewReplOutput = Repl | UserError
+
+union CreateReplSubmissionOutput = UserError | Repl
+
+union UpdateTeamInviteLinkEduSignupOutput = UserError | Team
+
+union TemplateTestOutput = ReplTemplateTest | UserError
+
+input CreateTemplateTestInput {
+  name: String!
+  input: String!
+  output: String!
+  type: ReplTemplateTestType!
+  templateId: Int!
+}
+
+union ReplUnitTestOutput = ReplUnitTest | UserError
+
+input CreateReplUnitTestInput {
+  name: String!
+  code: String!
+  failureMessage: String
+  replId: String!
+}
+
+input UpdateReplUnitTestInput {
+  name: String
+  code: String
+  failureMessage: String
+  testId: Int!
+}
+
+union ReplUnitTestMetaOutput = ReplUnitTestMeta | UserError
+
+input CreateReplUnitTestMetaInput {
+  imports: String
+  initialization: String
+  setup: String
+  tearDown: String
+  replId: String!
+}
+
+input UpdateReplUnitTestMetaInput {
+  imports: String
+  initialization: String
+  setup: String
+  tearDown: String
+  replId: String!
+}
+
+union UpdateReplUnitTestLastRunOutput =
+    UpdateReplUnitTestLastRunUpdatedTests
+  | UserError
+
+type UpdateReplUnitTestLastRunUpdatedTests {
+  updatedTests: [ReplUnitTestOutput!]!
+}
+
+input UpdateReplUnitTestLastRunInput {
+  replId: String!
+  results: [UpdateReplUnitTestLastRunInputResults!]!
+}
+
+input UpdateReplUnitTestLastRunInputResults {
+  testId: Int!
+  didPass: Boolean!
+}
+
+union CreateLanguageConnectionMetadataOutput = GovalMetadata | UserError
+
+# An object containing the connection metadata for a repl
+type GovalMetadata {
+  token: String!
+  gurl: String!
+  conmanURL: String!
+}
+
+# An object containing the metadata for a cluster
+input ClusterMetadata {
+  id: String!
+  gurl: String!
+  conmanURL: String!
+}
+
+union DeleteReplTemplateOutput = ReplTemplate | UserError
+
+input UpdateTemplateTestInput {
+  name: String
+  input: String
+  output: String
+  type: ReplTemplateTestType
+  testId: Int!
+}
+
+input UpdateEditorPreferencesInput {
+  isLayoutStacked: Boolean
+  theme: String
+  fontSize: Int
+  indentIsSpaces: Boolean
+  indentSize: Int
+  keyboardHandler: String
+  wrapping: Boolean
+  codeIntelligence: Boolean
+  codeSuggestion: Boolean
+  codeSuggestionEngine: String
+  accessibleTerminal: Boolean
+  extraDelight: Boolean
+}
+
+input CreateReplCommentInput {
+  replId: String!
+  body: String!
+}
+
+union ReplOutput = Repl | UserError
+
+input SetReplCommentSettingsInput {
+  replId: String!
+  enabled: Boolean!
+}
+
+input CreateReplCommentReplyInput {
+  replCommentId: Int!
+  body: String!
+}
+
+input OwnAnonReplInput {
+  replId: String!
+}
+
+input UpdateReplCommentInput {
+  id: Int!
+  body: String!
+}
+
+input CSVFileInput {
+  teamId: Int!
+  content: String!
+}
+
+union ResetPrivacyStudentPasswordOutput =
+    ResetPrivacyStudentPasswordSuccess
+  | UserError
+
+type ResetPrivacyStudentPasswordSuccess {
+  success: Boolean!
+}
+
+union DeletedProjectAndSubmissionOutput = Team | UserError
+
+union SetAlwaysOnOutput = UserError | Repl
+
+union CreateReplReleaseOutput =
+    UnauthorizedError
+  | UserError
+  | NotFoundError
+  | Repl
+
+input CreateReplReleaseInput {
+  replId: String!
+  description: String!
+}
+
+union RevertReplReleaseOutput =
+    UnauthorizedError
+  | UserError
+  | NotFoundError
+  | Repl
+
+input RevertReplReleaseInput {
+  replId: String!
+  releaseId: String!
+}
+
+union ReplReleaseOutput = ReplRelease | UserError
+
+input PromoteReplRelease {
+  id: String!
+}
+
+union CreateReplDeployemntOutput =
+    UnauthorizedError
+  | UserError
+  | NotFoundError
+  | Repl
+
+input CreateReplDeployemntInput {
+  replId: String!
+  iconUrl: String!
+  description: String!
+}
+
+union DeleteReplDeploymentOutput = UserError | NotFoundError | Repl
+
+input DeleteReplDeploymentInput {
+  replId: String!
+}
+
+union MarkMessagesAsSeenOutput = UserError | AnnotationMessageList
+
+type AnnotationMessageList {
+  messages: [AnnotationMessage!]!
+}
+
+union UpdateTeamOrganizationOutput =
+    UnauthorizedError
+  | NotFoundError
+  | TeamOrganization
+
+input UpdateTeamOrganizationInput {
+  id: Int!
+  name: String!
+}
+
+union SaveIOTestResultOutput = NotFoundError | UserError
+
+# An input type for telling the server the results of an IO test.
+input IOTestResultInput {
+  # The output of the program when the test was executed.
+  output: String!
+
+  # The status of the test that was executed.
+  status: IOTestResultStatus!
+
+  # The ID of the test which was executed on the repl.
+  testId: Int!
+}
+
+union RemoveTeamGuestOutput = UserError | Team
+
+union UpdateTeamMemberOutput = UnauthorizedError | UserError | Team
+
+input UpdateTeamMemberInput {
+  # The ID of the team
+  teamId: Int!
+
+  # The user whose nickname should be changed.
+  userId: Int!
+
+  # Admin assigned nickname for member.
+  nickname: String
+}
+
+union CreateTeamV2Output = UserError | UnauthorizedError | Team
+
+input CreateTeamV2Input {
+  username: String!
+  orgId: Int
+  displayName: String
+}
+
+union ConnectGoogleClassroomOutput = UserError | NotFoundError | GoogleClassroom
+
+input ConnectGoogleClassroomInput {
+  teamId: Int!
+  courseId: String!
+  courseName: String!
+  students: [ConnectGoogleClassroomStudentInput]!
+}
+
+input ConnectGoogleClassroomStudentInput {
+  # Google profile ID of user
+  id: String!
+
+  # Google profile email of user
+  email: String!
+}
+
+union DeleteMultiplayerInviteLink = UserError | Repl
+
+union ExportTeamSubmissionsOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | ExportTeamSubmissionsResult
+
+type ExportTeamSubmissionsResult {
+  folderPath: String!
+}
+
+union DisconnectGoogleClassroomOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | Team
+
+input DisconnectGoogleClassroomInput {
+  teamId: Int!
+}
+
+union CreateReplSubmissionGroupOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | ReplSubmission
+
+input CreateReplSubmissionGroupInput {
+  teamId: Int!
+  templateId: Int!
+}
+
+union JoinReplSubmissionGroupOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | ReplSubmission
+
+input JoinReplSubmissionGroupInput {
+  teamId: Int!
+  submissionId: Int!
+}
+
+union ExportProjectsOverviewOutput =
+    NotFoundError
+  | UnauthorizedError
+  | CurrentUser
+
+input ExportProjectsOverviewInput {
+  teamName: String!
+}
+
+union ArchviveTeamInput = UserError | NotFoundError | UnauthorizedError | Team
+
+input ArchiveTeamInput {
+  teamId: Int!
+}
+
+union UnarchiveTeamOutput = UserError | NotFoundError | UnauthorizedError | Team
+
+input UnarchiveTeamInput {
+  teamId: Int!
+}
+
+union SetLanguageTemplateOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | Repl
+
+input SetLanguageTemplateInput {
+  language: String!
+  replId: String
+  betaReplId: String
+}
+
+union CreateStackOutput = Team | User | UserError | UnauthorizedError
+
+input CreateStackInput {
+  # Owner of the stack
+  userId: Int!
+
+  # Title of the stack
+  title: String!
+
+  # Description of the stack
+  description: String
+}
+
+union ArrangeStackItemOutput =
+    Team
+  | User
+  | UserError
+  | UnauthorizedError
+  | NotFoundError
+
+input ArrangeStackItemInput {
+  # Repl in the stack.
+  replId: String!
+
+  # Stack the Repl belongs to. Set to 0 to ungroup the Repl from its existing stack.
+  stackId: Int!
+
+  # Stack the Repl previously belonged to.
+  previousStackId: Int
+
+  # Desired order in the stack.
+  order: Int!
+}
+
+union UploadReplAttachmentOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Repl
+
+input UploadReplAttachmentInput {
+  # Repl to own the attachment
+  replId: String!
+
+  # File name of attachment
+  fileName: String!
+
+  # File contents
+  contents: String!
+
+  # ISO timestamp of the last modified date of the attachment
+  lastModified: String!
+}
+
+union ImportCurriculumOutput = NotFoundError | UnauthorizedError | Team
+
+input ImportCurriculumInput {
+  curriculumId: Int!
+  versionNumber: Int!
+  teamId: Int!
+}
+
+union MigrateTeamToStacksOutput = UserError | NotFoundError | Team
+
+union UpdateStackOutput =
+    Team
+  | User
+  | UserError
+  | UnauthorizedError
+  | NotFoundError
+
+input UpdateStackInput {
+  # Id of the stack
+  stackId: Int!
+
+  # Title of the stack
+  title: String
+
+  # Description of the stack
+  description: String
+}
+
+union DeleteStackOutput =
+    Team
+  | User
+  | UserError
+  | UnauthorizedError
+  | NotFoundError
+
+union ArrangeStackOutput =
+    Team
+  | User
+  | UserError
+  | UnauthorizedError
+  | NotFoundError
+
+input ArrangeStackInput {
+  stackId: Int!
+
+  # Desired order with in the user profile
+  order: Int!
+}
+
+union CreateReplPost2Output =
+    UnauthorizedError
+  | UserError
+  | NotFoundError
+  | Post
+
+input CreateReplPost2Input {
+  replId: String!
+  tags: [String!]
+  iconUrl: String
+  body: String
+  title: String
+}
+
+union UnpublishReplFromCommunityOutput =
+    NotFoundError
+  | UnauthorizedError
+  | Repl
+
+input UnpublishReplFromCommunityInput {
+  replId: String!
+}
+
+union CodexFeedback2Output = UnauthorizedError | NotFoundError | CodexFeedback2
+
+type CodexFeedback2 {
+  id: String!
+  feedback: CodexFeedbackEnum!
+}
+
+enum CodexFeedbackEnum {
+  yes
+  no
+}
+
+input CodexFeedback2Input {
+  inferenceId: String!
+  feedback: CodexFeedbackEnum!
+  inferenceClass: CodexFeedback2CodexInferenceClassEnum!
+}
+
+enum CodexFeedback2CodexInferenceClassEnum {
+  explanation
+  generation
+  search
+}
+
+union ToggleReplLikeOutput = UserError | NotFoundError | Repl
+
+input ToggleReplLikeInput {
+  replId: String!
+}
+
+union setFollowing =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | FollowResult
+
+type FollowResult {
+  user: User
+  targetUser: User
+}
+
+input setFollowingInput {
+  targetUserId: Int!
+  shouldFollow: Boolean!
+}
+
+union SetBlocking = UnauthorizedError | NotFoundError | User
+
+input SetBlockingInput {
+  targetUserId: Int!
+  shouldBlock: Boolean!
+}
+
+union SetTemplateCategoryOutput = NotFoundError | Repl
+
+input SetTemplateReplCategoryInput {
+  replId: String!
+  category: String!
+}
+
+union SetOnboardingExperienceOutput =
+    UnauthorizedError
+  | UserError
+  | CurrentUser
+
+enum OnboardingExperience {
+  ONBOARDING_EXPERIENCE_NONE
+  ONBOARDING_EXPERIENCE_LOW
+  ONBOARDING_EXPERIENCE_MEDIUM
+  ONBOARDING_EXPERIENCE_HIGH
+}
+
+union SetOnboardingIntentOutput = UnauthorizedError | UserError | CurrentUser
+
+enum Intent {
+  INTENT_PERSONAL
+  INTENT_STUDENT
+  INTENT_TEACHER
+  INTENT_BUSINESS
+}
+
+union CreateReplTemplateModelSolutionOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Repl
+
+input CreateReplTemplateModelSolutionInput {
+  teamId: Int!
+  templateId: Int!
+  visibleAfterSubmitting: Boolean
+  visibleAfterDueDate: Boolean
+  visibleAfterPassingTests: Boolean
+}
+
+union CreateReplTemplateModelSolutionForkOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Repl
+
+input CreateReplTemplateModelSolutionForkInput {
+  teamId: Int!
+  solutionId: Int!
+}
+
+union UpdateReplTemplateModelSolutionOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Repl
+
+input UpdateReplTemplateModelSolutionInput {
+  teamId: Int!
+  solutionId: Int!
+  visibleAfterSubmitting: Boolean
+  visibleAfterDueDate: Boolean
+  visibleAfterPassingTests: Boolean
+}
+
+union ClaimVoucherOutput =
+    ClaimVoucherSuccessResult
+  | ClaimVoucherInvalidCodeResult
+  | ClaimVoucherRequiresPaymentMethodResult
+  | UserError
+  | NotFoundError
+
+type ClaimVoucherSuccessResult {
+  # If the voucher was processed, the voucher benefits expire on this date.
+  timeExpired: String
+}
+
+type ClaimVoucherInvalidCodeResult {
+  # If the voucher was processed, the voucher benefits expire on this date.
+  message: String!
+}
+
+type ClaimVoucherRequiresPaymentMethodResult {
+  # If the voucher requires a payment method, redirect to this URL.
+  redirectUrl: String!
+}
+
+input ClaimVoucherInput {
+  # Product prefx
+  prefix: String!
+
+  # Voucher code
+  code: String!
+}
+
+union UpdateTeamOrganizationMemberOutput =
+    UnauthorizedError
+  | NotFoundError
+  | TeamOrganization
+
+input UpdateTeamOrganizationMemberInput {
+  orgId: Int!
+  memberId: Int!
+  role: TeamMemberRoleEnumType!
+}
+
+# Team organization member roles
+enum TeamMemberRoleEnumType {
+  OWNER
+  ADMIN
+}
+
+union DeleteTeamOrganizationMemberOutput =
+    UnauthorizedError
+  | NotFoundError
+  | TeamOrganization
+
+input DeleteTeamOrganizationMemberInput {
+  orgId: Int!
+  memberId: Int!
+  retainTeamAccess: Boolean
+}
+
+union DeleteTeamOrganizationOutput =
+    UnauthorizedError
+  | NotFoundError
+  | TeamOrganization
+
+input DeleteTeamOrganizationInput {
+  orgId: Int!
+}
+
+union CreateTeamOrgInviteOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | TeamOrganization
+
+input CreateTeamOrgInviteInput {
+  orgId: Int!
+  usernameOrEmail: String!
+}
+
+union DeleteTeamOrgInviteOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | TeamOrganization
+
+input DeleteTeamOrgInviteInput {
+  orgId: Int!
+  inviteId: Int!
+}
+
+union UpdateSubscription =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | UpdateSubscriptionOutput
+
+type UpdateSubscriptionOutput {
+  subscriptions: [Subscription!]!
+}
+
+type Subscription {
+  id: Int!
+  quantity: Int!
+  isTrial: Boolean!
+  timeActivated: Date!
+  timeExpired: Date!
+  timeCreated: Date!
+  timeUpdated: Date!
+  timeDeleted: Date
+  product: Product!
+  status: String
+  isGift: Boolean!
+}
+
+type Product {
+  id: Int!
+  planPrefix: String!
+  planVariant: String!
+  planVersion: String!
+  description: String
+}
+
+input UpdateSubscriptionInput {
+  orgId: Int!
+  product: UpdateSubscriptionLineItemInput!
+}
+
+input UpdateSubscriptionLineItemInput {
+  # Product ID (only if changing subscribed product)
+  id: Int
+
+  # Subscription quantity (only if changing quantity)
+  quantity: Int
+}
+
+union CreateTeamOrgInviteLinkOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | TeamOrganization
+
+union DeleteTeamOrgInviteLinkOutput =
+    NotFoundError
+  | UnauthorizedError
+  | TeamOrganization
+
+union CopyTeamTemplateOutput =
+    Team
+  | User
+  | UserError
+  | UnauthorizedError
+  | NotFoundError
+
+input CopyTeamTemplateInput {
+  # Team project to copy
+  templateId: Int!
+
+  # Destination team
+  destinationTeamId: Int!
+
+  # Destination stack in team (optional)
+  destinationStackId: Int
+}
+
+union JoinTeamAsOrgAdminOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Team
+
+union SetUserSocialsOutput = UserError | UnauthorizedError | CurrentUser
+
+input SetUserSocialsInput {
+  socials: [SetUserSocialInput!]!
+}
+
+input SetUserSocialInput {
+  url: String
+  type: UserSocialEnum!
+}
+
+enum UserSocialEnum {
+  twitter
+  facebook
+  linkedin
+  github
+  discord
+  youtube
+  twitch
+  website
+}
+
+union UpdateUserSitePresenceOutput =
+    ServiceUnavailable
+  | UnauthorizedError
+  | CurrentUser
+
+union UpdateUserPrivacyPreferencesOutput =
+    UnauthorizedError
+  | UserError
+  | CurrentUser
+
+input UpdateUserPrivacyPreferencesInput {
+  show_presence: UserPrivacyPreferenceShowPresenceOptions
+}
+
+enum UserPrivacyPreferenceShowPresenceOptions {
+  never
+  when_online
+  where_online
+}
+
+union SetUserCoverImageOutput = UserError | UnauthorizedError | CurrentUser
+
+input SetUserCoverImageInput {
+  # Image ID to set as the cover image
+  imageId: Int
+
+  # Y position offset for adjusting image viewport area
+  offsetY: Int
+
+  # Remove the cover image
+  remove: Boolean
+}
+
+union SetUserActiveThemeOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | CurrentUser
+
+input SetUserActiveThemeInput {
+  themeId: String!
+}
+
+union AddUserCustomThemeOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | CurrentUser
+
+input AddUserCustomThemeInput {
+  theme: AddUserCustomThemeInputTheme!
+  setAsActive: Boolean!
+}
+
+input AddUserCustomThemeInputTheme {
+  replId: String!
+  filePath: String!
+  colorScheme: UserThemeColorScheme!
+  name: String!
+  values: AddUserCustomThemeInputThemeValues!
+}
+
+input AddUserCustomThemeInputThemeValues {
+  global: AddUserCustomThemeInputThemeValuesGlobal!
+  editor: AddUserCustomThemeInputThemeValuesEditor!
+}
+
+# The global Theme values
+input AddUserCustomThemeInputThemeValuesGlobal {
+  backgroundRoot: String!
+  backgroundDefault: String!
+  backgroundHigher: String!
+  backgroundHighest: String!
+  backgroundOverlay: String!
+  foregroundDefault: String!
+  foregroundDimmer: String!
+  foregroundDimmest: String!
+  outlineDimmest: String!
+  outlineDimmer: String!
+  outlineDefault: String!
+  outlineStronger: String!
+  outlineStrongest: String!
+  accentPrimaryDimmest: String!
+  accentPrimaryDimmer: String!
+  accentPrimaryDefault: String!
+  accentPrimaryStronger: String!
+  accentPrimaryStrongest: String!
+  accentPositiveDimmest: String!
+  accentPositiveDimmer: String!
+  accentPositiveDefault: String!
+  accentPositiveStronger: String!
+  accentPositiveStrongest: String!
+  accentNegativeDimmest: String!
+  accentNegativeDimmer: String!
+  accentNegativeDefault: String!
+  accentNegativeStronger: String!
+  accentNegativeStrongest: String!
+  redDimmest: String!
+  redDimmer: String!
+  redDefault: String!
+  redStronger: String!
+  redStrongest: String!
+  orangeDimmest: String!
+  orangeDimmer: String!
+  orangeDefault: String!
+  orangeStronger: String!
+  orangeStrongest: String!
+  yellowDimmest: String!
+  yellowDimmer: String!
+  yellowDefault: String!
+  yellowStronger: String!
+  yellowStrongest: String!
+  limeDimmest: String!
+  limeDimmer: String!
+  limeDefault: String!
+  limeStronger: String!
+  limeStrongest: String!
+  greenDimmest: String!
+  greenDimmer: String!
+  greenDefault: String!
+  greenStronger: String!
+  greenStrongest: String!
+  tealDimmest: String!
+  tealDimmer: String!
+  tealDefault: String!
+  tealStronger: String!
+  tealStrongest: String!
+  blueDimmest: String!
+  blueDimmer: String!
+  blueDefault: String!
+  blueStronger: String!
+  blueStrongest: String!
+  blurpleDimmest: String!
+  blurpleDimmer: String!
+  blurpleDefault: String!
+  blurpleStronger: String!
+  blurpleStrongest: String!
+  purpleDimmest: String!
+  purpleDimmer: String!
+  purpleDefault: String!
+  purpleStronger: String!
+  purpleStrongest: String!
+  magentaDimmest: String!
+  magentaDimmer: String!
+  magentaDefault: String!
+  magentaStronger: String!
+  magentaStrongest: String!
+  pinkDimmest: String!
+  pinkDimmer: String!
+  pinkDefault: String!
+  pinkStronger: String!
+  pinkStrongest: String!
+  greyDimmest: String!
+  greyDimmer: String!
+  greyDefault: String!
+  greyStronger: String!
+  greyStrongest: String!
+  brownDimmest: String!
+  brownDimmer: String!
+  brownDefault: String!
+  brownStronger: String!
+  brownStrongest: String!
+  black: String!
+  white: String!
+}
+
+# The editor Theme values
+input AddUserCustomThemeInputThemeValuesEditor {
+  syntaxHighlighting: [AddUserCustomThemeInputEditorSyntaxHighlighting!]!
+}
+
+# An object which contains CSS styles that are applied to a given set of editor tags
+input AddUserCustomThemeInputEditorSyntaxHighlighting {
+  tags: [AddUserCustomThemeInputEditorTag]!
+  values: JSON!
+}
+
+# A selector for a given editor tag
+input AddUserCustomThemeInputEditorTag {
+  name: String!
+  modifiers: [String!]
+}
+
+union RemoveUserCustomThemeOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | CurrentUser
+
+input RemoveUserCustomThemeInput {
+  themeId: String!
+}
+
+union ToggleHiddenCommentOutput =
+    ReplComment
+  | UserError
+  | UnauthorizedError
+  | NotFoundError
+
+union ToggleHiddenPostOutput = NotFoundError | UserError | Post
+
+union ImportGithubRepoOutput =
+    NotFoundError
+  | UserError
+  | UnauthorizedError
+  | Repl
+
+input ImportGithubRepoInput {
+  githubRepoUrl: String!
+  teamId: Int
+  folderId: String
+  activeReplReleaseId: String
+  isPrivate: Boolean
+  originId: String!
+  forkToPersonal: Boolean
+}
+
+input GraphQLGitHubApiFile {
+  path: String!
+  type: GraphQLGitHubApiFileType!
+}
+
+enum GraphQLGitHubApiFileType {
+  file
+  dir
+}
+
+union WarnUserOutput = UserError | Warning
+
+union RemoveWarnOutput = UserError | Warning
+
+union BanCommunityUserOutput = UserError | BannedBoardUser
+
+union SetReplLayoutStateOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Repl
+
+input SetReplLayoutStateInput {
+  replId: String!
+  state: JSON!
+}
+
+union SetReplTagsOutput = UnauthorizedError | UserError | NotFoundError | Repl
+
+input SetReplTagsInput {
+  replId: String!
+  tags: [String!]!
+}
+
+union DeleteReplLayoutStateOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Repl
+
+input DeleteReplLayoutStateInput {
+  replId: String!
+}
+
+union CreateNewTeamsEduOrganizationOutput =
+    UserError
+  | UnauthorizedError
+  | TeamOrganization
+
+input CreateNewTeamsEduOrganizationInput {
+  orgName: String!
+}
+
+union SetReplViewSettingsOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | ReplViewSettings
+
+input SetReplViewSettingsInput {
+  replId: String!
+  defaultView: ReplViewSettingsDefaultView
+
+  # The file used, if the defaultView is repl_file
+  replFile: String
+
+  # The image used, if the defaultView is repl_image
+  replImage: String
+}
+
+enum ReplViewSettingsDefaultView {
+  repl_file
+  repl_image
+}
+
+union CreateTeacherVerificationResponseOutput =
+    UserError
+  | UnauthorizedError
+  | TeacherVerification
+
+# Teacher verification information
+type TeacherVerification {
+  userId: Int!
+  formResponses: SequelizeJSON!
+}
+
+# The `JSON` scalar type represents raw JSON as values.
+scalar SequelizeJSON
+
+input CreateTeacherVerificationResponseInput {
+  orgNames: String!
+  website: String!
+  useCase: String!
+  howManyLearners: String!
+  referringEmailOrName: String
+}
+
+union EscalateBoardUserOutput =
+    UserError
+  | NotFoundError
+  | UnauthorizedError
+  | BoardReport
+
+union ReviewTemplateOutput = UserError | UnauthorizedError | TemplateReview
+
+input ReviewTemplateInput {
+  # Template Repl to promote or demote
+  replId: String!
+
+  # True to promote, false to demote
+  shouldPromote: Boolean!
+}
+
+union CreateAsanaSupportTaskOutput =
+    UserError
+  | UnauthorizedError
+  | TooManyRequestsError
+  | CreateAsanaSupportTaskSuccess
+
+# An error caused by a user making too many requests
+type TooManyRequestsError {
+  message: String!
+}
+
+type CreateAsanaSupportTaskSuccess {
+  isSuccess: Boolean!
+}
+
+input CreateAsanaSupportTaskInput {
+  title: String!
+  body: CreateAsanaSupportTaskBodyInput!
+  board: String!
+}
+
+input CreateAsanaSupportTaskBodyInput {
+  message: String!
+  pageUrl: String!
+  loomUrl: String
+  userAgent: String!
+  currentUser: CreateAsanaSupportTaskUser!
+}
+
+input CreateAsanaSupportTaskUser {
+  userId: Int!
+  username: String!
+  email: String!
+  isHacker: Boolean!
+  daysSinceSignup: Int!
+  isExplorer: Boolean!
+  isTeacher: Boolean!
+}
+
+union CreateAsanaFeedbackTaskOutput =
+    UserError
+  | UnauthorizedError
+  | TooManyRequestsError
+  | CreateAsanaFeedbackTaskSuccess
+
+type CreateAsanaFeedbackTaskSuccess {
+  isSuccess: Boolean!
+}
+
+input CreateAsanaFeedbackTaskInput {
+  title: String!
+  body: CreateAsanaFeedbackTaskBodyInput!
+  project: String!
+  membership: CreateAsanaFeedbackTaskMembership!
+}
+
+input CreateAsanaFeedbackTaskBodyInput {
+  description: String!
+  pageUrl: String!
+  loomUrl: String
+  userAgent: String!
+  currentUser: CreateAsanaFeedbackTaskUser!
+}
+
+input CreateAsanaFeedbackTaskUser {
+  userId: Int!
+  username: String!
+  email: String!
+  isHacker: Boolean!
+  daysSinceSignup: Int!
+  isExplorer: Boolean!
+  isTeacher: Boolean!
+}
+
+input CreateAsanaFeedbackTaskMembership {
+  project: String!
+  section: String!
+}
+
+union UpdatePrivatePowerUpOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | UserPowerUpDescriptionType
+
+union UnbanCommunityUserOutput = UserError | User
+
+input UnbanCommunityUserInput {
+  username: String!
+}
+
+union ChangeLanguagetoNixOutput =
+    UserError
+  | UnauthorizedError
+  | NotFoundError
+  | Repl
+
+union ModeratorUnpublishOutput = NotFoundError | UnauthorizedError | Repl
+
+input ModeratorUnpublishInput {
+  replId: String!
+  reason: String!
+}
+
+union CreateUserCourseOutput =
+    UnauthorizedError
+  | NotFoundError
+  | UserError
+  | UserCourseResult
+
+type UserCourseResult {
+  userCourse: UserCourse!
+}
+
+input CreateUserCourseInput {
+  # The course to start.
+  courseSlug: String!
+}
+
+union CreateUserCourseLessonOutput =
+    UnauthorizedError
+  | NotFoundError
+  | UserError
+  | UserCourseLessonResult
+
+type UserCourseLessonResult {
+  userCourseLesson: UserCourseLesson!
+}
+
+input CreateUserCourseLessonInput {
+  # The UserCourse associated with the lesson. This id is an integer.
+  userCourseId: Int!
+
+  # The lesson being created.
+  lessonSlug: String!
+
+  # The user's forked Repl UUID. The Repl has the origin set to the lesson's base Repl UUID.
+  replId: String!
+}
+
+union UpdateUserCourseLessonOutput =
+    UnauthorizedError
+  | NotFoundError
+  | UserError
+  | UpdatedUserCourseLesson
+
+type UpdatedUserCourseLesson {
+  userCourseLesson: UserCourseLesson!
+}
+
+input CompleteUserCourseLessonInput {
+  # The numeric ID for the UserCourseLesson to update.
+  userLessonId: Int!
+}
+
+# The top level entry point for subscribing to graph events
+type RootSubscriptionType {
+  # A subscriptions test
+  testSubscription: SubscriptionTestObject
+
+  # Updates to annotations in a given repl. Returns the updated annotation
+  annotationUpdatesByRepl(replId: String!): AnnotationAnchor
+
+  # A subscription to events regarding changes to the online status of repls in a team
+  teamReplConnections(teamId: Int!): TeamConnectionEvent!
+
+  # The subscription used to register a connection to a repl.
+  replConnection(replId: String!): Boolean
+
+  # Streams the notification count to current user
+  notificationCount: Int!
+  threadPreview(threadId: String!): ThreadPreview
+
+  # Updates to the current user's write permissions for a given repl.
+  currentUserCanWrite(replId: String!): Boolean!
+}
+
+type SubscriptionTestObject {
+  timestamp: String
+  username: String
+}
+
+# Events used for sending information on team connections
+union TeamConnectionEvent =
+    RemoveReplConnectionsEvent
+  | UpdateReplConnectionsEvent
+
+# The event called when there are no longer any connections to a Repl.
+type RemoveReplConnectionsEvent {
+  replId: String!
+
+  # The time when the data was returned
+  epoch: DateTime!
+}
+
+# The event sent when the list of connected users for a Repl changes or is created.
+type UpdateReplConnectionsEvent {
+  # The Repl which users are connected to
+  repl: Repl!
+
+  # The users that are connected to the Repl
+  users: [User!]!
+
+  # The time when the data was returned
+  epoch: DateTime!
+}
+
+type ThreadPreview {
+  userId: Int!
+  messageId: String!
+  message: String
+}
