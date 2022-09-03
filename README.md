@@ -17,6 +17,7 @@ client.on('ready', () => {
 	
 })
 ```
+If you don't know how to find your connect.sid cookie, look [here](https://replit.com/talk/learn/How-to-Get-Your-SID-Cookie/145979)
 
 ### Example
 Logs the number of followers a user has
