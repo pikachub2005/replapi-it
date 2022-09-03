@@ -1,3 +1,7 @@
+> ___
+> Replit's API is constantly changing, which means this will as well. I will try to keep it easy to use but be aware that your project may stop working at any point.
+> ___
+
 ## Install
 ```sh
 npm install replapi-it
@@ -32,6 +36,8 @@ client.on('ready', async () => {
 * `<Client>.repls`: a [`ReplManager`](#ReplManager) object
 * `<Client>.posts`: a [`PostManager`](#PostManager) object
 * `<Client>.comments`: a [`CommentManager`](#CommentManager) object
+* `<Client>.on('notification', callback)`: notifications event listener
+		* `callback`: a callback function
 
 #### User
 * `<User>.repls`: a [`ReplManager`](#ReplManager) object
@@ -311,3 +317,14 @@ A Map object with extra methods. Meant to be like [discord.js's Collection](http
 * `<UserEvent>.user`: a [`User`](#User) object
 * `<UserEvent>.repl`: a [`Repl`](#Repl) object
 * `<UserEvent>.comment`: a [`Comment`](#Comment) object
+
+#### NotificationManager
+* `<NotificationManager>.cache`: a [`Collection`](#Collection) of [`Notification`](#Notification) objects
+* `<NotificationManager>.fetch(options)`: a [`Collection`](#Collection) of [`Notification`](#Notification) objects
+	* `options`:
+	  * `cache`: cache the result(s). default: true
+	  * `limit`: the maximum number of results
+	  * `seen`: if the notifications have been seen or not. default: false
+* `<NotificationManager>.markAsRead()`: marks your notifications as read
+* `<NotificationManager>.startEvents()`: starts sending notification events for new notifications
+* `<NotificationManager>.stopEvents()`: stops the sending of notification events
