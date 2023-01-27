@@ -22,7 +22,7 @@ class ReplManager {
 			if (this.#user == this.#client.user) {
 				let [options = {}] = [...arguments];
 				options = {cache: true, limit: 10, paths: [''], ...options};
-				let res = await this.#client.graphql(options.paths.map(path => ({query: 'dashboardRepls', variables: {path, count: options.limit}})));
+				let res = await this.#client.graphql(options.paths.map(path => ({query: this.#client.queries.dashboardRepls, variables: {path, count: options.limit}})));
 				let c = new Collection();
 				for (let folder of res) {
 					let repls = folder.currentUser.replFolderByPath.repls.items
@@ -38,7 +38,7 @@ class ReplManager {
 				//User repls
 				let [options = {}] = [...arguments];
 				options = {cache: true, limit: 10, search: null, ...options};
-				let res = await this.#client.graphql({query: 'profileRepls', variables: {username: this.#user.username, count: options.limit}});
+				let res = await this.#client.graphql({query: this.#client.queries.profileRepls, variables: {username: this.#user.username, count: options.limit}});
 				let repls = res.user.profileRepls.items;
 				let c = new Collection();
 				for (let r of repls) {
@@ -73,7 +73,7 @@ class ReplManager {
 				let match = this.cache.find(repl => repl.id == variables.id);
 				if (match) return match;
 			}
-			let res = await this.#client.graphql({query: 'repl', variables});
+			let res = await this.#client.graphql({query: this.#client.queries.repl, variables});
 			let repl = new Repl(this.#client);
 			await repl.update(res.repl);
 			if (options.cache) this.cache.set(repl.id, repl);
@@ -81,12 +81,12 @@ class ReplManager {
 		}
 	}
 	async generateTitle() {
-		let res = await this.#client.graphql('replTitle');
+		let res = await this.#client.graphql(this.#client.queries.replTitle);
 		return res.replTitle;
 	}
 	async create(options = {}) {
 		let {cache, ...variables} = {cache: true, title: await this.generateTitle(), language: 'bash', ...options};
-		let res = await this.#client.graphql({query: 'createRepl', variables: {input: variables}});
+		let res = await this.#client.graphql({query: this.#client.queries.createRepl, variables: {input: variables}});
 		let r = res.createRepl;
 		if (!r.id) return null;
 		let repl = new Repl(this.#client);

@@ -15,7 +15,7 @@ class PostManager {
 		switch(this.#parent.constructor.name) {
 			case 'Client':
 				let [id, options2 = {cache: true}] = [...arguments];
-				res = await this.#client.graphql({query: 'post', variables: {id}});
+				res = await this.#client.graphql({query: this.#client.queries.post, variables: {id}});
 				if (!res.post) return null;
 				let post = new Post(this.#client);
 				await post.update(res.post);
@@ -25,7 +25,7 @@ class PostManager {
 			case 'CurrentUser':
 				let [options = {}] = [...arguments];
 				options = {cache: true, limit: 10, order: 'new', ...options};
-				res = await this.#client.graphql({query: 'userPosts', variables: {username: this.#parent.username, count: options.limit}});
+				res = await this.#client.graphql({query: this.#client.queries.userPosts, variables: {username: this.#parent.username, count: options.limit}});
 				let posts = res.userByUsername.posts.items;
 				let c = new Collection();
 				for (let p of posts) {
@@ -39,7 +39,7 @@ class PostManager {
 	}
 	async trending(options = {}) {
 		options = {cache: true, limit: 10, tags: [], ...options};
-		let res = await this.#client.graphql({query: 'trending', variables: {options: {searchQuery: options.search, count: options.limit, order: options.order, tags: options.tags}}});
+		let res = await this.#client.graphql({query: this.#client.queries.trending, variables: {options: {searchQuery: options.search, count: options.limit, order: options.order, tags: options.tags}}});
 		let posts = res.replPosts.items;
 		let c = new Collection();
 		for (let p of posts) {

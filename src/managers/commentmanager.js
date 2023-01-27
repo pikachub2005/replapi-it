@@ -30,7 +30,7 @@ class CommentManager {
 					let comment = this.cache.find(comment => comment.id == id);
 					if (comment) return comment;
 				}
-				let res = await this.#client.graphql({query: 'replComment', variables: { id } });
+				let res = await this.#client.graphql({query: this.#client.queries.replComment, variables: { id } });
 				let c = res.replComment;
 				if (c.message) return null;
 				let comment = new Comment(this.#client);
@@ -49,7 +49,7 @@ class CommentManager {
 			case 'Repl': {
 				let [options = {}] = [...arguments];
 				options = { cache: true, limit: 10, ...options };
-				let res = await this.#client.graphql({ query: 'replComments', variables: { id: this.#parent.id, count: options.limit } });
+				let res = await this.#client.graphql({ query: this.#client.queries.replComments, variables: { id: this.#parent.id, count: options.limit } });
 				let comments = res.repl.comments.items;
 				let cn = new Collection();
 				for (let c of comments) {
@@ -70,7 +70,7 @@ class CommentManager {
 			case 'User':
 				let [options = {}] = [...arguments];
 				options = { cache: true, limit: 10, ...options };
-				let res = await this.#client.graphql({ query: 'userComments', variables: { input: { userId: this.#parent.id } } });
+				let res = await this.#client.graphql({ query: this.#client.queries.userComments, variables: { input: { userId: this.#parent.id } } });
 				return res;
 			default:
 				return new Collection();

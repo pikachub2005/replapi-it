@@ -22,7 +22,7 @@ class NotificationManager{
 	}
 	async fetch(options = {}) {
 		options = {cache: true, seen: false, limit: 10, ...options};
-		let res = await this.#client.graphql({query: 'notifications', variables: {count: options.limit, seen: options.seen}});
+		let res = await this.#client.graphql({query: this.#client.queries.notifications, variables: {count: options.limit, seen: options.seen}});
 		let notifications = res.notifications.items;
 		let c = new Collection();
 		for (let n of notifications) {
@@ -34,7 +34,7 @@ class NotificationManager{
 		return c;
 	}
 	async markAsRead() {
-		await this.#client.graphql('markAsRead');
+		await this.#client.graphql(this.#client.queries.markAsRead);
 		this.#client.user.notificationCount = 0;
 	}
 	startEvents() {

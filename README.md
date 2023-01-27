@@ -62,7 +62,7 @@ client.on('ready', async () => {
 * `<User>.isBlockedByCurrentUser`: if you've blocked the user
 * `<User>.isBlockingCurrentUser`: if the user blocked you
 * `<User>.isLoggedIn`: if the user is logged in (`<User>.isOnline` is recommended)
-* `<User>.isSubscribed`: no clue
+* `<User>.isSubscribed`: 
 * `<User>.followerCount`: how many followers the user has
 * `<User>.followCount`: how many people the user is following
 * `<User>.isHacker`: if the user has Hacker plan
@@ -81,7 +81,7 @@ Also contains *most* [`User`](#User) properties and methods, excluding follow / 
 * `<CurrentUser>.email`: the user's email
 * `<CurrentUser>.emailNotifications`: if the user should be emailed notifications
 * `<CurrentUser>.hasRepl`: if the user has any repls
-* `<CurrentUser>.hasPrivacyRole`: no clue
+* `<CurrentUser>.hasPrivacyRole`: 
 * `<CurrentUser>.warnings`: any warnings the user has recieved
 * `<CurrentUser>.isBannedFromBoards`: if the user is banned from boards
 * `<CurrentUser>.canUpdateEmail`: if the user can change their email
@@ -89,7 +89,7 @@ Also contains *most* [`User`](#User) properties and methods, excluding follow / 
 * `<CurrentUser>.device`: if the user is using a mobile or mac device
 * `<CurrentUser>.sidebarClosed`: if the user's sidebar is closed
 * `<CurrentUser>.hasProfileImage`: if the user has a profile image
-* `<CurrentUser>.socialSignup`: no clue
+* `<CurrentUser>.socialSignup`: 
 * `<CurrentUser>.githubInfo`: the user's github info
 * `<CurrentUser>.usernameRepl`: the user's repl whose title matches their username
 * `<CurrentUser>.daysSinceSignup`: how many days since the user signed up
@@ -110,7 +110,7 @@ Also contains *most* [`User`](#User) properties and methods, excluding follow / 
 * `<Repl>.multiplayers`: a [`MultiplayerManager`](#MultiplayManager) object
 * `<Repl>.comments`: a [`CommentManager`](#CommentManager) object
 * `<Repl>.id`: the repl's id
-* `<Repl>.isProject`: no clue
+* `<Repl>.isProject`: 
 * `<Repl>.isPrivate`: if the repl is private
 * `<Repl>.isStarred`: if the repl is starred
 * `<Repl>.title`: the repl's title
@@ -151,14 +151,14 @@ Also contains *most* [`User`](#User) properties and methods, excluding follow / 
 * `<Repl>.lastPublishedAt`: when the repl was last published
 * `<Repl>.multiplayers`: a [`<Collection>`](#Collection) of [`User`](#User) objects of people invited to the repl
 * `<Repl>.nixedLanguage`: if the repl was nixed
-* `<Repl>.publishedAs`: no clue
-* `<Repl>.attachments`: no clue
+* `<Repl>.publishedAs`: returns undefined, 'RegularRepl', or 'Template'
+* `<Repl>.attachments`: 
 * `<Repl>.description`: the repl's description
 * `<Repl>.markdownDescription`: the repl's description, with markdown
 * `<Repl>.hasExplainCode`: if the repl has explain code
 * `<Repl>.hasGenerateCode`: if the repl has generate code
 * `<Repl>.templateInfo`: info about the repl's template
-* `<Repl>.domains`: no clue
+* `<Repl>.domains`: 
 * `<Repl>.apexProxy`: the ip of the repl's apex proxy
 * `<Repl>.replViewSettings`: the repl's view settings
 * `<Repl>.powerUpCosts`: the repl's power up costs

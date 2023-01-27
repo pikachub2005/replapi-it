@@ -32,8 +32,8 @@ class Crosis {
 			);
 			this.crosisClient.setUnrecoverableErrorHandler((error) => {throw new Error(error.message)});
 		})
-		let envFile = await this.repl.files.read('.env');
-		if (envFile) this.repl.env = [...envFile.matchAll(/(.*?)="(.*?)"/gm)].reduce((a, b) => {a[b[1]] = b[2]; return a}, {});
+		// let envFile = await this.repl.files.read('.env');
+		// if (envFile) this.repl.env = [...envFile.matchAll(/(.*?)="(.*?)"/gm)].reduce((a, b) => {a[b[1]] = b[2]; return a}, {});
 		this.repl.console = new Console(this.client, this.repl);
 		await this.repl.console.connect()
 	}

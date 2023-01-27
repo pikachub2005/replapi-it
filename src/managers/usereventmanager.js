@@ -9,7 +9,7 @@ class UserEventManager {
 	}
 	async fetch(options = {}) {
 		options = {cache: true, limit: 10, ...options};
-		let res = await this.#client.graphql({query: 'userEvents', variables: {count: options.limit, after: ''}});
+		let res = await this.#client.graphql({query: this.#client.queries.userEvents, variables: {count: options.limit, after: ''}});
 		let events = res.events.items;
 		let c = new Collection();
 		for (let e of events) {

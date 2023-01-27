@@ -24,12 +24,12 @@ class Client extends EventEmitter {
 		"x-requested-with": "XMLHttpRequest",
 		"User-Agent": "Mozilla/5.0",
 	};
-	#queries = Queries;
 	constructor(SID) {
 		super();
 		if (!SID) throw new Error("You must include your SID");
 		this.#SID = SID;
 		this.headers = { ...this.headers, Cookie: `connect.sid=${this.#SID}` };
+		this.queries = Queries;
 		this.User = User;
 		this.Repl = Repl;
 		this.users = new UserManager(this);
@@ -37,8 +37,8 @@ class Client extends EventEmitter {
 		this.posts = new PostManager(this, this);
 		this.comments = new CommentManager(this, this);
 		(async () => {
-			let data = await this.graphql([{ query: 'currentUser' }, {query: 'repl', variables: {id: process?.env?.REPL_ID}}]);
-			if (!data[0]) throw new Error('SID is invalid');
+			let data = await this.graphql([{ query: this.queries.currentUser }, {query: this.queries.repl, variables: {id: process?.env?.REPL_ID}}]);
+			if (!data[0].currentUser) throw new Error('SID is invalid');
 			this.user = new CurrentUser(this);
 			await this.user.update({...data[0].currentUser, countryCode: data[0].country});
 			this.users.cache.set(this.user.username, this.user);
@@ -54,21 +54,11 @@ class Client extends EventEmitter {
 		let body;
 		switch (typeof data) {
 			case "string":
-				if (!this.#queries[data]) throw new Error(`"${data}" query does not exist`);
-				body = { query: this.#queries[data].query, variables: {} };
+				body = { query: data, variables: {} };
 				break;
 			case "object":
-				if (Array.isArray(data)) {
-					data.forEach((req) => {
-						if (!this.#queries[req.query]) throw new Error(`"${req.query}" query does not exist`);
-					});
-					body = data.map((req) => ({ query: this.#queries[req.query].query, variables: req.variables || {} }));
-					break;
-				} else {
-					if (!this.#queries[data.query]) throw new Error(`"${data}" query does not exist`);
-					body = (({ query, variables }) => ({ variables: {}, query: this.#queries[query].query, variables }))(data);
-					break;
-				}
+				body = data;
+				break;
 			default:
 				throw new Error('Invalid data type');
 		}
@@ -82,7 +72,7 @@ class Client extends EventEmitter {
 	async search(query, options = {}) {
 		options = {cache: true, query, categories: ['Tags'], onlyCalculateHits: false, ...options};
 		let {cache, ...options2} = options;
-		let res = await this.graphql({query: 'search', variables: {options: options2}});
+		let res = await this.graphql({query: this.queries.search, variables: {options: options2}});
 		let search = res.search;
 		let results = {
 			repls: new Collection(),
@@ -117,6 +107,10 @@ class Client extends EventEmitter {
 		for (let t of search.tagResults.results.items) {
 			results.tags.push({...t.tag, lastUsed: t.timeLastUsed, replsCount: t.replsCount});
 		}
+	}
+	async uploadImage(datauri) {
+		let data = await axios.post('https://replit.com/data/images/upload', {context: 'profile-image', image: datauri}, {headers: this.headers}).catch(() => {});
+		return data?.data?.url;
 	}
 	get axios() {
 		return axios;

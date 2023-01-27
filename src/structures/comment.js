@@ -37,12 +37,11 @@ class Comment {
 		return this;
 	}
 	async delete() {
-		if (this.currentUserPermissions?.delete || this.isAuthor || this.repl?.isOwner) await this.#client.graphql({query: 'deleteCommment', variables: {id: this.id}});
+		if (this.currentUserPermissions?.delete || this.isAuthor || this.repl?.isOwner) await this.#client.graphql({query: this.#client.queries.deleteCommment, variables: {id: this.id}});
 	}
 	async reply(body, options = {}) {
 		options = {cache: true, mention: true, ...options}
-		console.log(this);
-		let res = await this.#client.graphql({query: 'sendReplCommentReply', variables: {input: {body: options.mention ? `@${this.user.username} ${body}` : body, replCommentId: this.id}}});
+		let res = await this.#client.graphql({query: this.#client.queries.sendReplCommentReply, variables: {input: {body: options.mention ? `@${this.user.username} ${body}` : body, replCommentId: this.id}}});
 		if (!res) return null;
 		let comment = new Comment(this.#client);
 		await comment.update(res.createReplCommentReply);

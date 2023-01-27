@@ -11,12 +11,12 @@ class MultiplayerManager {
 	async invite(userResolvable) {
 		let user = await this.#client.users.fetch(userResolvable);
 		if (!user) return;
-		await this.#client.graphql({ query: 'addMultiplayer', variables: { username: user.username, replId: this.#repl.id, type: 'rw' } });
+		await this.#client.graphql({ query: this.#client.queries.addMultiplayer, variables: { username: user.username, replId: this.#repl.id, type: 'rw' } });
 	}
 	async remove(userResolvable) {
 		let user = await this.#client.users.fetch(userResolvable);
 		if (!user) return;
-		await this.#client.graphql({ query: 'removeMultiplayer', variables: { username: user.username, replId: this.#repl.id } });
+		await this.#client.graphql({ query: this.#client.queries.removeMultiplayer, variables: { username: user.username, replId: this.#repl.id } });
 	}
 }
 

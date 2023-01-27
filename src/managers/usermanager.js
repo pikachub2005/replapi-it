@@ -33,7 +33,7 @@ class UserManager {
 			let match = this.cache.find(user => String(user[property]).toLowerCase() == String(value).toLowerCase());
 			if (match) return match;
 		}
-		let res = await this.#client.graphql({query, variables});
+		let res = await this.#client.graphql({query: this.#client.queries[query], variables});
 		if (!res[query]) return null;
 		let user = new User(this.#client);
 		await user.update(res[query]);
@@ -42,7 +42,7 @@ class UserManager {
 	}
 	async search(query, options = {}) {
 		options = {cache: true, limit: 10, ...options};
-		let res = await this.#client.graphql({query: 'userSearch', variables: {query, limit: options.limit}});
+		let res = await this.#client.graphql({query: this.#client.queries.userSearch, variables: {query, limit: options.limit}});
 		let users = res.usernameSearch;
 		let c = new Collection();
 		for (let u of users) {

@@ -1,8 +1,5 @@
-//variables are not important to the object, it just lets me know what's needed =P
-
 const queries = {
-	currentUser: {
-		query: `query {country appEnv {key value} currentUser {
+	currentUser: `query {currentUser {
 			id
 			email
 			username
@@ -97,10 +94,6 @@ const queries = {
 				url
 			}
 			daysSinceSignup
-			storage {
-				limit
-		 		used
-			}
 			clui
 			editorPreferences {
 				isLayoutStacked
@@ -110,17 +103,11 @@ const queries = {
 				indentSize
 		 		keyboardHandler
 				wrapping
-		 		codeIntelligence
-				codeSuggestion
-		 		codeSuggestionEngine
 				accessibleTerminal
 		 		extraDelight
 			}
 		}}`,
-		variables: []
-	},
-	userByUsername: {
-		query: `query UserByUsername($username: String!) {userByUsername(username: $username) {
+	userByUsername: `query UserByUsername($username: String!) {userByUsername(username: $username) {
 	 		id
 			username
 			firstName
@@ -162,10 +149,7 @@ const queries = {
 		 		isOnline
 			}
 		}}`,
-		variables: ['username']
-	},
-	user: {
-		query: `query User($id: Int!) {user(id: $id) {
+	user: `query User($id: Int!) {user(id: $id) {
 	 		id
 			username
 			firstName
@@ -207,10 +191,7 @@ const queries = {
 		 		isOnline
 			}
 		}}`,
-		variables: ['id']
-	},
-	repl: {
-		query: `query Repl($id: String, $url: String) {repl(id: $id, url: $url) {...on Repl {
+	repl: `query Repl($id: String, $url: String) {repl(id: $id, url: $url) {...on Repl {
 			id
 		 	isProject
 		 	isPrivate
@@ -288,7 +269,6 @@ const queries = {
 		 		replId
 				type
 			}
-			historyUrl
 			analyticsUrl
 			rootOriginReplUrl
 			timeCreated
@@ -426,10 +406,7 @@ const queries = {
 			}
 			isTutorial
 		}}}`,
-		variables: ['id', 'url']
-	},
-	replThreads: {
-		query: `query Repl($id: String) {repl(id: $id) {...on Repl {
+	replThreads: `query Repl($id: String) {repl(id: $id) {...on Repl {
 			annotationAnchors {
 				id
 		 		path
@@ -469,10 +446,7 @@ const queries = {
 				isGeneral
 			}
 		}}}`,
-		variables: ['id']
-	},
-	userSearch: {
-		query: `query UsernameSearch($query: String!, $limit: Int) {usernameSearch(query: $query, limit: $limit) {
+	userSearch: `query UsernameSearch($query: String!, $limit: Int) {usernameSearch(query: $query, limit: $limit) {
 			id
 			username
 			firstName
@@ -513,16 +487,10 @@ const queries = {
 				lastSeen
 		 		isOnline
 			}
-		}}`
-	},
-	replTitle: {
-		query: `query ReplTitle($title: String, $teamId: Int) {replTitle(title: $title, teamId: $teamId)}`
-	},
-	siteBanner: {
-		query: `query {siteBanner {id, message}}`
-	},
-	profileRepls: {
-		query: `query ProfilePublicRepls($username: String!, $after: String, $search: String, $count: Int) {user: userByUsername(username: $username) {profileRepls: profileRepls(after: $after, search: $search, count: $count) {
+		}}`,
+	replTitle: `query ReplTitle($title: String, $teamId: Int) {replTitle(title: $title, teamId: $teamId)}`,
+	siteBanner: `query {siteBanner {id, message}}`,
+	profileRepls: `query ProfilePublicRepls($username: String!, $after: String, $search: String, $count: Int) {user: userByUsername(username: $username) {profileRepls: profileRepls(after: $after, search: $search, count: $count) {
 			items {
 	 			id
 			 	isProject
@@ -601,7 +569,6 @@ const queries = {
 			 		replId
 					type
 				}
-				historyUrl
 				analyticsUrl
 				rootOriginReplUrl
 				timeCreated
@@ -744,10 +711,7 @@ const queries = {
 				nextCursor
 			}
 		}}}`,
-		variables: ['username', 'after', 'search', 'count']
-	},
-	followers: {
-		query: `query FollowModalFollowers($username: String!, $after: String, $count: Int) {userByUsername(username: $username) {followers(after: $after, count: $count) {
+	followers: `query FollowModalFollowers($username: String!, $after: String, $count: Int) {userByUsername(username: $username) {followers(after: $after, count: $count) {
 			items {
 	 			id
 				username
@@ -795,10 +759,7 @@ const queries = {
 		 		nextCursor
 			}
 		}}}`,
-		variables: ['username', 'count']
-	},
-	follows: {
-		query: `query FollowModalFollows($username: String!, $after: String, $count: Int) {userByUsername(username: $username) {follows(after: $after, count: $count) {
+	follows: `query FollowModalFollows($username: String!, $after: String, $count: Int) {userByUsername(username: $username) {follows(after: $after, count: $count) {
 			items {
 	 			id
 				username
@@ -846,22 +807,13 @@ const queries = {
 		 		nextCursor
 			}
 		}}}`,
-		variables: ['username', 'count']
-	},
-	follow: {
-		query: `mutation SetFollowing($input: setFollowingInput!) {setFollowing(input: $input) {... on FollowResult {targetUser {
+	follow: `mutation SetFollowing($input: setFollowingInput!) {setFollowing(input: $input) {... on FollowResult {targetUser {
 			isFollowedByCurrentUser, followerCount
 	 	}}, ... on NotFoundError {message}, ... on UnauthorizedError {message}, ... on UserError {message}}}`,
-		variables: [['targetUserId', 'shouldFollow']]
-	},
-	block: {
-		query: `mutation SetBlocking($input: SetBlockingInput!) {setBlocking(input: $input) {... on User {
+	block: `mutation SetBlocking($input: SetBlockingInput!) {setBlocking(input: $input) {... on User {
 			isBlockedByCurrentUser
 	 	}, ... on NotFoundError {message}, ... on UnauthorizedError {message}}}`,
-		variables: [['targetUserId', 'shouldBlock']]
-	},
-	replComments: {
-		query: `query Repl($id: String!, $after: String, $count: Int) {repl(id: $id) {... on Repl {comments(after: $after, count: $count) {items {
+	replComments: `query Repl($id: String!, $after: String, $count: Int) {repl(id: $id) {... on Repl {comments(after: $after, count: $count) {items {
 			id
 			timeCreated
 	 		timeUpdated
@@ -888,10 +840,7 @@ const queries = {
 		 		report
 			}
 		}}}}}`,
-		variables: ['id', 'after', 'count']
-	},
-	comment: {
-		query: `query Comment($id: Int!) {comment(id: $id) {
+	comment: `query Comment($id: Int!) {comment(id: $id) {
 			id
 	 		body
 			timeCreated
@@ -957,10 +906,7 @@ const queries = {
 	 		canComment
 			canReport
 		}}`,
-		variables: ['id']
-	},
-	replComment: {
-		query: `query ReplComment($id: Int!) {replComment(id: $id) {...on ReplComment {
+	replComment: `query ReplComment($id: Int!) {replComment(id: $id) {...on ReplComment {
 			id
 			body
 			timeCreated
@@ -1012,10 +958,7 @@ const queries = {
 			}
 	 		canComment
 		} ...on UserError {message}}}`,
-		variables: ['id']
-	},
-	createRepl: {
-		query: `mutation CreateRepl($input: CreateReplInput!) {createRepl(input: $input) {... on Repl {
+	createRepl: `mutation CreateRepl($input: CreateReplInput!) {createRepl(input: $input) {... on Repl {
 			id
 		 	isProject
 		 	isPrivate
@@ -1093,7 +1036,6 @@ const queries = {
 		 		replId
 				type
 			}
-			historyUrl
 			analyticsUrl
 			rootOriginReplUrl
 			timeCreated
@@ -1231,29 +1173,12 @@ const queries = {
 			}
 			isTutorial
 		}}}`,
-		variables: [['title', 'description', 'language', 'originId', 'isPrivate', 'files']]
-	},
-	deleteRepl: {
-		query: `mutation DeleteRepl($id: String!) {deleteRepl(id: $id) {id}}`,
-		variables: ['id']
-	},
-	addMultiplayer: {
-		query: `mutation AddMultiplayerUser($username: String!, $replId: String!, $type: String!) {addMultiplayerUser(username: $username, replId: $replId, type: $type) {id}}`,
-		variables: ['username', 'replId', 'type']
-	},
-	removeMultiplayer: {
-		query: `mutation RemoveMultiplayerUser($username: String!, $replId: String!) {removeMultiplayerUser(username: $username, replId: $replId) {id}}`,
-		variables: ['username', 'replId']
-	},
-	notifications: {
-		query: `query notifications($after: String, $count: Int, $seen: Boolean) {notifications(after: $after, count: $count, seen: $seen) {items {...NotificationItems}}}, fragment NotificationItems on Notification {... on BasicNotification {id, ...BasicNotificationItemNotification}, ... on MentionedInPostNotification {id, ...NotificationItemMentionedInPostNotification}, ... on RepliedToPostNotification {id, ...NotificationItemRepliedToPostNotification}, ... on MentionedInCommentNotification {id, ...NotificationItemMentionedInCommentNotification}, ... on RepliedToCommentNotification {id, ...NotificationItemRepliedToCommentNotification}, ... on AnswerAcceptedNotification {id, ...NotificationItemAnswerAcceptedNotification}, ... on MultiplayerInvitedNotification {id, ...NotificationItemMultiplayerInvitedNotification}, ... on MultiplayerJoinedEmailNotification {id, ...NotificationItemMultiplayerJoinedEmailNotification}, ... on MultiplayerJoinedLinkNotification {id, ...NotificationItemMultiplayerJoinedLinkNotification}, ... on MultiplayerOverlimitNotification {id, ...NotificationItemMultiplayerOverlimitNotification}, ... on WarningNotification {id, ...NotificationItemWarningNotification}, ... on AnnotationNotification {id, ...NotificationItemAnnotationNotification}, ... on ThreadNotification {id, ...NotificationItemThreadNotification}, ... on TeamInviteNotification {id, ...NotificationItemTeamInviteNotification}, ... on TeamOrganizationInviteNotification {id, ...NotificationItemTeamOrganizationInviteNotification}, ... on TeamTemplateSubmittedNotification {id, ...NotificationTeamTemplateSubmittedNotification}, ... on TeamTemplateReviewedStatusNotification {id, ...NotificationTeamTemplateReviewedStatusNotification}, ... on EditRequestCreatedNotification {id, __typename}, ... on EditRequestAcceptedNotification {id, __typename}, ... on ReplCommentCreatedNotification {id, ...NotificationReplCommentCreatedNotification}, ... on ReplCommentReplyCreatedNotification {id, ...NotificationReplCommentReplyCreatedNotification}, ... on ReplCommentMentionNotification {id, ...NotificationReplCommentMentionNotification}, ... on NewFollowerNotification {id, ...NotificationItemNewFollower}}, fragment BasicNotificationItemNotification on BasicNotification {id, text, url, timeCreated, seen, context, __typename}, fragment NotificationItemMentionedInPostNotification on MentionedInPostNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}, __typename}, fragment NotificationItemCreator on User {username, image, __typename}, fragment NotificationItemPost on Post {id, title, url, __typename}, fragment NotificationItemBoard on Board {id, name, url, color, slug, __typename}, fragment NotificationItemRepliedToPostNotification on RepliedToPostNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, comment {id, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}}, __typename}, fragment NotificationItemMentionedInCommentNotification on MentionedInCommentNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, comment {id, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}}, __typename}, fragment NotificationItemRepliedToCommentNotification on RepliedToCommentNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, comment {id, body, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}}, __typename}, fragment NotificationItemAnswerAcceptedNotification on AnswerAcceptedNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}, __typename}, fragment NotificationItemMultiplayerInvitedNotification on MultiplayerInvitedNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemMultiplayerJoinedEmailNotification on MultiplayerJoinedEmailNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemMultiplayerJoinedLinkNotification on MultiplayerJoinedLinkNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemMultiplayerOverlimitNotification on MultiplayerOverlimitNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemWarningNotification on WarningNotification {id, text, url, timeCreated, seen, __typename}, fragment NotificationItemAnnotationNotification on AnnotationNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemThreadNotification on ThreadNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, participants {id, ...NotificationItemCreator}, thread {id, repl {id, url, slug, nextPagePathname, user {id, username}}}, __typename}, fragment NotificationItemTeamInviteNotification on TeamInviteNotification {id, text, url, timeCreated, seen, invite {id, ...NotificationItemTeamInvite}, __typename}, fragment NotificationItemTeamInvite on TeamInvite {id, team {id, displayName, username}, __typename}, fragment NotificationItemTeamOrganizationInviteNotification on TeamOrganizationInviteNotification {id, text, url, timeCreated, seen, invite {id, ...NotificationItemTeamOrganizationInvite}, __typename}, fragment NotificationItemTeamOrganizationInvite on TeamOrganizationInvite {id, organization {id, name}, __typename}, fragment NotificationTeamTemplateSubmittedNotification on TeamTemplateSubmittedNotification {id, text, url, timeCreated, seen, repl {id, url}, __typename}, fragment NotificationTeamTemplateReviewedStatusNotification on TeamTemplateReviewedStatusNotification {id, text, url, timeCreated, seen, repl {id, url}, __typename}, fragment NotificationReplCommentCreatedNotification on ReplCommentCreatedNotification {id, url, timeCreated, seen, replComment {id, ...NotificationReplCommentNotificationReplComment}, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationReplCommentNotificationReplComment on ReplComment {id, repl {title, url}, body, __typename}, fragment NotificationReplCommentReplyCreatedNotification on ReplCommentReplyCreatedNotification {id, timeCreated, seen, creator {id, ...NotificationItemCreator}, replComment {id, ...NotificationReplCommentNotificationReplComment}, __typename}, fragment NotificationReplCommentMentionNotification on ReplCommentMentionNotification {id, timeCreated, seen, creator {id, ...NotificationItemCreator}, replComment {id, parentComment {id, body, user {username, image}}, ...NotificationReplCommentNotificationReplComment}, __typename}, fragment NotificationItemNewFollower on NewFollowerNotification {id, timeCreated, seen, creator {...NotificationItemCreator}, __typename}`,
-		variables: ['after', 'count', 'seen']
-	},
-	markAsRead: {
-		query: 'mutation MarkAllNotificationsAsSeen {markAllNotificationsAsSeen {id}}'
-	},
-	userEvents: {
-		query: `query getUserEventsFeed($count: Int!, $after: String!) {events: getUserEventsFeed(count: $count, after: $after) {... on UserEventConnection {items {id, ...UserEventsFeedEvent}}}}, fragment UserEventsFeedEvent on UserEvent {
+	deleteRepl: `mutation DeleteRepl($id: String!) {deleteRepl(id: $id) {id}}`,
+	addMultiplayer: `mutation AddMultiplayerUser($username: String!, $replId: String!, $type: String!) {addMultiplayerUser(username: $username, replId: $replId, type: $type) {id}}`,
+	removeMultiplayer: `mutation RemoveMultiplayerUser($username: String!, $replId: String!) {removeMultiplayerUser(username: $username, replId: $replId) {id}}`,
+	notifications: `query notifications($after: String, $count: Int, $seen: Boolean) {notifications(after: $after, count: $count, seen: $seen) {items {...NotificationItems}}}, fragment NotificationItems on Notification {... on BasicNotification {id, ...BasicNotificationItemNotification}, ... on MentionedInPostNotification {id, ...NotificationItemMentionedInPostNotification}, ... on RepliedToPostNotification {id, ...NotificationItemRepliedToPostNotification}, ... on MentionedInCommentNotification {id, ...NotificationItemMentionedInCommentNotification}, ... on RepliedToCommentNotification {id, ...NotificationItemRepliedToCommentNotification}, ... on AnswerAcceptedNotification {id, ...NotificationItemAnswerAcceptedNotification}, ... on MultiplayerInvitedNotification {id, ...NotificationItemMultiplayerInvitedNotification}, ... on MultiplayerJoinedEmailNotification {id, ...NotificationItemMultiplayerJoinedEmailNotification}, ... on MultiplayerJoinedLinkNotification {id, ...NotificationItemMultiplayerJoinedLinkNotification}, ... on MultiplayerOverlimitNotification {id, ...NotificationItemMultiplayerOverlimitNotification}, ... on WarningNotification {id, ...NotificationItemWarningNotification}, ... on AnnotationNotification {id, ...NotificationItemAnnotationNotification}, ... on ThreadNotification {id, ...NotificationItemThreadNotification}, ... on TeamInviteNotification {id, ...NotificationItemTeamInviteNotification}, ... on TeamOrganizationInviteNotification {id, ...NotificationItemTeamOrganizationInviteNotification}, ... on TeamTemplateSubmittedNotification {id, ...NotificationTeamTemplateSubmittedNotification}, ... on TeamTemplateReviewedStatusNotification {id, ...NotificationTeamTemplateReviewedStatusNotification}, ... on EditRequestCreatedNotification {id, __typename}, ... on EditRequestAcceptedNotification {id, __typename}, ... on ReplCommentCreatedNotification {id, ...NotificationReplCommentCreatedNotification}, ... on ReplCommentReplyCreatedNotification {id, ...NotificationReplCommentReplyCreatedNotification}, ... on ReplCommentMentionNotification {id, ...NotificationReplCommentMentionNotification}, ... on NewFollowerNotification {id, ...NotificationItemNewFollower}}, fragment BasicNotificationItemNotification on BasicNotification {id, text, url, timeCreated, seen, context, __typename}, fragment NotificationItemMentionedInPostNotification on MentionedInPostNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}, __typename}, fragment NotificationItemCreator on User {username, image, __typename}, fragment NotificationItemPost on Post {id, title, url, __typename}, fragment NotificationItemBoard on Board {id, name, url, color, slug, __typename}, fragment NotificationItemRepliedToPostNotification on RepliedToPostNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, comment {id, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}}, __typename}, fragment NotificationItemMentionedInCommentNotification on MentionedInCommentNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, comment {id, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}}, __typename}, fragment NotificationItemRepliedToCommentNotification on RepliedToCommentNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, comment {id, body, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}}, __typename}, fragment NotificationItemAnswerAcceptedNotification on AnswerAcceptedNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, post {id, ...NotificationItemPost, board {id, ...NotificationItemBoard}}, __typename}, fragment NotificationItemMultiplayerInvitedNotification on MultiplayerInvitedNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemMultiplayerJoinedEmailNotification on MultiplayerJoinedEmailNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemMultiplayerJoinedLinkNotification on MultiplayerJoinedLinkNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemMultiplayerOverlimitNotification on MultiplayerOverlimitNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemWarningNotification on WarningNotification {id, text, url, timeCreated, seen, __typename}, fragment NotificationItemAnnotationNotification on AnnotationNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationItemThreadNotification on ThreadNotification {id, text, url, timeCreated, seen, creator {id, ...NotificationItemCreator}, participants {id, ...NotificationItemCreator}, thread {id, repl {id, url, slug, nextPagePathname, user {id, username}}}, __typename}, fragment NotificationItemTeamInviteNotification on TeamInviteNotification {id, text, url, timeCreated, seen, invite {id, ...NotificationItemTeamInvite}, __typename}, fragment NotificationItemTeamInvite on TeamInvite {id, team {id, displayName, username}, __typename}, fragment NotificationItemTeamOrganizationInviteNotification on TeamOrganizationInviteNotification {id, text, url, timeCreated, seen, invite {id, ...NotificationItemTeamOrganizationInvite}, __typename}, fragment NotificationItemTeamOrganizationInvite on TeamOrganizationInvite {id, organization {id, name}, __typename}, fragment NotificationTeamTemplateSubmittedNotification on TeamTemplateSubmittedNotification {id, text, url, timeCreated, seen, repl {id, url}, __typename}, fragment NotificationTeamTemplateReviewedStatusNotification on TeamTemplateReviewedStatusNotification {id, text, url, timeCreated, seen, repl {id, url}, __typename}, fragment NotificationReplCommentCreatedNotification on ReplCommentCreatedNotification {id, url, timeCreated, seen, replComment {id, ...NotificationReplCommentNotificationReplComment}, creator {id, ...NotificationItemCreator}, __typename}, fragment NotificationReplCommentNotificationReplComment on ReplComment {id, repl {title, url}, body, __typename}, fragment NotificationReplCommentReplyCreatedNotification on ReplCommentReplyCreatedNotification {id, timeCreated, seen, creator {id, ...NotificationItemCreator}, replComment {id, ...NotificationReplCommentNotificationReplComment}, __typename}, fragment NotificationReplCommentMentionNotification on ReplCommentMentionNotification {id, timeCreated, seen, creator {id, ...NotificationItemCreator}, replComment {id, parentComment {id, body, user {username, image}}, ...NotificationReplCommentNotificationReplComment}, __typename}, fragment NotificationItemNewFollower on NewFollowerNotification {id, timeCreated, seen, creator {...NotificationItemCreator}, __typename}`,
+	markAsRead: 'mutation MarkAllNotificationsAsSeen {markAllNotificationsAsSeen {id}}',
+	userEvents: `query getUserEventsFeed($count: Int!, $after: String!) {events: getUserEventsFeed(count: $count, after: $after) {... on UserEventConnection {items {id, ...UserEventsFeedEvent}}}}, fragment UserEventsFeedEvent on UserEvent {
 			id
 	 		eventType
 			timeUpdated
@@ -1277,14 +1202,8 @@ const queries = {
 				reactionType
 			}
 		}`,
-		variables: ['count', 'after']
-	},
-	deleteComment: {
-		query: `mutation DeleteComment($id: Int!) {deleteComment(id: $id) {id}}`,
-		variables: ['id']
-	},
-	userPosts: {
-		query: `query ProfilePosts($username: String!, $after: String, $order: String, $count: Int) {userByUsername(username: $username) {posts(after: $after, order: $order, count: $count) {items {
+	deleteComment: `mutation DeleteComment($id: Int!) {deleteComment(id: $id) {id}}`,
+	userPosts: `query ProfilePosts($username: String!, $after: String, $order: String, $count: Int) {userByUsername(username: $username) {posts(after: $after, order: $order, count: $count) {items {
 			id
 	 		title
 			showHosted
@@ -1309,10 +1228,7 @@ const queries = {
 				id
 			}
 		}}}}`,
-		variables: ['username', 'after', 'order', 'count']
-	},
-	updateRepl: {
-		query: `mutation ReplsDashboardUpdateRepl($input: UpdateReplInput!) {updateRepl(input: $input) {repl {
+	updateRepl: `mutation ReplsDashboardUpdateRepl($input: UpdateReplInput!) {updateRepl(input: $input) {repl {
 			title
 	 		description
 			imageUrl
@@ -1322,20 +1238,14 @@ const queries = {
 			language
 	 		slug
 		}}}`,
-		variables: ['id', 'title', 'description', 'imageUrl', 'iconUrl', 'isPrivate', 'isStarred', 'language', 'templateLabel', 'isServer', 'isVnc', 'domain', 'removeDomain', 'doClone']
-	},
-	updateUser: {
-		query: `mutation UpdateCurrentUser($input: UpdateCurrentUserInput!) {updateCurrentUser(input: $input) {
+	updateUser: `mutation UpdateCurrentUser($input: UpdateCurrentUserInput!) {updateCurrentUser(input: $input) {
 			firstName
 	 		lastName
 			bio
 			emailNotifications
 	 		image
 		}}`,
-			variables: ['firstName', 'lastName', 'bio', 'emailNotifications']
-	},
-	search: {
-		query: `query Search($options: SearchQueryOptions!) {search(options: $options) {...on UserError {message} ...on UnauthorizedError {message} ...on SearchQueryResults {
+	search: `query Search($options: SearchQueryOptions!) {search(options: $options) {...on UserError {message} ...on UnauthorizedError {message} ...on SearchQueryResults {
 			replResults {
 	 			results {
 		 			items {
@@ -1393,10 +1303,7 @@ const queries = {
 				}
 			}
 		}}}`,
-		variables: []
-	},
-	post: {
-		query: `query Post($id: Int!) {post(id: $id) {
+	post: `query Post($id: Int!) {post(id: $id) {
 			id
 	 		title
 			showHosted
@@ -1463,10 +1370,7 @@ const queries = {
 		 		canComment
 			}
 		}}`,
-		variables: ['id']
-	},
-	trending: {
-		query: `query ReplPosts($options: ReplPostsQueryOptions) {replPosts(options: $options) {
+	trending: `query ReplPosts($options: ReplPostsQueryOptions) {replPosts(options: $options) {
 			items {
 	 			id
 		 		title
@@ -1496,10 +1400,7 @@ const queries = {
 				}
 			}
 		}}`,
-		variables: ['searchQuery', 'count', 'order', 'tags']
-	},
-	dashboardRepls: {
-		query: `query ReplsDashboardReplFolderList($path: String!, $starred: Boolean, $after: String, $count: Int) {currentUser {replFolderByPath(path: $path) {
+	dashboardRepls: `query ReplsDashboardReplFolderList($path: String!, $starred: Boolean, $after: String, $count: Int) {currentUser {replFolderByPath(path: $path) {
 			id
 	 		userId
 			pathnames
@@ -1592,7 +1493,6 @@ const queries = {
 			 		replId
 					type
 				}
-				historyUrl
 				analyticsUrl
 				rootOriginReplUrl
 				timeCreated
@@ -1732,10 +1632,7 @@ const queries = {
 			}
 	 		pageInfo {nextCursor}
 		}}}}`,
-		variables: []
-	},
-	sendComment: {
-		query: `mutation CreateComment($input: CreateCommentInput!) {createReplComment(input: $input) {comment {
+	sendComment: `mutation CreateComment($input: CreateCommentInput!) {createReplComment(input: $input) {comment {
 			id
 	 		body
 			timeCreated
@@ -1776,10 +1673,7 @@ const queries = {
 			canEdit
 			canReport
 		}}}`,
-		variables: []
-	},
-	sendReplComment: {
-		query: `mutation CreateReplComment($input: CreateReplCommentInput!) {createReplComment(input: $input) {...on UserError {message} ...on ReplComment {
+	sendReplComment: `mutation CreateReplComment($input: CreateReplCommentInput!) {createReplComment(input: $input) {...on UserError {message} ...on ReplComment {
 			id
 	 		body
 			timeCreated
@@ -1794,10 +1688,8 @@ const queries = {
 				id
 			}
 	 		canEdit
-		}}}`
-	},
-	sendReplCommentReply: {
-		query: `mutation CreateReplCommentReply($input: CreateReplCommentReplyInput!) {createReplCommentReply(input: $input) {...on UserError {message} ...on ReplComment {
+		}}}`,
+	sendReplCommentReply: `mutation CreateReplCommentReply($input: CreateReplCommentReplyInput!) {createReplCommentReply(input: $input) {...on UserError {message} ...on ReplComment {
 			id
 	 		body
 			timeCreated
@@ -1810,7 +1702,6 @@ const queries = {
 			}
 	 		canEdit
 		}}}`
-	}
 }
 
 module.exports = queries;

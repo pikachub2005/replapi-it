@@ -10,7 +10,7 @@ class FollowerManager {
 	}
 	async fetch(options = {}) {
 		options = { cache: true, limit: 10, ...options };
-		let res = await this.#client.graphql({ query: 'followers', variables: { username: this.#user.username, count: options.limit } });
+		let res = await this.#client.graphql({ query: this.#client.queries.followers, variables: { username: this.#user.username, count: options.limit } });
 		let users = res.userByUsername.followers.items;
 		let c = new Collection();
 		for (let u of users) {

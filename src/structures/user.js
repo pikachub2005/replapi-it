@@ -24,13 +24,13 @@ class User {
 		}
 	}
 	async setFollowing(val = true) {
-		let res = await this.#client.graphql({query: 'follow', variables: {input: {targetUserId: this.id, shouldFollow: val && true}}});
+		let res = await this.#client.graphql({query: this.#client.queries.follow, variables: {input: {targetUserId: this.id, shouldFollow: val && true}}});
 		if (!res.setFollowing) return false;
 		await this.update(res.setFollowing.targetUser);
 		return this.isFollowedByCurrentUser;
 	}
 	async setBlocking(val = true) {
-		let res = await this.#client.graphql({query: 'block', variables: {input: {targetUserId: this.id, shouldBlock: val && true}}});
+		let res = await this.#client.graphql({query: this.#client.queries.block, variables: {input: {targetUserId: this.id, shouldBlock: val && true}}});
 		if (!res.setBlocking) return false;
 		await this.update(res.setBlocking);
 		return this.isBlockedByCurrentUser;
@@ -76,7 +76,7 @@ class CurrentUser extends User {
 				if (data) options2.profileImageId = data.data.id;
 			}
 		}
-		let res = await this.#client.graphql({query: 'updateUser', variables: {input: options2}});
+		let res = await this.#client.graphql({query: this.#client.queries.updateUser, variables: {input: options2}});
 		await this.update(res.updateCurrentUser);
 		return this;
 	}

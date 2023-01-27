@@ -13,11 +13,11 @@ class Repl {
 	#env;
 	constructor(client) {
 		this.#client = client;
+		this.files = new FileManager(this.#client, this);
 		this.#crosis = new Crosis(this.#client, this);
 		this.threads = [];
 		this.multiplayers = new MultiplayerManager(this.#client, this);
 		this.comments = new CommentManager(this.#client, this);
-		this.files = new FileManager(this.#client, this);
 	}
 	async update(data) {
 		let {layoutState, owner, timeCreated, timeUpdated, currentUserPermissions, annotationAnchors, multiplayers, database, ...properties} = data;
@@ -49,7 +49,7 @@ class Repl {
 		return this.#layoutState;
 	}
 	async fetchThreads(options = {cache: true}) {
-		let res = await this.#client.graphql({query: 'replThreads', variables: {id: this.id}});
+		let res = await this.#client.graphql({query: this.#client.queries.replThreads, variables: {id: this.id}});
 		let threads = res.repl.annotationAnchors;
 		let c = new Collection();
 		for (let t of threads) {
@@ -72,7 +72,7 @@ class Repl {
 	async fork(options = {}) {
 		options = {cache: true, title: this.title, description: this.description, language: this.templateInfo.label, isPrivate: this.isPrivate, ...options, originId: this.id};
 		let {cache, ...variables} = options;
-		let res = await this.#client.graphql({query: 'createRepl', variables: {input: variables}});
+		let res = await this.#client.graphql({query: this.#client.queries.createRepl, variables: {input: variables}});
 		let r = res.createRepl;
 		if (!r.id) return null;
 		let repl = new Repl(this.#client);
@@ -81,16 +81,16 @@ class Repl {
 		return repl;
 	}
 	async delete() {
-		await this.#client.graphql({query: 'deleteRepl', variables: {id: this.id}});
+		await this.#client.graphql({query: this.#client.queries.deleteRepl, variables: {id: this.id}});
 	}
 	async change(options = {}) {
 		options = {...options, id: this.id};
-		let res = await this.#client.graphql({query: 'updateRepl', variables: {input: options}});
+		let res = await this.#client.graphql({query: this.#client.queries.updateRepl, variables: {input: options}});
 		await this.update(res.updateRepl.repl);
 		return this;
 	}
 	async comment(body, options = {cache: true}) {
-		let res = await this.#client.graphql({query: 'sendReplComment', variables: {input: {body, replId: this.id}}});
+		let res = await this.#client.graphql({query: this.#client.queries.sendReplComment, variables: {input: {body, replId: this.id}}});
 		if (!res) return null;
 		let comment = new Comment(this.#client);
 		await comment.update(res.createReplComment);

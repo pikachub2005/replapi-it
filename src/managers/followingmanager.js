@@ -12,7 +12,7 @@ class FollowingManager {
 	}
 	async fetch(options = {}) {
 		options = { cache: true, limit: 10, ...options };
-		let res = await this.#client.graphql({ query: 'follows', variables: { username: this.#user.username, count: options.limit } });
+		let res = await this.#client.graphql({ query: this.#client.queries.follows, variables: { username: this.#user.username, count: options.limit } });
 		let users = res.userByUsername.follows.items;
 		let c = new Collection();
 		for (let u of users) {
@@ -29,7 +29,7 @@ class FollowingManager {
 	async setFollowing(userResolvable, val = true, options = { cache: true }) {
 		let user = await this.#client.users.fetch(userResolvable);
 		if (!user) return false;
-		let res = await this.#client.graphql({ query: 'follow', variables: { input: { targetUserId: user.id, shouldFollow: val } } });
+		let res = await this.#client.graphql({ query: this.#client.queries.follow, variables: { input: { targetUserId: user.id, shouldFollow: val } } });
 		if (!res.setFollowing) return false;
 		await user.update(res.setFollowing.targetUser);
 		return user.isFollowedByCurrentUser;

@@ -74,6 +74,9 @@ class FileManager {
 		if (res.error) throw new Error('CrosisError: ' + res.error);
 		return res.ok ? true : false;
 	}
+	async readHistory() {
+		
+	}
 }
 
 module.exports = FileManager;
